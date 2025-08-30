@@ -34,7 +34,8 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         _;
     }
 
-    constructor() {
+    constructor(address _usdtAddress) {
+        USDT = IERC20(_usdtAddress);
         lastRewardTime = block.timestamp;
     }
 
@@ -55,9 +56,10 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         lastRewardTime = block.timestamp;
     }
 
-    function stake(address contractor, uint256 contractId) external payable onlyAuthorized nonReentrant {
-        require(msg.value > 0, "Cannot stake 0");
+    function stake(address contractor, uint256 contractId, uint256 amount) external onlyAuthorized nonReentrant {
+        require(amount > 0, "Cannot stake 0");
         require(contractor != address(0), "Invalid contractor address");
+        require(USDT.transferFrom(msg.sender, address(this), amount), "USDT transfer failed");
         
         updateRewards();
         
@@ -73,13 +75,13 @@ contract StakingRewards is ReentrancyGuard, Ownable {
             }
         }
         
-        userStake.amount += msg.value;
+        userStake.amount += amount;
         userStake.timestamp = block.timestamp;
         userStake.rewardDebt = (userStake.amount * accRewardPerShare) / 1e12;
         userStake.contractor = contractor;
         userStake.contractId = contractId;
         
-        totalStaked += msg.value;
+        totalStaked += amount;
         
         emit Staked(msg.sender, msg.value);
     }
@@ -97,14 +99,12 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         
         totalStaked -= amount;
         
-        // Send principal amount to contractor
-        (bool success1, ) = userStake.contractor.call{value: amount}("");
-        require(success1, "Principal transfer to contractor failed");
+        // Send principal amount in USDT to contractor
+        require(USDT.transfer(userStake.contractor, amount), "USDT transfer to contractor failed");
         
-        // Send yield to BuildTrust treasury
+        // Send yield in USDT to BuildTrust treasury
         if (pending > 0) {
-            (bool success2, ) = BUILDTRUST_TREASURY.call{value: pending}("");
-            require(success2, "Yield transfer to treasury failed");
+            require(USDT.transfer(BUILDTRUST_TREASURY, pending), "USDT yield transfer to treasury failed");
         }
         
         emit Unstaked(msg.sender, amount);

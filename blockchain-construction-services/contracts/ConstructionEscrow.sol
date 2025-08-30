@@ -6,6 +6,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract ConstructionEscrow is ReentrancyGuard, Ownable {
+    IERC20 public immutable USDT;
+    uint256 private constant USDT_DECIMALS = 6;
+    
     struct Contract {
         uint256 id;
         address client;
@@ -72,8 +75,9 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         _;
     }
 
-    constructor(address _stakingContract) {
+    constructor(address _stakingContract, address _usdtAddress) {
         stakingContract = _stakingContract;
+        USDT = IERC20(_usdtAddress);
     }
 
     function createContract(
@@ -83,20 +87,27 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         uint256 _deadline,
         ContractType _contractType,
         string[] memory _milestoneDescriptions
-    ) external payable nonReentrant {
+    ) external nonReentrant {
         require(_contractor != address(0), "Invalid contractor address");
         require(_contractor != msg.sender, "Cannot hire yourself");
-        require(msg.value > 0, "Payment required");
         require(_milestones > 0 && _milestones <= 10, "Invalid milestone count");
         require(_milestoneDescriptions.length == _milestones, "Milestone descriptions mismatch");
+        
+        // Calculate total amount needed in USDT (using USDT decimals)
+        uint256 totalAmount = _amount * (10 ** USDT_DECIMALS);
+        require(USDT.allowance(msg.sender, address(this)) >= totalAmount, "Insufficient USDT allowance");
+        require(USDT.balanceOf(msg.sender) >= totalAmount, "Insufficient USDT balance");
 
         uint256 contractId = nextContractId++;
         
+        // Transfer USDT from client to contract
+        require(USDT.transferFrom(msg.sender, address(this), totalAmount), "USDT transfer failed");
+
         contracts[contractId] = Contract({
             id: contractId,
             client: msg.sender,
             contractor: _contractor,
-            totalAmount: msg.value,
+            totalAmount: totalAmount,
             releasedAmount: 0,
             milestones: _milestones,
             completedMilestones: 0,
@@ -126,10 +137,9 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         
         emit MilestonesInitialized(contractId, _milestones, _milestoneDescriptions, amountPerMilestone);
 
-        // Send funds to staking contract for yield generation
+        // Transfer USDT to staking contract for yield generation
         if (stakingContract != address(0)) {
-            (bool success, ) = stakingContract.call{value: msg.value}("");
-            require(success, "Failed to stake funds");
+            require(USDT.transfer(stakingContract, totalAmount), "Failed to transfer USDT to staking");
         }
 
         emit ContractCreated(contractId, msg.sender, _contractor, msg.value);
@@ -169,9 +179,8 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         uint256 releaseAmount = milestones[contractId][milestoneIndex].amount;
         contracts[contractId].releasedAmount += releaseAmount;
 
-        // Release payment to contractor
-        (bool success, ) = contracts[contractId].contractor.call{value: releaseAmount}("");
-        require(success, "Payment release failed");
+        // Release USDT payment to contractor
+        require(USDT.transfer(contracts[contractId].contractor, releaseAmount), "USDT transfer to contractor failed");
 
         emit PaymentReleased(contractId, releaseAmount, contracts[contractId].contractor);
 
