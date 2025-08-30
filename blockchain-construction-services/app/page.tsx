@@ -311,6 +311,14 @@ export default function ConstructionServicesApp() {
 
             {!isConnected ? (
               <div className="flex items-center space-x-3">
+                <Button
+                  onClick={() => window.open('/web3-test', '_blank')}
+                  variant="outline"
+                  className="bg-white/10 text-white border-white/30 hover:bg-white/20 font-semibold"
+                >
+                  <Wallet className="h-4 w-4 mr-2" />
+                  Web3 Real
+                </Button>
                 <MetaMaskGuide />
                 <Button
                   onClick={handleConnectWallet}
@@ -337,6 +345,15 @@ export default function ConstructionServicesApp() {
               />
             ) : (
               <div className="flex items-center space-x-4">
+                <Button
+                  onClick={() => window.open('/web3-test', '_blank')}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/10 text-white border-white/30 hover:bg-white/20"
+                >
+                  <Wallet className="h-4 w-4 mr-1" />
+                  Web3
+                </Button>
                 <Badge variant="outline" className="px-3 py-1">
                   {account.slice(0, 6)}...{account.slice(-4)}
                 </Badge>
