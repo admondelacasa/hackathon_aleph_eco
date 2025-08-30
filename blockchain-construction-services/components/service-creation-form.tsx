@@ -391,7 +391,7 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
             <div className="space-y-2">
               <Label htmlFor="budget" className="flex items-center space-x-1">
                 <DollarSign className="h-4 w-4" />
-                <span>Presupuesto (ETH)</span>
+                <span>Presupuesto (USDT)</span>
               </Label>
               <Input
                 id="budget"

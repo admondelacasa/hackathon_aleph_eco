@@ -128,11 +128,11 @@ export function ServiceCard({
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-2 bg-blue-50 rounded-lg">
             <div className="text-xs text-gray-600 mb-1">Valor Total</div>
-            <div className="font-bold text-lg text-blue-600">{service.totalAmount} ETH</div>
+            <div className="font-bold text-lg text-blue-600">{service.totalAmount} USDT</div>
           </div>
           <div className="text-center p-2 bg-green-50 rounded-lg">
             <div className="text-xs text-gray-600 mb-1">Liberado</div>
-            <div className="font-bold text-lg text-green-600">{service.releasedAmount} ETH</div>
+            <div className="font-bold text-lg text-green-600">{service.releasedAmount} USDT</div>
           </div>
         </div>
 

@@ -88,7 +88,7 @@ export function ContractCard({ contract, role, onUpdateMilestones, onFinalizeCon
           
           <div className="flex items-center space-x-2">
             <DollarSign className="h-4 w-4 text-gray-500" />
-            <span className="font-semibold text-green-600">{contract.budget} ETH</span>
+            <span className="font-semibold text-green-600">{contract.budget} USDT</span>
           </div>
           
           {contract.location && (
