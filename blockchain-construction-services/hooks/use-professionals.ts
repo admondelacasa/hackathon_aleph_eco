@@ -243,6 +243,262 @@ export function useProfessionals() {
         email: "laura.paisajista@email.com",
         website: "www.jardineslaura.es"
       }
+    },
+    {
+      id: 5,
+      address: "0x567890123456789012345678901234567890bcde",
+      name: "Roberto Silva",
+      description: "Pintor profesional especializado en pintura interior, exterior y decorativa. 12 años de experiencia.",
+      skills: ["Pintura interior", "Pintura exterior", "Pintura decorativa", "Empapelado", "Lacado"],
+      serviceTypes: [4], // PAINTING
+      rating: 4.7,
+      totalReviews: 94,
+      completedJobs: 143,
+      joinDate: Date.now() - 15552000000, // 6 meses atrás
+      hourlyRate: "0.018",
+      location: "Valencia Centro",
+      verified: true,
+      responseTime: "< 3 horas",
+      successRate: 95.8,
+      portfolio: [
+        {
+          title: "Renovación apartamento moderno",
+          description: "Pintura completa de apartamento de 90m² con acabados premium",
+          completedDate: Date.now() - 1209600000, // 2 semanas atrás
+        },
+        {
+          title: "Fachada edificio comercial",
+          description: "Pintura exterior de edificio de 4 plantas con impermeabilización",
+          completedDate: Date.now() - 4320000000, // 1.5 meses atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 8,
+          clientName: "Carmen López",
+          clientAddress: "0x5678901234567890123456789012345678901234",
+          rating: 5,
+          comment: "Trabajo impecable. Muy cuidadoso con los detalles y muy limpio.",
+          date: Date.now() - 864000000, // 10 días atrás
+          serviceType: 4,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 656 789 012",
+        email: "roberto.pintor@email.com"
+      }
+    },
+    {
+      id: 6,
+      address: "0x678901234567890123456789012345678901cdef",
+      name: "Manuel Herrera",
+      description: "Carpintero artesano con 20 años de experiencia en muebles a medida y restauración.",
+      skills: ["Muebles a medida", "Restauración", "Carpintería de obra", "Ebanistería", "Instalación cocinas"],
+      serviceTypes: [5], // CARPENTRY
+      rating: 4.9,
+      totalReviews: 78,
+      completedJobs: 89,
+      joinDate: Date.now() - 41472000000, // 16 meses atrás
+      hourlyRate: "0.028",
+      location: "Sevilla Este",
+      verified: true,
+      responseTime: "< 4 horas",
+      successRate: 98.9,
+      portfolio: [
+        {
+          title: "Cocina completa en roble",
+          description: "Diseño y fabricación de cocina integral en madera maciza",
+          completedDate: Date.now() - 2592000000, // 1 mes atrás
+        },
+        {
+          title: "Restauración mesa antigua",
+          description: "Restauración completa de mesa del siglo XIX",
+          completedDate: Date.now() - 5184000000, // 2 meses atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 9,
+          clientName: "Francisco Ruiz",
+          clientAddress: "0x6789012345678901234567890123456789012345",
+          rating: 5,
+          comment: "Un verdadero artista. La calidad del trabajo es excepcional.",
+          date: Date.now() - 1814400000, // 3 semanas atrás
+          serviceType: 5,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 667 890 123",
+        email: "manuel.carpintero@email.com",
+        website: "www.carpinteriamanu.es"
+      }
+    },
+    {
+      id: 7,
+      address: "0x789012345678901234567890123456789012def0",
+      name: "Patricia Morales",
+      description: "Técnica en climatización y calefacción. Especialista en instalación y mantenimiento de sistemas HVAC.",
+      skills: ["Aire acondicionado", "Calefacción", "Ventilación", "Bombas de calor", "Mantenimiento HVAC"],
+      serviceTypes: [8], // HVAC
+      rating: 4.8,
+      totalReviews: 67,
+      completedJobs: 92,
+      joinDate: Date.now() - 25920000000, // 10 meses atrás
+      hourlyRate: "0.032",
+      location: "Bilbao Norte",
+      verified: true,
+      responseTime: "< 2 horas",
+      successRate: 97.8,
+      portfolio: [
+        {
+          title: "Sistema climatización oficina",
+          description: "Instalación completa de sistema de climatización para oficina de 300m²",
+          completedDate: Date.now() - 1814400000, // 3 semanas atrás
+        },
+        {
+          title: "Bomba de calor residencial",
+          description: "Instalación de bomba de calor aerotérmica para vivienda unifamiliar",
+          completedDate: Date.now() - 3628800000, // 6 semanas atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 10,
+          clientName: "Antonio García",
+          clientAddress: "0x7890123456789012345678901234567890123456",
+          rating: 5,
+          comment: "Muy profesional y técnica. Solucionó un problema complejo rápidamente.",
+          date: Date.now() - 1209600000, // 2 semanas atrás
+          serviceType: 8,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 678 901 234",
+        email: "patricia.clima@email.com"
+      }
+    },
+    {
+      id: 8,
+      address: "0x890123456789012345678901234567890123ef01",
+      name: "Diego Ramírez",
+      description: "Especialista en techos y cubiertas. Experto en reparaciones e impermeabilización de tejados.",
+      skills: ["Reparación tejados", "Impermeabilización", "Canalones", "Tejas", "Cubiertas metálicas"],
+      serviceTypes: [6], // ROOFING
+      rating: 4.6,
+      totalReviews: 83,
+      completedJobs: 107,
+      joinDate: Date.now() - 18144000000, // 7 meses atrás
+      hourlyRate: "0.026",
+      location: "Zaragoza Centro",
+      verified: true,
+      responseTime: "< 6 horas",
+      successRate: 94.4,
+      portfolio: [
+        {
+          title: "Reparación tejado casa rural",
+          description: "Reparación completa de tejado de teja árabe con impermeabilización",
+          completedDate: Date.now() - 2419200000, // 4 semanas atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 11,
+          clientName: "Elena Jiménez",
+          clientAddress: "0x8901234567890123456789012345678901234567",
+          rating: 4,
+          comment: "Buen trabajo, aunque tardó un poco más de lo esperado por el mal tiempo.",
+          date: Date.now() - 1814400000, // 3 semanas atrás
+          serviceType: 6,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 689 012 345",
+        email: "diego.tejados@email.com"
+      }
+    },
+    {
+      id: 9,
+      address: "0x901234567890123456789012345678901234f012",
+      name: "Sandra Vega",
+      description: "Servicio profesional de limpieza residencial y comercial. Especialista en limpieza profunda.",
+      skills: ["Limpieza residencial", "Limpieza comercial", "Limpieza profunda", "Cristales", "Alfombras"],
+      serviceTypes: [7], // CLEANING
+      rating: 4.9,
+      totalReviews: 156,
+      completedJobs: 203,
+      joinDate: Date.now() - 31104000000, // 12 meses atrás
+      hourlyRate: "0.015",
+      location: "Málaga Este",
+      verified: true,
+      responseTime: "< 1 hora",
+      successRate: 99.0,
+      portfolio: [
+        {
+          title: "Limpieza oficina corporativa",
+          description: "Limpieza semanal de oficina de 500m² incluyendo cristales",
+          completedDate: Date.now() - 604800000, // 1 semana atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 12,
+          clientName: "Luis Herrero",
+          clientAddress: "0x9012345678901234567890123456789012345678",
+          rating: 5,
+          comment: "Excelente servicio. Muy puntual y el resultado es impecable.",
+          date: Date.now() - 432000000, // 5 días atrás
+          serviceType: 7,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 690 123 456",
+        email: "sandra.limpieza@email.com"
+      }
+    },
+    {
+      id: 10,
+      address: "0xa01234567890123456789012345678901234f0123",
+      name: "Javier Molina",
+      description: "Cerrajero 24h con amplia experiencia en seguridad residencial y comercial.",
+      skills: ["Apertura cerraduras", "Cambio bombines", "Cajas fuertes", "Puertas blindadas", "Sistemas seguridad"],
+      serviceTypes: [9], // LOCKSMITH
+      rating: 4.7,
+      totalReviews: 134,
+      completedJobs: 189,
+      joinDate: Date.now() - 20736000000, // 8 meses atrás
+      hourlyRate: "0.035",
+      location: "Madrid Sur",
+      verified: true,
+      responseTime: "< 30 min",
+      successRate: 96.8,
+      portfolio: [
+        {
+          title: "Instalación puerta blindada",
+          description: "Instalación completa de puerta de seguridad grado 3",
+          completedDate: Date.now() - 1814400000, // 3 semanas atrás
+        }
+      ],
+      reviews: [
+        {
+          id: 13,
+          clientName: "Rosa Delgado",
+          clientAddress: "0xa012345678901234567890123456789012345678",
+          rating: 5,
+          comment: "Servicio muy rápido. Llegó en 20 minutos y solucionó el problema.",
+          date: Date.now() - 1209600000, // 2 semanas atrás
+          serviceType: 9,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+34 601 234 567",
+        email: "javier.cerrajero@email.com"
+      }
     }
   ]
 

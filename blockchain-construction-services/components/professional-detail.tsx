@@ -1,9 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { 
   Star, 
   MapPin, 
@@ -27,6 +29,8 @@ interface ProfessionalDetailProps {
 }
 
 export function ProfessionalDetail({ professional, onBack, onContact, onHire }: ProfessionalDetailProps) {
+  const [showPhoneDialog, setShowPhoneDialog] = useState(false)
+  
   const renderStars = (rating: number) => {
     const stars = []
     const fullStars = Math.floor(rating)
@@ -150,9 +154,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                     </div>
                   </div>
                 </div>
-                <Badge variant="secondary" className="bg-green-100 text-green-800 text-lg px-3 py-1">
-                  {professional.hourlyRate} ETH/h
-                </Badge>
+                {/* Removed ETH/h rate badge */}
               </div>
             </CardHeader>
             <CardContent>
@@ -175,22 +177,6 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">
                     Trabajos Completados
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
-                    {professional.successRate}%
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Tasa de Éxito
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {professional.responseTime}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Tiempo de Respuesta
                   </div>
                 </div>
                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
@@ -267,9 +253,10 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
               <div className="space-y-3">
                 <Button
                   size="lg"
-                  onClick={() => onHire(professional.id)}
+                  onClick={() => setShowPhoneDialog(true)}
                   className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                 >
+                  <Phone className="h-4 w-4 mr-2" />
                   Contactar
                 </Button>
               </div>
@@ -334,6 +321,33 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
           </Card>
         </div>
       </div>
+
+      {/* Phone Dialog */}
+      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Contactar a {professional.name}</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+            <Phone className="h-6 w-6 text-orange-600" />
+            <div>
+              <p className="font-medium text-gray-900">Número de teléfono</p>
+              <p className="text-lg font-mono text-orange-600">
+                {professional.contact?.phone || "No disponible"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <Mail className="h-6 w-6 text-gray-600" />
+            <div>
+              <p className="font-medium text-gray-900">Email</p>
+              <p className="text-sm text-gray-600">
+                {professional.contact?.email || "No disponible"}
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

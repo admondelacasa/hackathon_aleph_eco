@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet, Building2 } from "lucide-react"
+import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet, Building2, Paintbrush, Home, SprayCanIcon, Wind, Key, Construction, Square, Settings, Bug, Glasses, Brush } from "lucide-react"
 import { useBlockchain } from "@/hooks/use-blockchain"
 import { useConstructionServices, type Service } from "@/hooks/use-construction-services"
 import { useStaking } from "@/hooks/use-staking"
@@ -24,8 +24,13 @@ import { UserProfileDisplay } from "@/components/user-profile-display"
 import { toast } from "@/hooks/use-toast"
 import { MetaMaskGuide } from "@/components/metamask-guide"
 
-const serviceTypes = ["Jardinería", "Plomería", "Electricidad", "Construcción"]
-const serviceIcons = [TreePine, Wrench, Zap, Hammer]
+const serviceTypes = [
+  "Jardinería", "Plomería", "Electricidad", "Construcción", 
+  "Pintura", "Carpintería", "Techos", "Limpieza", 
+  "Climatización", "Cerrajería", "Albañilería", "Suelos",
+  "Reparación electrodomésticos", "Control de plagas", "Soldadura", "Cristalería"
+]
+const serviceIcons = [TreePine, Wrench, Zap, Hammer, Paintbrush, Construction, Home, Brush, Wind, Key, Construction, Square, Settings, Bug, Zap, Glasses]
 
 export default function ConstructionServicesApp() {
   const [activeTab, setActiveTab] = useState("browse")
@@ -292,7 +297,7 @@ export default function ConstructionServicesApp() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Image 
-                src="/BuildTrust-logo-v2.png" 
+                src="/BuildTrust-logo-v3.png" 
                 alt="BuildTrust Logo" 
                 width={32} 
                 height={32}
@@ -354,7 +359,7 @@ export default function ConstructionServicesApp() {
         {!isConnected ? (
           <div className="text-center py-20">
             <Image 
-              src="/BuildTrust-logo-v2.png" 
+              src="/BuildTrust-logo-v3.png" 
               alt="BuildTrust Logo" 
               width={80} 
               height={80}
@@ -374,7 +379,7 @@ export default function ConstructionServicesApp() {
                 <div className="text-center">
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src="/BuildTrust-logo-v2.png" 
+                      src="/BuildTrust-logo-v3.png" 
                       alt="BuildTrust Logo" 
                       width={24} 
                       height={24}
@@ -630,18 +635,6 @@ export default function ConstructionServicesApp() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Total Reseñas</span>
                       <span className="font-bold text-orange-600">{contractorReputation.totalReviews}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Tasa de Éxito</span>
-                      <span className="font-bold text-green-600">
-                        {contractorReputation.completedJobs > 0
-                          ? Math.round(
-                              (contractorReputation.completedJobs / (contractorReputation.completedJobs + 2)) * 100,
-                            )
-                          : 0}
-                        %
-                      </span>
                     </div>
 
                     <div className="flex items-center justify-between">

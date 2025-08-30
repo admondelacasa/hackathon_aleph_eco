@@ -14,7 +14,17 @@ import {
   Search,
   Filter,
   Star,
-  MapPin
+  MapPin,
+  Paintbrush,
+  Construction,
+  Home,
+  Brush,
+  Wind,
+  Key,
+  Square,
+  Settings,
+  Bug,
+  Glasses
 } from "lucide-react"
 import { useProfessionals, Professional } from "@/hooks/use-professionals"
 import { ProfessionalCard } from "./professional-card"
@@ -25,8 +35,13 @@ interface ServiceBrowserProps {
   onBack?: () => void
 }
 
-const serviceTypes = ["Jardinería", "Plomería", "Electricidad", "Construcción"]
-const serviceIcons = [TreePine, Wrench, Zap, Hammer]
+const serviceTypes = [
+  "Jardinería", "Plomería", "Electricidad", "Construcción", 
+  "Pintura", "Carpintería", "Techos", "Limpieza", 
+  "Climatización", "Cerrajería", "Albañilería", "Suelos",
+  "Reparación electrodomésticos", "Control de plagas", "Soldadura", "Cristalería"
+]
+const serviceIcons = [TreePine, Wrench, Zap, Hammer, Paintbrush, Construction, Home, Brush, Wind, Key, Construction, Square, Settings, Bug, Zap, Glasses]
 
 export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
   const [selectedService, setSelectedService] = useState<number | null>(null)
@@ -115,8 +130,6 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
       switch (sortBy) {
         case "rating":
           return b.rating - a.rating
-        case "price":
-          return parseFloat(a.hourlyRate) - parseFloat(b.hourlyRate)
         case "experience":
           return b.completedJobs - a.completedJobs
         case "reviews":
@@ -196,7 +209,6 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="rating">Mejor calificados</SelectItem>
-                <SelectItem value="price">Precio más bajo</SelectItem>
                 <SelectItem value="experience">Más experiencia</SelectItem>
                 <SelectItem value="reviews">Más reseñas</SelectItem>
               </SelectContent>

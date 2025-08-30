@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle } from "lucide-react"
+import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle, AlertCircle, Loader2, Navigation } from "lucide-react"
 
 interface ServiceCreationFormProps {
   onSubmit: (serviceData: any) => void
@@ -36,11 +36,168 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
     contractorConfirmed: false,
   })
 
+  const [userValidation, setUserValidation] = useState({
+    isValidating: false,
+    isValid: false,
+    userFound: null as { username: string; walletAddress: string } | null,
+    message: ""
+  })
+
+  const [locationState, setLocationState] = useState({
+    isGettingLocation: false,
+    useManualLocation: false,
+    country: "",
+    province: "",
+    city: "",
+    currentLocation: ""
+  })
+
+  // Location data
+  const countries = {
+    "Argentina": {
+      "Buenos Aires": ["Buenos Aires", "La Plata", "Mar del Plata", "Tandil", "Bahía Blanca"],
+      "Córdoba": ["Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María"],
+      "Santa Fe": ["Santa Fe", "Rosario", "Rafaela", "Venado Tuerto"],
+      "Mendoza": ["Mendoza", "San Rafael", "Godoy Cruz", "Maipú"]
+    },
+    "España": {
+      "Madrid": ["Madrid", "Alcalá de Henares", "Móstoles", "Fuenlabrada"],
+      "Barcelona": ["Barcelona", "Hospitalet", "Terrassa", "Sabadell"],
+      "Valencia": ["Valencia", "Alicante", "Elche", "Castellón"],
+      "Sevilla": ["Sevilla", "Jerez de la Frontera", "Dos Hermanas", "Alcalá de Guadaíra"]
+    },
+    "México": {
+      "Ciudad de México": ["Ciudad de México", "Ecatepec", "Guadalajara", "Puebla"],
+      "Jalisco": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá"],
+      "Nuevo León": ["Monterrey", "Guadalupe", "San Nicolás", "Apodaca"]
+    }
+  }
+
+  // Geolocation functions
+  const getCurrentLocation = async () => {
+    setLocationState(prev => ({ ...prev, isGettingLocation: true }))
+    
+    try {
+      if (!navigator.geolocation) {
+        throw new Error("Geolocalización no soportada por este navegador")
+      }
+
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        })
+      })
+
+      // Simulate reverse geocoding (in real app, use a service like Google Maps API)
+      const mockLocation = `Lat: ${position.coords.latitude.toFixed(4)}, Lng: ${position.coords.longitude.toFixed(4)}`
+      
+      setLocationState(prev => ({ 
+        ...prev, 
+        isGettingLocation: false, 
+        currentLocation: mockLocation,
+        useManualLocation: false 
+      }))
+      
+      setFormData(prev => ({ ...prev, location: mockLocation }))
+      
+    } catch (error) {
+      console.error("Error getting location:", error)
+      setLocationState(prev => ({ 
+        ...prev, 
+        isGettingLocation: false,
+        useManualLocation: true 
+      }))
+    }
+  }
+
+  const handleManualLocationChange = () => {
+    const { country, province, city } = locationState
+    if (country && province && city) {
+      const fullLocation = `${city}, ${province}, ${country}`
+      setFormData(prev => ({ ...prev, location: fullLocation }))
+    }
+  }
+
+  useEffect(() => {
+    handleManualLocationChange()
+  }, [locationState.country, locationState.province, locationState.city])
+
+  // Simulated user database (in real app, this would be an API call)
+  const mockUsers = [
+    { username: "CarlosMendoza", walletAddress: "0x742d35Cc6635Bb327234567890123456789ab987" },
+    { username: "AnaRodriguez", walletAddress: "0x856f123456789012345678901234567890abcdef" },
+    { username: "MiguelTorres", walletAddress: "0x123abc456def789012345678901234567890cdef" },
+    { username: "LauraFernandez", walletAddress: "0xabcdef123456789012345678901234567890abcd" },
+    { username: "RobertoSilva", walletAddress: "0x567890123456789012345678901234567890bcde" },
+    { username: "ManuelHerrera", walletAddress: "0x678901234567890123456789012345678901cdef" }
+  ]
+
+  // Function to validate user
+  const validateUser = async (username: string) => {
+    if (!username.trim()) {
+      setUserValidation({
+        isValidating: false,
+        isValid: false,
+        userFound: null,
+        message: ""
+      })
+      return
+    }
+
+    setUserValidation(prev => ({ ...prev, isValidating: true }))
+
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    const foundUser = mockUsers.find(user => 
+      user.username.toLowerCase() === username.toLowerCase()
+    )
+
+    if (foundUser) {
+      setUserValidation({
+        isValidating: false,
+        isValid: true,
+        userFound: foundUser,
+        message: "Usuario válido encontrado"
+      })
+    } else {
+      setUserValidation({
+        isValidating: false,
+        isValid: false,
+        userFound: null,
+        message: "Usuario no encontrado"
+      })
+    }
+  }
+
+  // Effect to validate user when username changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      validateUser(formData.contractorUsername)
+    }, 800) // Debounce for 800ms
+
+    return () => clearTimeout(timeoutId)
+  }, [formData.contractorUsername])
+
   const serviceTypes = [
     { value: "0", label: "Jardinería", icon: "🌱" },
     { value: "1", label: "Plomería", icon: "🔧" },
     { value: "2", label: "Electricidad", icon: "⚡" },
     { value: "3", label: "Construcción", icon: "🏗️" },
+    { value: "4", label: "Pintura", icon: "🎨" },
+    { value: "5", label: "Carpintería", icon: "🪚" },
+    { value: "6", label: "Techos", icon: "🏠" },
+    { value: "7", label: "Limpieza", icon: "🧽" },
+    { value: "8", label: "Climatización", icon: "❄️" },
+    { value: "9", label: "Cerrajería", icon: "🔐" },
+    { value: "10", label: "Albañilería", icon: "🧱" },
+    { value: "11", label: "Suelos", icon: "⬜" },
+    { value: "12", label: "Reparación electrodomésticos", icon: "🔧" },
+    { value: "13", label: "Control de plagas", icon: "🐛" },
+    { value: "14", label: "Soldadura", icon: "⚡" },
+    { value: "15", label: "Cristalería", icon: "🪟" },
   ]
 
   const addMilestone = () => {
@@ -68,10 +225,16 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
     e.preventDefault()
     const validMilestones = formData.milestones.filter((m) => m.trim() !== "")
     
+    if (!userValidation.isValid) {
+      alert("Debes ingresar un usuario válido para el contratista")
+      return
+    }
+    
     if (confirmations.clientConfirmed && confirmations.contractorConfirmed) {
       onSubmit({
         ...formData,
         milestones: validMilestones,
+        contractorWalletAddress: userValidation.userFound?.walletAddress,
         confirmations,
       })
     } else {
@@ -155,20 +318,36 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                 />
               </div>
               
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="walletVerified"
-                    checked={formData.walletVerified}
-                    onCheckedChange={(checked) => 
-                      setFormData((prev) => ({ ...prev, walletVerified: checked as boolean }))
-                    }
-                  />
-                  <Label htmlFor="walletVerified" className="text-sm">
-                    Wallet verificada
-                  </Label>
+              {/* User Validation Display */}
+              {formData.contractorUsername && (
+                <div className="flex items-center space-x-3 p-3 bg-white dark:bg-gray-700 rounded-lg border">
+                  {userValidation.isValidating && (
+                    <div className="flex items-center space-x-2">
+                      <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+                      <span className="text-sm text-gray-500">Verificando usuario...</span>
+                    </div>
+                  )}
+                  
+                  {!userValidation.isValidating && userValidation.isValid && userValidation.userFound && (
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <div>
+                        <p className="text-sm font-medium text-green-600">{userValidation.message}</p>
+                        <p className="text-xs text-gray-500">
+                          Wallet: {userValidation.userFound.walletAddress.slice(0, 6)}...{userValidation.userFound.walletAddress.slice(-4)}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {!userValidation.isValidating && !userValidation.isValid && userValidation.message && (
+                    <div className="flex items-center space-x-2">
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                      <p className="text-sm text-red-600">{userValidation.message}</p>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -196,11 +375,125 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                 <MapPin className="h-4 w-4" />
                 <span>Ubicación</span>
               </Label>
+              
+              {/* Location buttons */}
+              <div className="flex space-x-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={getCurrentLocation}
+                  disabled={locationState.isGettingLocation}
+                  className="flex items-center space-x-2"
+                >
+                  {locationState.isGettingLocation ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Navigation className="h-4 w-4" />
+                  )}
+                  <span>
+                    {locationState.isGettingLocation ? "Localizando..." : "Mi ubicación"}
+                  </span>
+                </Button>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setLocationState(prev => ({ ...prev, useManualLocation: !prev.useManualLocation }))}
+                >
+                  {locationState.useManualLocation ? "Ocultar" : "Manual"}
+                </Button>
+              </div>
+
+              {/* Manual location selects */}
+              {locationState.useManualLocation && (
+                <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {/* Country select */}
+                    <div className="space-y-1">
+                      <Label className="text-xs text-gray-600">País</Label>
+                      <Select 
+                        value={locationState.country} 
+                        onValueChange={(value) => setLocationState(prev => ({ 
+                          ...prev, 
+                          country: value, 
+                          province: "", 
+                          city: "" 
+                        }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar país" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.keys(countries).map((country) => (
+                            <SelectItem key={country} value={country}>
+                              {country}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Province select */}
+                    <div className="space-y-1">
+                      <Label className="text-xs text-gray-600">Provincia</Label>
+                      <Select 
+                        value={locationState.province} 
+                        onValueChange={(value) => setLocationState(prev => ({ 
+                          ...prev, 
+                          province: value, 
+                          city: "" 
+                        }))}
+                        disabled={!locationState.country}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar provincia" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {locationState.country && 
+                            Object.keys(countries[locationState.country as keyof typeof countries] || {}).map((province) => (
+                              <SelectItem key={province} value={province}>
+                                {province}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* City select */}
+                    <div className="space-y-1">
+                      <Label className="text-xs text-gray-600">Ciudad</Label>
+                      <Select 
+                        value={locationState.city} 
+                        onValueChange={(value) => setLocationState(prev => ({ ...prev, city: value }))}
+                        disabled={!locationState.province}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {locationState.country && locationState.province && 
+                            ((countries as any)[locationState.country]?.[locationState.province] || []).map((city: string) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Display current location */}
               <Input
                 id="location"
                 placeholder="Ciudad, País"
                 value={formData.location}
                 onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
+                className="bg-gray-50"
+                readOnly={!locationState.useManualLocation && !!locationState.currentLocation}
               />
             </div>
 

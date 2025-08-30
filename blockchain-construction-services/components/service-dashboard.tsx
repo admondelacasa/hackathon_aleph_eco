@@ -39,7 +39,12 @@ export function ServiceDashboard() {
   const { account, isConnected } = useBlockchain()
   const { getUserServices } = useConstructionServices()
 
-  const serviceTypes = ["Jardinería", "Plomería", "Electricidad", "Construcción"]
+  const serviceTypes = [
+    "Jardinería", "Plomería", "Electricidad", "Construcción", 
+    "Pintura", "Carpintería", "Techos", "Limpieza", 
+    "Climatización", "Cerrajería", "Albañilería", "Suelos",
+    "Reparación electrodomésticos", "Control de plagas", "Soldadura", "Cristalería"
+  ]
   const serviceIcons = [null, null, null, null] // Placeholder for icons
 
   useEffect(() => {
