@@ -18,6 +18,8 @@ import { ServiceCreationForm } from "@/components/service-creation-form"
 import { ServiceBrowser } from "@/components/service-browser"
 import { ContractCard } from "@/components/contract-card"
 import { ReputationBadge } from "@/components/reputation-badge"
+import { UserRegistration, type UserProfile } from "@/components/user-registration"
+import { UserProfileDisplay } from "@/components/user-profile-display"
 import { toast } from "@/hooks/use-toast"
 import { MetaMaskGuide } from "@/components/metamask-guide"
 
@@ -33,6 +35,8 @@ export default function ConstructionServicesApp() {
     asContractor: [],
   })
   const [activeContracts, setActiveContracts] = useState<any[]>([])
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [showRegistration, setShowRegistration] = useState(false)
   const [pendingRewards, setPendingRewards] = useState("0")
   const [totalStaked, setTotalStaked] = useState("0")
   const [contractorReputation, setContractorReputation] = useState({
@@ -53,11 +57,47 @@ export default function ConstructionServicesApp() {
   useEffect(() => {
     if (isConnected && account) {
       loadUserData()
+      checkUserRegistration()
     } else {
       // Load demo services even when not connected
       loadDemoServices()
     }
   }, [isConnected, account])
+
+  const checkUserRegistration = () => {
+    if (account) {
+      // Verificar si el usuario ya está registrado en localStorage
+      const savedProfile = localStorage.getItem(`userProfile_${account}`)
+      if (savedProfile) {
+        setUserProfile(JSON.parse(savedProfile))
+        setShowRegistration(false)
+      } else {
+        setShowRegistration(true)
+      }
+    }
+  }
+
+  const handleUserRegistration = (userData: UserProfile) => {
+    // Guardar el perfil en localStorage
+    localStorage.setItem(`userProfile_${account}`, JSON.stringify(userData))
+    setUserProfile(userData)
+    setShowRegistration(false)
+    
+    toast({
+      title: "Perfil Completado",
+      description: `¡Bienvenido a BuildTrust, ${userData.username}!`,
+    })
+  }
+
+  const handleEditProfile = () => {
+    setShowRegistration(true)
+  }
+
+  const handleDisconnectWallet = async () => {
+    await disconnectWallet()
+    setUserProfile(null)
+    setShowRegistration(false)
+  }
 
   const loadDemoServices = async () => {
     try {
@@ -201,6 +241,31 @@ export default function ConstructionServicesApp() {
     }
   }
 
+  const handleUpdateMilestones = (contractId: string, milestones: string[]) => {
+    setActiveContracts(prev => 
+      prev.map(contract => 
+        contract.id === contractId 
+          ? { ...contract, milestones }
+          : contract
+      )
+    )
+  }
+
+  const handleFinalizeContract = (contractId: string) => {
+    setActiveContracts(prev => 
+      prev.map(contract => 
+        contract.id === contractId 
+          ? { ...contract, status: "Completado" }
+          : contract
+      )
+    )
+    
+    toast({
+      title: "Contrato Finalizado",
+      description: "El contrato se ha completado exitosamente",
+    })
+  }
+
   const getStatusBadge = (status: number) => {
     const statuses = [
       { label: "Creado", variant: "secondary" as const },
@@ -240,6 +305,14 @@ export default function ConstructionServicesApp() {
                   )}
                 </Button>
               </div>
+            ) : userProfile ? (
+              <UserProfileDisplay
+                userProfile={userProfile}
+                walletAddress={account}
+                balance={balance}
+                onEditProfile={handleEditProfile}
+                onDisconnectWallet={handleDisconnectWallet}
+              />
             ) : (
               <div className="flex items-center space-x-4">
                 <Badge variant="outline" className="px-3 py-1">
@@ -249,22 +322,6 @@ export default function ConstructionServicesApp() {
                   <Coins className="h-4 w-4" />
                   <span>{Number.parseFloat(balance).toFixed(4)} ETH</span>
                 </div>
-                {Number.parseFloat(pendingRewards) > 0 && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleClaimRewards}
-                    disabled={stakingLoading}
-                    className="text-green-600 border-green-600 hover:bg-green-50 bg-transparent"
-                  >
-                    {stakingLoading ? (
-                      <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                    ) : (
-                      <Star className="h-3 w-3 mr-1" />
-                    )}
-                    {Number.parseFloat(pendingRewards).toFixed(4)} ETH
-                  </Button>
-                )}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -415,6 +472,8 @@ export default function ConstructionServicesApp() {
                           key={contract.id}
                           contract={contract}
                           role="client"
+                          onUpdateMilestones={handleUpdateMilestones}
+                          onFinalizeContract={handleFinalizeContract}
                         />
                       ))}
                     </div>
@@ -592,6 +651,14 @@ export default function ConstructionServicesApp() {
           </Tabs>
         )}
       </main>
+
+      {/* Modal de Registro de Usuario */}
+      {showRegistration && isConnected && account && (
+        <UserRegistration
+          walletAddress={account}
+          onSubmit={handleUserRegistration}
+        />
+      )}
     </div>
   )
 }
