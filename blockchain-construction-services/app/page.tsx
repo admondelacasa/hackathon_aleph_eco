@@ -182,7 +182,7 @@ export default function ConstructionServicesApp() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Shield className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">BuildChain</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">BuildTrust</h1>
             </div>
 
             {!isConnected ? (
@@ -246,7 +246,7 @@ export default function ConstructionServicesApp() {
         {!isConnected ? (
           <div className="text-center py-20">
             <Shield className="h-20 w-20 text-blue-600 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildChain</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildTrust</h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               La plataforma blockchain descentralizada para servicios de construcción. Pagos seguros, liberación gradual
               de fondos y staking automático.
