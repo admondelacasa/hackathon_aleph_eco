@@ -193,38 +193,41 @@ export default function ConstructionServicesApp() {
 
   const handleCreateService = async (serviceData: any) => {
     try {
-      if (!serviceData.confirmations?.clientConfirmed || !serviceData.confirmations?.contractorConfirmed) {
+      // Solo verificar que el cliente haya confirmado
+      if (!serviceData.confirmations?.clientConfirmed) {
         toast({
           title: "Error",
-          description: "Ambas partes deben confirmar antes de crear el contrato",
+          description: "Debes confirmar como cliente para crear el contrato",
           variant: "destructive",
         })
         return
       }
 
-      // Crear un nuevo contrato
+      // Crear un nuevo contrato pendiente de confirmación del prestador
       const newContract = {
         id: Date.now().toString(),
         title: serviceData.title,
         description: serviceData.description,
         serviceType: serviceData.serviceType,
         contractorUsername: serviceData.contractorUsername,
+        contractorWalletAddress: serviceData.contractorWalletAddress,
         walletVerified: serviceData.walletVerified,
         budget: serviceData.budget,
         location: serviceData.location,
         deadline: serviceData.deadline,
         milestones: serviceData.milestones,
-        status: "En Curso",
+        status: "Pendiente de Confirmación",
         createdAt: new Date().toISOString(),
         clientConfirmed: true,
-        contractorConfirmed: true,
+        contractorConfirmed: false,
+        confirmations: serviceData.confirmations
       }
 
       setActiveContracts(prev => [...prev, newContract])
 
       toast({
         title: "Contrato Creado",
-        description: `Contrato creado exitosamente con ${serviceData.contractorUsername}`,
+        description: `Contrato enviado a ${serviceData.contractorUsername} para su revisión y confirmación`,
       })
 
       setActiveTab("my-services")
@@ -297,7 +300,7 @@ export default function ConstructionServicesApp() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Image 
-                src="/BuildTrust-logo-v3.png" 
+                src="/BuildTrust-logo-v4.png" 
                 alt="BuildTrust Logo" 
                 width={32} 
                 height={32}
@@ -359,7 +362,7 @@ export default function ConstructionServicesApp() {
         {!isConnected ? (
           <div className="text-center py-20">
             <Image 
-              src="/BuildTrust-logo-v3.png" 
+              src="/BuildTrust-logo-v4.png" 
               alt="BuildTrust Logo" 
               width={80} 
               height={80}
@@ -379,7 +382,7 @@ export default function ConstructionServicesApp() {
                 <div className="text-center">
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src="/BuildTrust-logo-v3.png" 
+                      src="/BuildTrust-logo-v4.png" 
                       alt="BuildTrust Logo" 
                       width={24} 
                       height={24}

@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'BuildTrust - Plataforma Blockchain para Servicios de Construcción',
   description: 'Plataforma descentralizada para servicios de construcción con pagos seguros y liberación gradual de fondos',
   generator: 'BuildTrust',
+  icons: {
+    icon: '/BuildTrust-logo-v4.png',
+    shortcut: '/BuildTrust-logo-v4.png',
+    apple: '/BuildTrust-logo-v4.png',
+  },
 }
 
 export default function RootLayout({
