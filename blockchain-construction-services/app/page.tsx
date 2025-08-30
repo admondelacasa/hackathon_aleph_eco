@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
+import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet } from "lucide-react"
 import { useBlockchain } from "@/hooks/use-blockchain"
 import { useConstructionServices, type Service } from "@/hooks/use-construction-services"
 import { useStaking } from "@/hooks/use-staking"
@@ -247,50 +247,91 @@ export default function ConstructionServicesApp() {
           <div className="text-center py-20">
             <Shield className="h-20 w-20 text-blue-600 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildTrust</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-              La plataforma blockchain descentralizada para servicios de construcción. Pagos seguros, liberación gradual
-              de fondos y staking automático.
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+              La plataforma blockchain descentralizada para servicios de construcción. Conectamos clientes y profesionales 
+              con la máxima seguridad y transparencia.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-              <Card>
-                <CardHeader className="text-center">
-                  <Shield className="h-12 w-12 text-blue-600 mx-auto mb-2" />
-                  <CardTitle>Pagos Seguros</CardTitle>
+            
+            {/* Características Principales */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
+              <Card className="border-blue-200 hover:border-blue-300 transition-colors">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <CardTitle className="text-xl text-blue-700">Pagos Seguros</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Fondos protegidos en smart contracts hasta completar el trabajo
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Tus fondos están protegidos por contratos inteligentes que garantizan que el dinero solo se libera 
+                    cuando el trabajo está completado. No más estafas ni pagos perdidos. Cada transacción queda registrada 
+                    de manera inmutable en la blockchain, brindándote total tranquilidad y control sobre tus pagos.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="text-center">
-                  <Coins className="h-12 w-12 text-green-600 mx-auto mb-2" />
-                  <CardTitle>Sin Comisiones</CardTitle>
+              <Card className="border-green-200 hover:border-green-300 transition-colors">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-8 w-8 text-green-600" />
+                  </div>
+                  <CardTitle className="text-xl text-green-700">Valoraciones Reales</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Staking automático genera rendimientos que cubren las comisiones
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Cada reseña y calificación está registrada en blockchain, lo que hace imposible manipular o falsificar 
+                    las opiniones. Conoce la reputación real de cada profesional basada en experiencias auténticas de otros 
+                    usuarios. Toma decisiones informadas y contrata con confianza sabiendo que las valoraciones son 100% genuinas.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="text-center">
-                  <CheckCircle className="h-12 w-12 text-purple-600 mx-auto mb-2" />
-                  <CardTitle>Transparencia</CardTitle>
+              <Card className="border-purple-200 hover:border-purple-300 transition-colors">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <CardTitle className="text-xl text-purple-700">Búsqueda Avanzada</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Sistema de reseñas y calificaciones inmutable en blockchain
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Encuentra exactamente lo que necesitas con nuestro sistema de búsqueda inteligente. Filtra por ubicación, 
+                    especialidad, calificaciones, precio y disponibilidad. Nuestro algoritmo te conecta con los profesionales 
+                    más adecuados para tu proyecto, ahorrándote tiempo y garantizando que encuentres la calidad que buscas.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-orange-200 hover:border-orange-300 transition-colors">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Wallet className="h-8 w-8 text-orange-600" />
+                  </div>
+                  <CardTitle className="text-xl text-orange-700">Billetera Integrada</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Gestiona todos tus pagos desde una interfaz simple y segura. Tu billetera MetaMask se integra perfectamente 
+                    con BuildTrust, permitiéndote pagar, recibir fondos y hacer staking de manera intuitiva. No necesitas ser 
+                    un experto en blockchain para usar nuestra plataforma de forma segura y eficiente.
                   </p>
                 </CardContent>
               </Card>
             </div>
-            <Button onClick={handleConnectWallet} size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Conectar Wallet para Comenzar
-            </Button>
+
+            {/* Llamada a la Acción Reforzada */}
+            <div className="text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8 mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Únete a la Revolución de la Construcción Digital
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                Miles de profesionales y clientes ya confían en BuildTrust para realizar sus proyectos de construcción 
+                de manera segura y transparente.
+              </p>
+              <Button onClick={handleConnectWallet} size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-3">
+                Conectar Wallet y Comenzar Ahora
+              </Button>
+            </div>
           </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
