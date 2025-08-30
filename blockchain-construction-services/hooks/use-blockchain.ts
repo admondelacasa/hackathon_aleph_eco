@@ -35,9 +35,13 @@ export function useBlockchain() {
             setAccount(accounts[0].address)
             setIsConnected(true)
 
-            // Get balance and chain ID
-            const balance = await provider.getBalance(accounts[0].address)
-            setBalance(ethers.formatEther(balance))
+            // Get USDT balance and chain ID
+            const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+            const [usdtBalance, decimals] = await Promise.all([
+              usdtContract.balanceOf(accounts[0].address),
+              usdtContract.decimals()
+            ])
+            setBalance(ethers.formatUnits(usdtBalance, decimals))
 
             const network = await provider.getNetwork()
             setChainId(Number(network.chainId))
@@ -65,8 +69,12 @@ export function useBlockchain() {
           // Reinitialize signer
           if (provider) {
             provider.getSigner().then(setSigner)
-            provider.getBalance(accounts[0]).then((balance) => {
-              setBalance(ethers.formatEther(balance))
+            const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+            Promise.all([
+              usdtContract.balanceOf(accounts[0]),
+              usdtContract.decimals()
+            ]).then(([balance, decimals]) => {
+              setBalance(ethers.formatUnits(balance, decimals))
             })
           }
         }
@@ -114,9 +122,13 @@ export function useBlockchain() {
         setAccount(accounts[0])
         setIsConnected(true)
 
-        // Get balance and chain ID
-        const balance = await provider.getBalance(accounts[0])
-        setBalance(ethers.formatEther(balance))
+        // Get USDT balance and chain ID
+        const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+        const [usdtBalance, decimals] = await Promise.all([
+          usdtContract.balanceOf(accounts[0]),
+          usdtContract.decimals()
+        ])
+        setBalance(ethers.formatUnits(usdtBalance, decimals))
 
         const network = await provider.getNetwork()
         setChainId(Number(network.chainId))

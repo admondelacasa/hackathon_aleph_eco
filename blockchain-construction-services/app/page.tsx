@@ -359,7 +359,7 @@ export default function ConstructionServicesApp() {
                 </Badge>
                 <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
                   <Coins className="h-4 w-4" />
-                  <span>{Number.parseFloat(balance).toFixed(4)} ETH</span>
+                  <span>{Number.parseFloat(balance).toFixed(2)} USDT</span>
                 </div>
                 <Button
                   variant="ghost"
@@ -708,18 +708,18 @@ export default function ConstructionServicesApp() {
                     <div className="pt-4 border-t">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-gray-600">Total Staked</span>
-                        <span className="font-bold">{Number.parseFloat(totalStaked).toFixed(4)} ETH</span>
+                        <span className="font-bold">{Number.parseFloat(totalStaked).toFixed(2)} USDT</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Recompensas Pendientes</span>
                         <span className="font-bold text-green-600">
-                          {Number.parseFloat(pendingRewards).toFixed(6)} ETH
+                          {Number.parseFloat(pendingRewards).toFixed(2)} USDT
                         </span>
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <span className="text-sm text-gray-600">Ganancias Totales</span>
                         <span className="font-bold text-purple-600">
-                          {Number.parseFloat(contractorReputation.totalEarnings).toFixed(4)} ETH
+                          {Number.parseFloat(contractorReputation.totalEarnings).toFixed(2)} USDT
                         </span>
                       </div>
                     </div>

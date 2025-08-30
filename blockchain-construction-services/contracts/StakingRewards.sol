@@ -9,6 +9,8 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         uint256 amount;
         uint256 timestamp;
         uint256 rewardDebt;
+        address contractor; // The contractor associated with this stake
+        uint256 contractId; // The contract ID this stake is associated with
     }
 
     mapping(address => StakeInfo) public stakes;
@@ -19,6 +21,8 @@ contract StakingRewards is ReentrancyGuard, Ownable {
     uint256 public constant REWARD_PRECISION = 10000;
     uint256 public lastRewardTime;
     uint256 public accRewardPerShare;
+    
+    address public constant BUILDTRUST_TREASURY = address(0x8d613ff3e545b5673b462124ac830f6fdd52aa7a); 
 
     event Staked(address indexed user, uint256 amount);
     event Unstaked(address indexed user, uint256 amount);
@@ -30,7 +34,8 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         _;
     }
 
-    constructor() {
+    constructor(address _usdtAddress) {
+        USDT = IERC20(_usdtAddress);
         lastRewardTime = block.timestamp;
     }
 
@@ -51,8 +56,10 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         lastRewardTime = block.timestamp;
     }
 
-    function stake() external payable onlyAuthorized nonReentrant {
-        require(msg.value > 0, "Cannot stake 0");
+    function stake(address contractor, uint256 contractId, uint256 amount) external onlyAuthorized nonReentrant {
+        require(amount > 0, "Cannot stake 0");
+        require(contractor != address(0), "Invalid contractor address");
+        require(USDT.transferFrom(msg.sender, address(this), amount), "USDT transfer failed");
         
         updateRewards();
         
@@ -61,17 +68,20 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         if (userStake.amount > 0) {
             uint256 pending = (userStake.amount * accRewardPerShare) / 1e12 - userStake.rewardDebt;
             if (pending > 0) {
-                (bool success, ) = msg.sender.call{value: pending}("");
-                require(success, "Reward transfer failed");
-                emit RewardsClaimed(msg.sender, pending);
+                // Send yield rewards to BuildTrust treasury
+                (bool success, ) = BUILDTRUST_TREASURY.call{value: pending}("");
+                require(success, "Reward transfer to treasury failed");
+                emit RewardsClaimed(BUILDTRUST_TREASURY, pending);
             }
         }
         
-        userStake.amount += msg.value;
+        userStake.amount += amount;
         userStake.timestamp = block.timestamp;
         userStake.rewardDebt = (userStake.amount * accRewardPerShare) / 1e12;
+        userStake.contractor = contractor;
+        userStake.contractId = contractId;
         
-        totalStaked += msg.value;
+        totalStaked += amount;
         
         emit Staked(msg.sender, msg.value);
     }
@@ -89,9 +99,13 @@ contract StakingRewards is ReentrancyGuard, Ownable {
         
         totalStaked -= amount;
         
-        uint256 totalWithdraw = amount + pending;
-        (bool success, ) = msg.sender.call{value: totalWithdraw}("");
-        require(success, "Withdrawal failed");
+        // Send principal amount in USDT to contractor
+        require(USDT.transfer(userStake.contractor, amount), "USDT transfer to contractor failed");
+        
+        // Send yield in USDT to BuildTrust treasury
+        if (pending > 0) {
+            require(USDT.transfer(BUILDTRUST_TREASURY, pending), "USDT yield transfer to treasury failed");
+        }
         
         emit Unstaked(msg.sender, amount);
         if (pending > 0) {
@@ -136,8 +150,7 @@ contract StakingRewards is ReentrancyGuard, Ownable {
     }
 
     receive() external payable {
-        if (authorizedContracts[msg.sender]) {
-            stake();
-        }
+        // Only accept direct payments from authorized contracts
+        require(authorizedContracts[msg.sender], "Only authorized contracts can send Ether");
     }
 }

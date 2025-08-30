@@ -1,15 +1,14 @@
 // Contract addresses and ABIs for blockchain integration
-// NOTA: Estas son direcciones de demostración para desarrollo/testing
-// Los contratos reales se desplegarán en la red principal próximamente
 export const CONTRACT_ADDRESSES = {
   CONSTRUCTION_ESCROW: process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS || "0x1234567890123456789012345678901234567890",
   STAKING_REWARDS: process.env.NEXT_PUBLIC_STAKING_CONTRACT_ADDRESS || "0x2345678901234567890123456789012345678901",
   SERVICE_FEEDBACK: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS || "0x3456789012345678901234567890123456789012",
+  USDT: process.env.NEXT_PUBLIC_USDT_ADDRESS || "0x4456789012345678901234567890123456789013", // Testnet USDT address
 }
 
 // Simplified ABIs for the contracts
 export const CONSTRUCTION_ESCROW_ABI = [
-  "function createService(address _contractor, uint256 _milestones, string memory _description, uint256 _deadline, uint8 _serviceType, string[] memory _milestoneDescriptions) external payable",
+  "function createService(address _contractor, uint256 _milestones, string memory _description, uint256 _deadline, uint8 _serviceType, string[] memory _milestoneDescriptions, uint256 _amount) external",
   "function completeMilestone(uint256 serviceId, uint256 milestoneIndex) external",
   "function approveMilestone(uint256 serviceId, uint256 milestoneIndex) external",
   "function getService(uint256 serviceId) external view returns (tuple(uint256 id, address client, address contractor, uint256 totalAmount, uint256 releasedAmount, uint256 milestones, uint256 completedMilestones, uint8 status, string description, uint256 createdAt, uint256 deadline))",
