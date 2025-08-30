@@ -122,10 +122,18 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-2xl">
-                      {professional.name.charAt(0)}
-                    </span>
+                  <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+                    {professional.avatar ? (
+                      <img 
+                        src={professional.avatar} 
+                        alt={professional.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-white font-bold text-2xl">
+                        {professional.name.charAt(0)}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">

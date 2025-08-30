@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -50,27 +52,86 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
     country: "",
     province: "",
     city: "",
-    currentLocation: ""
+    currentLocation: "",
+    countryPopoverOpen: false,
+    provincePopoverOpen: false,
+    cityPopoverOpen: false
   })
 
-  // Location data
+  // Location data - Expanded with more Latin American countries
   const countries = {
     "Argentina": {
-      "Buenos Aires": ["Buenos Aires", "La Plata", "Mar del Plata", "Tandil", "Bahía Blanca"],
-      "Córdoba": ["Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María"],
-      "Santa Fe": ["Santa Fe", "Rosario", "Rafaela", "Venado Tuerto"],
-      "Mendoza": ["Mendoza", "San Rafael", "Godoy Cruz", "Maipú"]
+      "Buenos Aires": ["Buenos Aires", "La Plata", "Mar del Plata", "Tandil", "Bahía Blanca", "Quilmes", "Lanús"],
+      "Córdoba": ["Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María", "San Francisco"],
+      "Santa Fe": ["Santa Fe", "Rosario", "Rafaela", "Venado Tuerto", "Reconquista"],
+      "Mendoza": ["Mendoza", "San Rafael", "Godoy Cruz", "Maipú", "Luján de Cuyo"],
+      "Tucumán": ["San Miguel de Tucumán", "Yerba Buena", "Tafí Viejo", "Banda del Río Salí"],
+      "Entre Ríos": ["Paraná", "Concordia", "Gualeguaychú", "Concepción del Uruguay"]
     },
-    "España": {
-      "Madrid": ["Madrid", "Alcalá de Henares", "Móstoles", "Fuenlabrada"],
-      "Barcelona": ["Barcelona", "Hospitalet", "Terrassa", "Sabadell"],
-      "Valencia": ["Valencia", "Alicante", "Elche", "Castellón"],
-      "Sevilla": ["Sevilla", "Jerez de la Frontera", "Dos Hermanas", "Alcalá de Guadaíra"]
+    "Brasil": {
+      "São Paulo": ["São Paulo", "Campinas", "Santos", "São José dos Campos", "Ribeirão Preto", "Sorocaba"],
+      "Rio de Janeiro": ["Rio de Janeiro", "Niterói", "Duque de Caxias", "Nova Iguaçu", "Belford Roxo"],
+      "Minas Gerais": ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim"],
+      "Bahia": ["Salvador", "Feira de Santana", "Vitória da Conquista", "Camaçari", "Jequié"],
+      "Rio Grande do Sul": ["Porto Alegre", "Caxias do Sul", "Pelotas", "Canoas", "Santa Maria"]
     },
     "México": {
-      "Ciudad de México": ["Ciudad de México", "Ecatepec", "Guadalajara", "Puebla"],
-      "Jalisco": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá"],
-      "Nuevo León": ["Monterrey", "Guadalupe", "San Nicolás", "Apodaca"]
+      "Ciudad de México": ["Ciudad de México", "Iztapalapa", "Ecatepec", "Guadalajara", "Puebla"],
+      "Jalisco": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá", "Puerto Vallarta"],
+      "Nuevo León": ["Monterrey", "Guadalupe", "San Nicolás", "Apodaca", "Santa Catarina"],
+      "Veracruz": ["Veracruz", "Xalapa", "Coatzacoalcos", "Córdoba", "Orizaba"],
+      "Yucatán": ["Mérida", "Kanasín", "Umán", "Progreso", "Tizimín"]
+    },
+    "Colombia": {
+      "Bogotá": ["Bogotá", "Soacha", "Chía", "Zipaquirá", "Facatativá"],
+      "Antioquia": ["Medellín", "Bello", "Itagüí", "Envigado", "Apartadó"],
+      "Valle del Cauca": ["Cali", "Palmira", "Buenaventura", "Tuluá", "Cartago"],
+      "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Sabanagrande", "Baranoa"],
+      "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Piedecuesta", "Barrancabermeja"]
+    },
+    "Chile": {
+      "Región Metropolitana": ["Santiago", "Puente Alto", "Maipú", "Las Condes", "La Florida"],
+      "Valparaíso": ["Valparaíso", "Viña del Mar", "Villa Alemana", "Quilpué", "San Antonio"],
+      "Biobío": ["Concepción", "Talcahuano", "Chillán", "Los Ángeles", "Coronel"],
+      "Araucanía": ["Temuco", "Villarrica", "Pucón", "Padre Las Casas", "Angol"]
+    },
+    "Perú": {
+      "Lima": ["Lima", "Callao", "San Juan de Lurigancho", "Ate", "Comas"],
+      "La Libertad": ["Trujillo", "Chepén", "Pacasmayo", "Casa Grande", "Laredo"],
+      "Arequipa": ["Arequipa", "Cayma", "Cerro Colorado", "Yanahuara", "Miraflores"],
+      "Cusco": ["Cusco", "Wanchaq", "Santiago", "San Sebastián", "San Jerónimo"]
+    },
+    "Ecuador": {
+      "Pichincha": ["Quito", "Cayambe", "Mejía", "Pedro Moncayo", "Rumiñahui"],
+      "Guayas": ["Guayaquil", "Durán", "Samborondón", "Daule", "Playas"],
+      "Azuay": ["Cuenca", "Gualaceo", "Paute", "Santa Isabel", "Chordeleg"],
+      "Manabí": ["Portoviejo", "Manta", "Chone", "Montecristi", "Jipijapa"]
+    },
+    "Uruguay": {
+      "Montevideo": ["Montevideo", "Ciudad de la Costa", "Las Piedras", "Pando", "Barros Blancos"],
+      "Canelones": ["Canelones", "Santa Lucía", "Pando", "La Paz", "Progreso"],
+      "Maldonado": ["Maldonado", "Punta del Este", "San Carlos", "Piriápolis", "Pan de Azúcar"]
+    },
+    "Paraguay": {
+      "Central": ["Asunción", "Lambaré", "San Lorenzo", "Luque", "Capiatá"],
+      "Alto Paraná": ["Ciudad del Este", "Hernandarias", "Minga Guazú", "Presidente Franco"],
+      "Itapúa": ["Encarnación", "Bella Vista", "Fram", "Jesús", "Trinidad"]
+    },
+    "Bolivia": {
+      "La Paz": ["La Paz", "El Alto", "Viacha", "Tiwanaku", "Achocalla"],
+      "Santa Cruz": ["Santa Cruz de la Sierra", "Montero", "Warnes", "La Guardia", "Cotoca"],
+      "Cochabamba": ["Cochabamba", "Quillacollo", "Sacaba", "Colcapirhua", "Tiquipaya"]
+    },
+    "Venezuela": {
+      "Distrito Capital": ["Caracas", "Chacao", "Baruta", "El Hatillo", "Sucre"],
+      "Miranda": ["Los Teques", "Guarenas", "Guatire", "Charallave", "Cúa"],
+      "Zulia": ["Maracaibo", "Ciudad Ojeda", "Cabimas", "Punto Fijo", "Los Puertos de Altagracia"]
+    },
+    "España": {
+      "Madrid": ["Madrid", "Alcalá de Henares", "Móstoles", "Fuenlabrada", "Leganés"],
+      "Barcelona": ["Barcelona", "Hospitalet", "Terrassa", "Sabadell", "Badalona"],
+      "Valencia": ["Valencia", "Alicante", "Elche", "Castellón", "Torrent"],
+      "Sevilla": ["Sevilla", "Jerez de la Frontera", "Dos Hermanas", "Alcalá de Guadaíra", "Utrera"]
     }
   }
 
@@ -91,14 +152,15 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
         })
       })
 
-      // Simulate reverse geocoding with realistic location data
+      // Simulate reverse geocoding with realistic location data for Latin America
       // In a real app, you would use Google Maps Geocoding API or similar service
       const lat = position.coords.latitude
       const lng = position.coords.longitude
       
       let mockLocation = "Ubicación no identificada"
       
-      // Simple mock geocoding based on coordinates ranges
+      // Extended mock geocoding based on coordinates ranges for Latin America
+      // Argentina
       if (lat >= -38.95 && lat <= -32.89 && lng >= -68.84 && lng <= -57.53) {
         mockLocation = "Buenos Aires, Argentina"
       } else if (lat >= -34.92 && lat <= -31.16 && lng >= -65.23 && lng <= -63.18) {
@@ -107,20 +169,82 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
         mockLocation = "Santa Fe, Argentina"
       } else if (lat >= -33.28 && lat <= -32.53 && lng >= -69.35 && lng <= -68.19) {
         mockLocation = "Mendoza, Argentina"
-      } else if (lat >= 40.31 && lat <= 40.56 && lng >= -3.84 && lng <= -3.57) {
+      }
+      // Brasil
+      else if (lat >= -23.73 && lat <= -23.45 && lng >= -46.83 && lng <= -46.36) {
+        mockLocation = "São Paulo, Brasil"
+      } else if (lat >= -22.97 && lat <= -22.79 && lng >= -43.79 && lng <= -43.09) {
+        mockLocation = "Rio de Janeiro, Brasil"
+      } else if (lat >= -19.99 && lat <= -19.81 && lng >= -44.06 && lng <= -43.85) {
+        mockLocation = "Belo Horizonte, Brasil"
+      }
+      // México
+      else if (lat >= 19.32 && lat <= 19.59 && lng >= -99.22 && lng <= -98.94) {
+        mockLocation = "Ciudad de México, México"
+      } else if (lat >= 20.61 && lat <= 20.75 && lng >= -103.41 && lng <= -103.25) {
+        mockLocation = "Guadalajara, México"
+      } else if (lat >= 25.61 && lat <= 25.76 && lng >= -100.37 && lng <= -100.25) {
+        mockLocation = "Monterrey, México"
+      }
+      // Colombia
+      else if (lat >= 4.53 && lat <= 4.81 && lng >= -74.22 && lng <= -73.99) {
+        mockLocation = "Bogotá, Colombia"
+      } else if (lat >= 6.20 && lat <= 6.33 && lng >= -75.62 && lng <= -75.47) {
+        mockLocation = "Medellín, Colombia"
+      } else if (lat >= 3.39 && lat <= 3.53 && lng >= -76.57 && lng <= -76.46) {
+        mockLocation = "Cali, Colombia"
+      }
+      // Chile
+      else if (lat >= -33.60 && lat <= -33.35 && lng >= -70.75 && lng <= -70.48) {
+        mockLocation = "Santiago, Chile"
+      } else if (lat >= -33.08 && lat <= -32.95 && lng >= -71.65 && lng <= -71.58) {
+        mockLocation = "Valparaíso, Chile"
+      }
+      // Perú
+      else if (lat >= -12.21 && lat <= -11.87 && lng >= -77.16 && lng <= -76.84) {
+        mockLocation = "Lima, Perú"
+      } else if (lat >= -16.43 && lat <= -16.34 && lng >= -71.58 && lng <= -71.49) {
+        mockLocation = "Arequipa, Perú"
+      }
+      // Ecuador
+      else if (lat >= -0.35 && lat <= 0.01 && lng >= -78.65 && lng <= -78.45) {
+        mockLocation = "Quito, Ecuador"
+      } else if (lat >= -2.30 && lat <= -2.10 && lng >= -79.96 && lng <= -79.84) {
+        mockLocation = "Guayaquil, Ecuador"
+      }
+      // Uruguay
+      else if (lat >= -34.92 && lat <= -34.85 && lng >= -56.22 && lng <= -56.12) {
+        mockLocation = "Montevideo, Uruguay"
+      }
+      // Paraguay
+      else if (lat >= -25.34 && lat <= -25.23 && lng >= -57.67 && lng <= -57.57) {
+        mockLocation = "Asunción, Paraguay"
+      }
+      // Bolivia
+      else if (lat >= -16.54 && lat <= -16.46 && lng >= -68.17 && lng <= -68.09) {
+        mockLocation = "La Paz, Bolivia"
+      } else if (lat >= -17.83 && lat <= -17.75 && lng >= -63.23 && lng <= -63.15) {
+        mockLocation = "Santa Cruz, Bolivia"
+      }
+      // Venezuela
+      else if (lat >= 10.44 && lat <= 10.54 && lng >= -67.02 && lng <= -66.81) {
+        mockLocation = "Caracas, Venezuela"
+      }
+      // España
+      else if (lat >= 40.31 && lat <= 40.56 && lng >= -3.84 && lng <= -3.57) {
         mockLocation = "Madrid, España"
       } else if (lat >= 41.32 && lat <= 41.47 && lng >= 2.08 && lng <= 2.23) {
         mockLocation = "Barcelona, España"
-      } else if (lat >= 19.32 && lat <= 19.59 && lng >= -99.22 && lng <= -98.94) {
-        mockLocation = "Ciudad de México, México"
       } else {
         // Default to closest major city based on general geographic region
         if (lat >= -55 && lat <= -20 && lng >= -75 && lng <= -35) {
           mockLocation = "Buenos Aires, Argentina"
+        } else if (lat >= -35 && lat <= 12 && lng >= -82 && lng <= -34) {
+          mockLocation = "São Paulo, Brasil"  
+        } else if (lat >= 14 && lat <= 32 && lng >= -118 && lng <= -86) {
+          mockLocation = "Ciudad de México, México"
         } else if (lat >= 35 && lat <= 45 && lng >= -10 && lng <= 5) {
           mockLocation = "Madrid, España"
-        } else if (lat >= 15 && lat <= 35 && lng >= -120 && lng <= -85) {
-          mockLocation = "Ciudad de México, México"
         }
       }
       
@@ -459,107 +583,213 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
 
               {/* Manual location selects - shown when manual selection is active */}
               {locationState.useManualLocation && (
-                <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {/* Country select */}
-                    <div className="space-y-1">
-                      <Label className="text-xs text-gray-600">País</Label>
-                      <Select 
-                        value={locationState.country} 
-                        onValueChange={(value) => setLocationState(prev => ({ 
-                          ...prev, 
-                          country: value, 
-                          province: "", 
-                          city: "" 
-                        }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar país" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.keys(countries).map((country) => (
-                            <SelectItem key={country} value={country}>
-                              {country}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-blue-200 dark:border-gray-700 shadow-lg">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                      <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                     </div>
-
-                    {/* Province select */}
-                    <div className="space-y-1">
-                      <Label className="text-xs text-gray-600">Provincia</Label>
-                      <Select 
-                        value={locationState.province} 
-                        onValueChange={(value) => setLocationState(prev => ({ 
-                          ...prev, 
-                          province: value, 
-                          city: "" 
-                        }))}
-                        disabled={!locationState.country}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar provincia" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {locationState.country && 
-                            Object.keys(countries[locationState.country as keyof typeof countries] || {}).map((province) => (
-                              <SelectItem key={province} value={province}>
-                                {province}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* City select */}
-                    <div className="space-y-1">
-                      <Label className="text-xs text-gray-600">Ciudad</Label>
-                      <Select 
-                        value={locationState.city} 
-                        onValueChange={(value) => {
-                          setLocationState(prev => ({ ...prev, city: value }))
-                          // Update form data when city is selected
-                          if (locationState.country && locationState.province && value) {
-                            const fullLocation = `${value}, ${locationState.province}, ${locationState.country}`
-                            setFormData(prev => ({ ...prev, location: fullLocation }))
-                          }
-                        }}
-                        disabled={!locationState.province}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar ciudad" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {locationState.country && locationState.province && 
-                            ((countries as any)[locationState.country]?.[locationState.province] || []).map((city: string) => (
-                              <SelectItem key={city} value={city}>
-                                {city}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">Selección Manual de Ubicación</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        Disponible en {Object.keys(countries).length} países de Latinoamérica y España
+                      </p>
                     </div>
                   </div>
                   
+                  <div className="space-y-4">
+                    {/* Country select with search */}
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span>País</span>
+                      </Label>
+                      <Popover 
+                        open={locationState.countryPopoverOpen} 
+                        onOpenChange={(open) => setLocationState(prev => ({ ...prev, countryPopoverOpen: open }))}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={locationState.countryPopoverOpen}
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-blue-300 transition-colors"
+                          >
+                            <span className="font-medium">{locationState.country || "Seleccionar país..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Command>
+                            <CommandInput placeholder="Buscar país..." className="h-9" />
+                            <CommandList>
+                              <CommandEmpty>No se encontraron países.</CommandEmpty>
+                              <CommandGroup>
+                                {Object.keys(countries).map((country) => (
+                                  <CommandItem
+                                    key={country}
+                                    value={country}
+                                    onSelect={() => {
+                                      setLocationState(prev => ({ 
+                                        ...prev, 
+                                        country: country, 
+                                        province: "", 
+                                        city: "",
+                                        countryPopoverOpen: false
+                                      }))
+                                    }}
+                                  >
+                                    {country}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    {/* Province select with search */}
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span>Provincia/Estado</span>
+                      </Label>
+                      <Popover 
+                        open={locationState.provincePopoverOpen} 
+                        onOpenChange={(open) => setLocationState(prev => ({ ...prev, provincePopoverOpen: open }))}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={locationState.provincePopoverOpen}
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-green-300 transition-colors"
+                            disabled={!locationState.country}
+                          >
+                            <span className="font-medium">{locationState.province || "Seleccionar provincia..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Command>
+                            <CommandInput placeholder="Buscar provincia..." className="h-9" />
+                            <CommandList>
+                              <CommandEmpty>No se encontraron provincias.</CommandEmpty>
+                              <CommandGroup>
+                                {locationState.country && 
+                                  Object.keys(countries[locationState.country as keyof typeof countries] || {}).map((province) => (
+                                    <CommandItem
+                                      key={province}
+                                      value={province}
+                                      onSelect={() => {
+                                        setLocationState(prev => ({ 
+                                          ...prev, 
+                                          province: province, 
+                                          city: "",
+                                          provincePopoverOpen: false
+                                        }))
+                                      }}
+                                    >
+                                      {province}
+                                    </CommandItem>
+                                  ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    {/* City select with search */}
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span>Ciudad</span>
+                      </Label>
+                      <Popover 
+                        open={locationState.cityPopoverOpen} 
+                        onOpenChange={(open) => setLocationState(prev => ({ ...prev, cityPopoverOpen: open }))}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={locationState.cityPopoverOpen}
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-orange-300 transition-colors"
+                            disabled={!locationState.province}
+                          >
+                            <span className="font-medium">{locationState.city || "Seleccionar ciudad..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Command>
+                            <CommandInput placeholder="Buscar ciudad..." className="h-9" />
+                            <CommandList>
+                              <CommandEmpty>No se encontraron ciudades.</CommandEmpty>
+                              <CommandGroup>
+                                {locationState.country && locationState.province && 
+                                  ((countries as any)[locationState.country]?.[locationState.province] || []).map((city: string) => (
+                                    <CommandItem
+                                      key={city}
+                                      value={city}
+                                      onSelect={() => {
+                                        setLocationState(prev => ({ ...prev, city, cityPopoverOpen: false }))
+                                        // Update form data when city is selected
+                                        if (locationState.country && locationState.province && city) {
+                                          const fullLocation = `${city}, ${locationState.province}, ${locationState.country}`
+                                          setFormData(prev => ({ ...prev, location: fullLocation }))
+                                        }
+                                      }}
+                                    >
+                                      {city}
+                                    </CommandItem>
+                                  ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                  
+                  {/* Selected location display */}
+                  {locationState.country && locationState.province && locationState.city && (
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <div className="p-1 bg-green-100 dark:bg-green-900/30 rounded-full">
+                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        </div>
+                        <span className="text-base font-bold text-green-800 dark:text-green-300">Ubicación seleccionada</span>
+                      </div>
+                      <p className="text-lg font-semibold text-green-700 dark:text-green-400 ml-8">
+                        📍 {locationState.city}, {locationState.province}, {locationState.country}
+                      </p>
+                    </div>
+                  )}
+                  
                   {/* Reset manual selection button */}
-                  <div className="flex justify-end">
+                  <div className="flex justify-end mt-6">
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
+                      size="lg"
                       onClick={() => {
                         setLocationState(prev => ({ 
                           ...prev, 
                           useManualLocation: false,
                           country: "",
                           province: "",
-                          city: ""
+                          city: "",
+                          countryPopoverOpen: false,
+                          provincePopoverOpen: false,
+                          cityPopoverOpen: false
                         }))
                         setFormData(prev => ({ ...prev, location: "" }))
                       }}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors px-6 py-3"
                     >
+                      <X className="h-5 w-5 mr-2" />
                       Cancelar selección manual
                     </Button>
                   </div>

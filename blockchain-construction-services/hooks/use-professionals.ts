@@ -64,6 +64,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 31536000000, // 1 año atrás
       hourlyRate: "0.025",
       location: "Madrid Centro",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 2 horas",
       successRate: 98.7,
@@ -120,6 +121,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 20736000000, // 8 meses atrás
       hourlyRate: "0.022",
       location: "Barcelona Norte",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b287?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 1 hora",
       successRate: 96.4,
@@ -160,6 +162,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 63072000000, // 2 años atrás
       hourlyRate: "0.035",
       location: "Valencia Centro",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 4 horas",
       successRate: 94.8,
@@ -216,6 +219,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 15552000000, // 6 meses atrás
       hourlyRate: "0.020",
       location: "Sevilla Este",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 3 horas",
       successRate: 97.4,
@@ -257,6 +261,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 15552000000, // 6 meses atrás
       hourlyRate: "0.018",
       location: "Valencia Centro",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 3 horas",
       successRate: 95.8,
@@ -302,6 +307,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 41472000000, // 16 meses atrás
       hourlyRate: "0.028",
       location: "Sevilla Este",
+      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 4 horas",
       successRate: 98.9,
@@ -348,6 +354,7 @@ export function useProfessionals() {
       joinDate: Date.now() - 25920000000, // 10 meses atrás
       hourlyRate: "0.032",
       location: "Bilbao Norte",
+      avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 2 horas",
       successRate: 97.8,

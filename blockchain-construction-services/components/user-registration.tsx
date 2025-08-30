@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Phone, CreditCard, Save } from "lucide-react"
+import { User, Phone, CreditCard, Save, Camera, X } from "lucide-react"
 
 interface UserRegistrationProps {
   walletAddress: string
@@ -19,19 +19,55 @@ export interface UserProfile {
   username: string
   phoneNumber: string
   documentNumber: string
+  avatar?: string
   isRegistered: boolean
 }
 
 export function UserRegistration({ walletAddress, onSubmit, existingProfile, onCancel }: UserRegistrationProps) {
   const isEditMode = !!existingProfile
+  const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [formData, setFormData] = useState({
     username: existingProfile?.username || "",
     phoneNumber: existingProfile?.phoneNumber || "",
     documentNumber: existingProfile?.documentNumber || "",
+    avatar: existingProfile?.avatar || "",
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [avatarPreview, setAvatarPreview] = useState<string>(existingProfile?.avatar || "")
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        setErrors(prev => ({ ...prev, avatar: "La imagen debe ser menor a 5MB" }))
+        return
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        setErrors(prev => ({ ...prev, avatar: "Solo se permiten imágenes" }))
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const result = e.target?.result as string
+        setAvatarPreview(result)
+        setFormData(prev => ({ ...prev, avatar: result }))
+        setErrors(prev => ({ ...prev, avatar: "" }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeAvatar = () => {
+    setAvatarPreview("")
+    setFormData(prev => ({ ...prev, avatar: "" }))
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -67,6 +103,7 @@ export function UserRegistration({ walletAddress, onSubmit, existingProfile, onC
         username: formData.username.trim(),
         phoneNumber: formData.phoneNumber.trim(),
         documentNumber: formData.documentNumber.trim(),
+        avatar: formData.avatar || undefined,
         isRegistered: true,
       }
       
@@ -96,6 +133,68 @@ export function UserRegistration({ walletAddress, onSubmit, existingProfile, onC
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Photo upload section */}
+            <div className="space-y-3">
+              <Label className="flex items-center space-x-2">
+                <Camera className="h-4 w-4" />
+                <span>Foto de Perfil</span>
+              </Label>
+              <div className="flex flex-col items-center space-y-3">
+                {/* Avatar preview */}
+                <div className="relative">
+                  <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700">
+                    {avatarPreview ? (
+                      <img 
+                        src={avatarPreview} 
+                        alt="Avatar preview" 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <User className="h-8 w-8 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  {avatarPreview && (
+                    <button
+                      type="button"
+                      onClick={removeAvatar}
+                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                </div>
+                
+                {/* Upload button */}
+                <div className="flex flex-col items-center space-y-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-32"
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    {avatarPreview ? "Cambiar" : "Subir foto"}
+                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+                  <p className="text-xs text-gray-500 text-center">
+                    Máximo 5MB. Formatos: JPG, PNG, GIF
+                  </p>
+                </div>
+                {errors.avatar && (
+                  <p className="text-sm text-red-600">{errors.avatar}</p>
+                )}
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="username" className="flex items-center space-x-2">
                 <User className="h-4 w-4" />

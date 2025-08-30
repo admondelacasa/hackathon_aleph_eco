@@ -60,6 +60,7 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
 
   const loadAllProfessionals = async () => {
     try {
+      setSelectedService(null)
       const allProfessionals = await getAllProfessionals()
       setProfessionals(allProfessionals)
     } catch (error) {
@@ -164,30 +165,42 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
       </div>
 
       {/* Selección de Servicios */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Button
-          variant={selectedService === null ? "default" : "outline"}
-          onClick={loadAllProfessionals}
-          className="flex items-center space-x-2 p-4 h-auto"
-        >
-          <Search className="h-5 w-5" />
-          <span>Todos</span>
-        </Button>
-        {serviceTypes.map((service, index) => {
-          const IconComponent = serviceIcons[index]
-          return (
+      <Card>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-bold">Seleccionar Servicio</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Botón Todos los servicios destacado */}
+          <div className="w-full">
             <Button
-              key={index}
-              variant={selectedService === index ? "default" : "outline"}
-              onClick={() => handleServiceSelect(index)}
-              className="flex items-center space-x-2 p-4 h-auto"
+              variant={selectedService === null ? "default" : "outline"}
+              onClick={loadAllProfessionals}
+              className="flex items-center justify-center space-x-3 p-6 h-16 w-full text-lg font-semibold shadow-md hover:shadow-lg transition-all"
             >
-              <IconComponent className="h-5 w-5" />
-              <span>{service}</span>
+              <Search className="h-6 w-6" />
+              <span>Todos los servicios</span>
             </Button>
-          )
-        })}
-      </div>
+          </div>
+          
+          {/* Grid de servicios específicos */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {serviceTypes.map((service, index) => {
+              const IconComponent = serviceIcons[index]
+              return (
+                <Button
+                  key={index}
+                  variant={selectedService === index ? "default" : "outline"}
+                  onClick={() => handleServiceSelect(index)}
+                  className="flex flex-col items-center justify-center space-y-2 p-4 h-20 w-full text-center hover:scale-105 transition-transform"
+                >
+                  <IconComponent className="h-5 w-5 flex-shrink-0" />
+                  <span className="text-xs font-medium leading-tight">{service}</span>
+                </Button>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Filtros y Búsqueda */}
       <Card>
