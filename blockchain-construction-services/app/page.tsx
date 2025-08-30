@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet, Building2, Paintbrush, Home, SprayCanIcon, Wind, Key, Construction, Square, Settings, Bug, Glasses, Brush } from "lucide-react"
+import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, CheckCircle2, AlertCircle, Loader2, Search, Wallet, Building2, Paintbrush, Home, SprayCanIcon, Wind, Key, Construction, Square, Settings, Bug, Glasses, Brush, Users, Eye, Clock } from "lucide-react"
 import { useBlockchain } from "@/hooks/use-blockchain"
 import { useConstructionServices, type Service } from "@/hooks/use-construction-services"
 import { useStaking } from "@/hooks/use-staking"
@@ -360,114 +360,154 @@ export default function ConstructionServicesApp() {
 
       <main className="container mx-auto px-4 py-8">
         {!isConnected ? (
-          <div className="text-center py-20">
-            <Image 
-              src="/BuildTrust-logo-v4.png" 
-              alt="BuildTrust Logo" 
-              width={80} 
-              height={80}
-              className="h-20 w-20 object-contain mx-auto mb-6"
-            />
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildTrust</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-16 max-w-xl mx-auto">
-              Conectamos clientes y profesionales con la máxima seguridad y transparencia.
-            </p>
-            
-            {/* ¿Por qué BuildTrust? */}
-            <div className="mb-16">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-                ¿Por qué BuildTrust?
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Image 
-                      src="/BuildTrust-logo-v4.png" 
-                      alt="BuildTrust Logo" 
-                      width={24} 
-                      height={24}
-                      className="h-6 w-6 object-contain"
-                    />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pagos Seguros</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Fondos bloqueados hasta completar el trabajo
-                  </p>
-                </div>
+          <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+            {/* Hero Section */}
+            <div className="text-center py-16 px-4">
+              <div className="mb-8">
+                <Image 
+                  src="/BuildTrust-logo-v4.png" 
+                  alt="BuildTrust Logo" 
+                  width={200} 
+                  height={200}
+                  className="h-40 w-40 object-contain mx-auto mb-6 drop-shadow-2xl"
+                />
+                <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
+                  <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                    BuildTrust
+                  </span>
+                </h1>
+                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                  La plataforma más segura de Latinoamérica para contratar servicios de construcción
+                </p>
+              </div>
 
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Star className="h-6 w-6 text-red-600" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valoraciones Reales</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Sistema de puntuación verificado y rastreable
-                  </p>
+              {/* Stats Section */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-16">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl font-bold text-orange-600 mb-2">500+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Profesionales</div>
                 </div>
-
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Search className="h-6 w-6 text-orange-700" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Búsqueda Avanzada</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Filtros por zona, precio y calificación
-                  </p>
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl font-bold text-red-600 mb-2">1.2M+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Proyectos</div>
                 </div>
-
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Wallet className="h-6 w-6 text-red-600" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Billetera Integrada</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Gestión de pagos con tecnología blockchain
-                  </p>
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl font-bold text-orange-600 mb-2">98%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Satisfacción</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl font-bold text-red-600 mb-2">24/7</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Soporte</div>
                 </div>
               </div>
-            </div>
 
-            {/* Cómo Funciona */}
-            <div className="mb-12">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-                Cómo Funciona
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span className="text-white font-bold">1</span>
+              {/* Main Features Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+                {/* Seguridad Blockchain */}
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-3xl p-8 shadow-xl border border-orange-200 dark:border-orange-700/50 hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Shield className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Busca y Contrata</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Encuentra el profesional perfecto usando nuestros filtros avanzados
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Seguridad Blockchain</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    Contratos inteligentes que protegen tu dinero hasta que el trabajo esté 100% completado.
                   </p>
+                  <div className="flex items-center text-orange-600 font-semibold">
+                    <CheckCircle2 className="h-5 w-5 mr-2" />
+                    Fondos protegidos
+                  </div>
                 </div>
 
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span className="text-white font-bold">2</span>
+                {/* Profesionales Verificados */}
+                <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-3xl p-8 shadow-xl border border-red-200 dark:border-red-700/50 hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Users className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pago Seguro</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Los fondos se bloquean hasta que el trabajo esté completado
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Profesionales Elite</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    Contratistas verificados con certificaciones reales y años de experiencia comprobada.
                   </p>
+                  <div className="flex items-center text-red-600 font-semibold">
+                    <Star className="h-5 w-5 mr-2" />
+                    Calificación promedio 4.8/5
+                  </div>
                 </div>
 
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span className="text-white font-bold">3</span>
+                {/* Transparencia Total */}
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-8 shadow-xl border border-blue-200 dark:border-blue-700/50 hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Eye className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valora el Trabajo</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Califica la experiencia para ayudar a otros usuarios
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Transparencia Total</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    Seguimiento en tiempo real de tu proyecto con hitos verificables y comunicación directa.
                   </p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    <Clock className="h-5 w-5 mr-2" />
+                    Actualizaciones en vivo
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Button onClick={handleConnectWallet} size="lg" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-lg px-8 py-3 text-white font-semibold shadow-lg">
-              Conectar Wallet para Comenzar
-            </Button>
+              {/* Services Grid */}
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">
+                  Servicios Más Demandados
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+                  {[
+                    { icon: "🏠", name: "Construcción", count: "200+" },
+                    { icon: "🔧", name: "Plomería", count: "150+" },
+                    { icon: "⚡", name: "Electricidad", count: "180+" },
+                    { icon: "🎨", name: "Pintura", count: "120+" },
+                    { icon: "🪟", name: "Ventanas", count: "90+" },
+                    { icon: "🚿", name: "Baños", count: "110+" },
+                  ].map((service, index) => (
+                    <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 text-center group">
+                      <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                        {service.icon}
+                      </div>
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{service.name}</h4>
+                      <p className="text-sm text-orange-600 font-medium">{service.count} profesionales</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Testimonial */}
+              <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 max-w-4xl mx-auto text-white shadow-2xl mb-16">
+                <div className="flex items-center justify-center mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-6 w-6 text-yellow-300 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="text-xl md:text-2xl font-medium italic mb-6">
+                  "BuildTrust revolucionó la forma en que contrato servicios. La seguridad del blockchain me da total tranquilidad."
+                </blockquote>
+                <cite className="font-semibold">— María González, Cliente satisfecha</cite>
+              </div>
+
+              {/* CTA Section */}
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                  ¿Listo para empezar?
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                  Únete a miles de clientes que ya confían en BuildTrust para sus proyectos de construcción.
+                </p>
+                <Button 
+                  onClick={handleConnectWallet} 
+                  size="lg" 
+                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-xl px-12 py-4 text-white font-bold shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 rounded-2xl"
+                >
+                  <Wallet className="h-6 w-6 mr-3" />
+                  Conectar Wallet y Empezar
+                </Button>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+                  Conecta tu wallet en segundos y accede a la mejor plataforma de construcción
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
