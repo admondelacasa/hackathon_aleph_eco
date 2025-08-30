@@ -49,10 +49,18 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">
-                {professional.name.charAt(0)}
-              </span>
+            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-600">
+              {professional.avatar ? (
+                <img 
+                  src={professional.avatar} 
+                  alt={professional.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-white font-bold text-lg">
+                  {professional.name.charAt(0)}
+                </span>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2">

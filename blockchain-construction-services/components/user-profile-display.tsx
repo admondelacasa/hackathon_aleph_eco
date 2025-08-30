@@ -51,8 +51,16 @@ export function UserProfileDisplay({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2 rounded-lg">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <User className="h-4 w-4 text-white" />
+              <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500">
+                {userProfile.avatar ? (
+                  <img 
+                    src={userProfile.avatar} 
+                    alt={userProfile.username} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-4 w-4 text-white" />
+                )}
               </div>
               <div className="hidden sm:block text-left">
                 <p className="text-sm font-medium">{userProfile.username}</p>
@@ -68,8 +76,16 @@ export function UserProfileDisplay({
         <DropdownMenuContent className="w-80" align="end">
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <User className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500">
+                {userProfile.avatar ? (
+                  <img 
+                    src={userProfile.avatar} 
+                    alt={userProfile.username} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-6 w-6 text-white" />
+                )}
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold">{userProfile.username}</h3>
