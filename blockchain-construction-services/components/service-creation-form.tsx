@@ -16,9 +16,10 @@ import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle, AlertCircle, 
 interface ServiceCreationFormProps {
   onSubmit: (serviceData: any) => void
   onCancel?: () => void
+  userRole?: 'client' | 'contractor'
 }
 
-export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormProps) {
+export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }: ServiceCreationFormProps) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -90,8 +91,38 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
         })
       })
 
-      // Simulate reverse geocoding (in real app, use a service like Google Maps API)
-      const mockLocation = `Lat: ${position.coords.latitude.toFixed(4)}, Lng: ${position.coords.longitude.toFixed(4)}`
+      // Simulate reverse geocoding with realistic location data
+      // In a real app, you would use Google Maps Geocoding API or similar service
+      const lat = position.coords.latitude
+      const lng = position.coords.longitude
+      
+      let mockLocation = "Ubicación no identificada"
+      
+      // Simple mock geocoding based on coordinates ranges
+      if (lat >= -38.95 && lat <= -32.89 && lng >= -68.84 && lng <= -57.53) {
+        mockLocation = "Buenos Aires, Argentina"
+      } else if (lat >= -34.92 && lat <= -31.16 && lng >= -65.23 && lng <= -63.18) {
+        mockLocation = "Córdoba, Argentina" 
+      } else if (lat >= -31.89 && lat <= -28.17 && lng >= -62.08 && lng <= -59.97) {
+        mockLocation = "Santa Fe, Argentina"
+      } else if (lat >= -33.28 && lat <= -32.53 && lng >= -69.35 && lng <= -68.19) {
+        mockLocation = "Mendoza, Argentina"
+      } else if (lat >= 40.31 && lat <= 40.56 && lng >= -3.84 && lng <= -3.57) {
+        mockLocation = "Madrid, España"
+      } else if (lat >= 41.32 && lat <= 41.47 && lng >= 2.08 && lng <= 2.23) {
+        mockLocation = "Barcelona, España"
+      } else if (lat >= 19.32 && lat <= 19.59 && lng >= -99.22 && lng <= -98.94) {
+        mockLocation = "Ciudad de México, México"
+      } else {
+        // Default to closest major city based on general geographic region
+        if (lat >= -55 && lat <= -20 && lng >= -75 && lng <= -35) {
+          mockLocation = "Buenos Aires, Argentina"
+        } else if (lat >= 35 && lat <= 45 && lng >= -10 && lng <= 5) {
+          mockLocation = "Madrid, España"
+        } else if (lat >= 15 && lat <= 35 && lng >= -120 && lng <= -85) {
+          mockLocation = "Ciudad de México, México"
+        }
+      }
       
       setLocationState(prev => ({ 
         ...prev, 
@@ -230,15 +261,19 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
       return
     }
     
-    if (confirmations.clientConfirmed && confirmations.contractorConfirmed) {
+    // Solo verificar la confirmación del cliente ya que es quien crea el contrato
+    if (confirmations.clientConfirmed) {
       onSubmit({
         ...formData,
         milestones: validMilestones,
         contractorWalletAddress: userValidation.userFound?.walletAddress,
-        confirmations,
+        confirmations: {
+          ...confirmations,
+          contractorConfirmed: false // El contratista confirmará después
+        },
       })
     } else {
-      alert("Ambas partes deben confirmar antes de crear el contrato")
+      alert("Debes confirmar como cliente para crear el contrato")
     }
   }
 
@@ -396,17 +431,33 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                   </span>
                 </Button>
                 
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setLocationState(prev => ({ ...prev, useManualLocation: !prev.useManualLocation }))}
+                {/* Manual Selection Dropdown */}
+                <Select
+                  value={locationState.useManualLocation ? "manual" : ""}
+                  onValueChange={(value) => {
+                    if (value === "manual") {
+                      setLocationState(prev => ({ 
+                        ...prev, 
+                        useManualLocation: true,
+                        currentLocation: "",
+                        country: "",
+                        province: "",
+                        city: ""
+                      }))
+                      setFormData(prev => ({ ...prev, location: "" }))
+                    }
+                  }}
                 >
-                  {locationState.useManualLocation ? "Ocultar" : "Manual"}
-                </Button>
+                  <SelectTrigger className="w-auto">
+                    <SelectValue placeholder="Manual" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="manual">Selección Manual</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Manual location selects */}
+              {/* Manual location selects - shown when manual selection is active */}
               {locationState.useManualLocation && (
                 <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -466,7 +517,14 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                       <Label className="text-xs text-gray-600">Ciudad</Label>
                       <Select 
                         value={locationState.city} 
-                        onValueChange={(value) => setLocationState(prev => ({ ...prev, city: value }))}
+                        onValueChange={(value) => {
+                          setLocationState(prev => ({ ...prev, city: value }))
+                          // Update form data when city is selected
+                          if (locationState.country && locationState.province && value) {
+                            const fullLocation = `${value}, ${locationState.province}, ${locationState.country}`
+                            setFormData(prev => ({ ...prev, location: fullLocation }))
+                          }
+                        }}
                         disabled={!locationState.province}
                       >
                         <SelectTrigger>
@@ -483,24 +541,46 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                       </Select>
                     </div>
                   </div>
+                  
+                  {/* Reset manual selection button */}
+                  <div className="flex justify-end">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setLocationState(prev => ({ 
+                          ...prev, 
+                          useManualLocation: false,
+                          country: "",
+                          province: "",
+                          city: ""
+                        }))
+                        setFormData(prev => ({ ...prev, location: "" }))
+                      }}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      Cancelar selección manual
+                    </Button>
+                  </div>
                 </div>
               )}
 
               {/* Display current location */}
               <Input
                 id="location"
-                placeholder="Ciudad, País"
+                placeholder="Tu ubicación aparecerá aquí"
                 value={formData.location}
                 onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
                 className="bg-gray-50"
-                readOnly={!locationState.useManualLocation && !!locationState.currentLocation}
+                readOnly={!locationState.useManualLocation || (locationState.useManualLocation && locationState.city !== "")}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="deadline" className="flex items-center space-x-1">
                 <Calendar className="h-4 w-4" />
-                <span>Fecha Límite</span>
+                <span>Fecha estimada de finalización</span>
               </Label>
               <Input
                 id="deadline"
@@ -555,33 +635,51 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                 <Checkbox
                   id="clientConfirmed"
                   checked={confirmations.clientConfirmed}
-                  onCheckedChange={(checked) => 
-                    setConfirmations((prev) => ({ ...prev, clientConfirmed: checked as boolean }))
+                  disabled={userRole !== 'client'}
+                  onCheckedChange={(checked: boolean) => 
+                    setConfirmations((prev) => ({ ...prev, clientConfirmed: checked }))
                   }
                 />
                 <Label htmlFor="clientConfirmed" className="text-sm">
                   Como cliente, doy mi consentimiento para crear este contrato
                 </Label>
+                {confirmations.clientConfirmed && (
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                )}
               </div>
               
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="contractorConfirmed"
                   checked={confirmations.contractorConfirmed}
-                  onCheckedChange={(checked) => 
-                    setConfirmations((prev) => ({ ...prev, contractorConfirmed: checked as boolean }))
+                  disabled={true}
+                  onCheckedChange={(checked: boolean) => 
+                    setConfirmations((prev) => ({ ...prev, contractorConfirmed: checked }))
                   }
                 />
                 <Label htmlFor="contractorConfirmed" className="text-sm">
                   Como prestador del servicio, acepto los términos del contrato
                 </Label>
+                {confirmations.contractorConfirmed && (
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                )}
               </div>
               
-              {confirmations.clientConfirmed && confirmations.contractorConfirmed && (
-                <div className="flex items-center space-x-2 mt-3 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-700 dark:text-green-300">
-                    ¡Ambas partes han confirmado! El contrato está listo para crearse.
+              {/* Status Messages */}
+              {userRole === 'client' && !confirmations.clientConfirmed && (
+                <div className="flex items-center space-x-2 mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded">
+                  <AlertCircle className="h-4 w-4 text-yellow-600" />
+                  <span className="text-sm text-yellow-700 dark:text-yellow-300">
+                    Como cliente, debes confirmar para crear el contrato
+                  </span>
+                </div>
+              )}
+              
+              {confirmations.clientConfirmed && (
+                <div className="flex items-center space-x-2 mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded">
+                  <CheckCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm text-blue-700 dark:text-blue-300">
+                    ¡Listo! El contrato se creará y el prestador podrá revisarlo y confirmarlo.
                   </span>
                 </div>
               )}
@@ -598,11 +696,11 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
             <Button 
               type="submit" 
               className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-              disabled={!confirmations.clientConfirmed || !confirmations.contractorConfirmed}
+              disabled={!confirmations.clientConfirmed}
             >
-              {confirmations.clientConfirmed && confirmations.contractorConfirmed 
+              {confirmations.clientConfirmed 
                 ? "Crear Contrato" 
-                : "Confirmar Ambas Partes"}
+                : "Confirmar como Cliente"}
             </Button>
           </div>
         </form>

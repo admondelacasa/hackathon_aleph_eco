@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, DollarSign, Clock, CheckCircle, AlertTriangle, BarChart3 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Search, DollarSign, Clock, CheckCircle, AlertTriangle, BarChart3, FileText, Calendar, User } from "lucide-react"
 import { useConstructionServices, type Service } from "@/hooks/use-construction-services"
 import { useBlockchain } from "@/hooks/use-blockchain"
 import { ServiceCard } from "./service-card"
+import { ContractView } from "./contract-view"
 
 interface ServiceStats {
   total: number
@@ -23,6 +25,9 @@ interface ServiceStats {
 export function ServiceDashboard() {
   const [services, setServices] = useState<Service[]>([])
   const [filteredServices, setFilteredServices] = useState<Service[]>([])
+  const [pendingContracts, setPendingContracts] = useState<any[]>([])
+  const [selectedContract, setSelectedContract] = useState<any>(null)
+  const [showContractView, setShowContractView] = useState(false)
   const [stats, setStats] = useState<ServiceStats>({
     total: 0,
     active: 0,
@@ -50,6 +55,7 @@ export function ServiceDashboard() {
   useEffect(() => {
     if (isConnected && account) {
       loadServices()
+      loadPendingContracts()
     }
   }, [isConnected, account])
 
@@ -65,6 +71,72 @@ export function ServiceDashboard() {
       calculateStats(allServices)
     } catch (error) {
       console.error("Error loading services:", error)
+    }
+  }
+
+  // Simular contratos pendientes para prestadores de servicios
+  const loadPendingContracts = async () => {
+    try {
+      // Simulamos algunos contratos pendientes para demostrar la funcionalidad
+      const mockPendingContracts = [
+        {
+          id: "contract-001",
+          title: "Instalación Sistema Eléctrico Residencial",
+          description: "Necesito una instalación completa del sistema eléctrico para una casa de 150m². Incluye cableado interno, tablero principal, tomas de corriente, interruptores y conexión a medidor. La casa tiene 3 dormitorios, 2 baños, cocina, living-comedor y lavadero.",
+          serviceType: "2", // Electricidad
+          budget: "2.5",
+          location: "Buenos Aires, Argentina",
+          deadline: "2025-09-15",
+          milestones: [
+            "Revisión inicial y planificación del proyecto",
+            "Instalación del tablero principal y conexiones",
+            "Cableado interno de todas las habitaciones",
+            "Instalación de tomas e interruptores",
+            "Pruebas finales y certificación"
+          ],
+          clientUsername: "maria_garcia",
+          contractorUsername: "carlos_electricista",
+          confirmations: {
+            clientConfirmed: true,
+            contractorConfirmed: false
+          },
+          createdAt: "2025-08-25"
+        },
+        {
+          id: "contract-002", 
+          title: "Reparación Integral de Techo",
+          description: "Mi casa tiene filtraciones en el techo tras las lluvias recientes. Necesito una reparación integral que incluya revisión de tejas, membranas, canaletas y posibles refuerzos estructurales. El área aproximada es de 80m².",
+          serviceType: "6", // Techos
+          budget: "1.8",
+          location: "Córdoba, Argentina", 
+          deadline: "2025-09-10",
+          milestones: [
+            "Inspección detallada del estado del techo",
+            "Reparación de estructura si es necesario",
+            "Reemplazo de tejas y membranas dañadas",
+            "Limpieza y reparación de canaletas",
+            "Prueba de impermeabilización final"
+          ],
+          clientUsername: "juan_lopez",
+          contractorUsername: "roberto_techista",
+          confirmations: {
+            clientConfirmed: true,
+            contractorConfirmed: false
+          },
+          createdAt: "2025-08-28"
+        }
+      ]
+      
+      // Filtrar solo contratos donde el usuario actual es el contratista
+      // y aún no ha confirmado
+      const userContracts = mockPendingContracts.filter(contract => 
+        contract.contractorUsername.toLowerCase().includes("carlos") || 
+        contract.contractorUsername.toLowerCase().includes("roberto")
+      )
+      
+      setPendingContracts(userContracts)
+    } catch (error) {
+      console.error("Error loading pending contracts:", error)
     }
   }
 
@@ -115,6 +187,38 @@ export function ServiceDashboard() {
     }
 
     setFilteredServices(filtered)
+  }
+
+  const handleContractorConfirm = (contractId: string) => {
+    setPendingContracts(prev => 
+      prev.map(contract => 
+        contract.id === contractId 
+          ? { ...contract, confirmations: { ...contract.confirmations, contractorConfirmed: true }}
+          : contract
+      )
+    )
+    setShowContractView(false)
+    setSelectedContract(null)
+    alert("¡Contrato confirmado exitosamente!")
+  }
+
+  const viewContractDetails = (contract: any) => {
+    setSelectedContract(contract)
+    setShowContractView(true)
+  }
+
+  if (showContractView && selectedContract) {
+    return (
+      <ContractView
+        contractData={selectedContract}
+        userRole="contractor"
+        onContractorConfirm={() => handleContractorConfirm(selectedContract.id)}
+        onBack={() => {
+          setShowContractView(false)
+          setSelectedContract(null)
+        }}
+      />
+    )
   }
 
   const getStatusBadge = (status: number) => {
@@ -230,30 +334,104 @@ export function ServiceDashboard() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="all">Todos</TabsTrigger>
               <TabsTrigger value="client">Como Cliente</TabsTrigger>
               <TabsTrigger value="contractor">Como Contratista</TabsTrigger>
+              <TabsTrigger value="pending" className="relative">
+                Contratos Pendientes
+                {pendingContracts.filter(c => !c.confirmations.contractorConfirmed).length > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {pendingContracts.filter(c => !c.confirmations.contractorConfirmed).length}
+                  </span>
+                )}
+              </TabsTrigger>
             </TabsList>
 
-            <TabsContent value={activeTab} className="mt-6">
-              {filteredServices.length === 0 ? (
+            <TabsContent value="pending" className="mt-6">
+              {pendingContracts.filter(c => !c.confirmations.contractorConfirmed).length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-gray-500 mb-4">No se encontraron servicios</p>
-                  <Button variant="outline">Crear Nuevo Servicio</Button>
+                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-4">No tienes contratos pendientes de confirmación</p>
+                  <p className="text-sm text-gray-400">
+                    Cuando los clientes creen contratos contigo, aparecerán aquí para tu revisión y confirmación.
+                  </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredServices.map((service) => (
-                    <ServiceCard
-                      key={service.id}
-                      service={service}
-                      serviceTypes={serviceTypes}
-                      serviceIcons={serviceIcons}
-                      onViewDetails={(id) => window.open(`/service/${id}`, "_blank")}
-                    />
-                  ))}
+                <div className="space-y-4">
+                  {pendingContracts
+                    .filter(contract => !contract.confirmations.contractorConfirmed)
+                    .map((contract) => (
+                      <Card key={contract.id} className="p-6 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Badge variant="outline" className="text-orange-600 border-orange-200">
+                                Pendiente de Confirmación
+                              </Badge>
+                              <Badge variant="secondary">
+                                ID: {contract.id}
+                              </Badge>
+                            </div>
+                            
+                            <h3 className="text-lg font-semibold mb-2">{contract.title}</h3>
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                              {contract.description}
+                            </p>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                              <div className="flex items-center space-x-2 text-sm">
+                                <DollarSign className="h-4 w-4 text-green-600" />
+                                <span className="font-medium">{contract.budget} ETH</span>
+                              </div>
+                              <div className="flex items-center space-x-2 text-sm">
+                                <Calendar className="h-4 w-4 text-blue-600" />
+                                <span>{contract.deadline}</span>
+                              </div>
+                              <div className="flex items-center space-x-2 text-sm">
+                                <User className="h-4 w-4 text-purple-600" />
+                                <span>Cliente: {contract.clientUsername}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="ml-6">
+                            <Button 
+                              onClick={() => viewContractDetails(contract)}
+                              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                            >
+                              Revisar y Confirmar
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                 </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value={activeTab} className="mt-6">
+              {activeTab !== "pending" && (
+                <>
+                  {filteredServices.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-500 mb-4">No se encontraron servicios</p>
+                      <Button variant="outline">Crear Nuevo Servicio</Button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredServices.map((service) => (
+                        <ServiceCard
+                          key={service.id}
+                          service={service}
+                          serviceTypes={serviceTypes}
+                          serviceIcons={serviceIcons}
+                          onViewDetails={(id) => window.open(`/service/${id}`, "_blank")}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </TabsContent>
           </Tabs>
