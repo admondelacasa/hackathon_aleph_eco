@@ -139,7 +139,7 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
           {/* Contractor Section */}
           <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <div className="flex items-center space-x-2">
-              <User className="h-5 w-5 text-blue-600" />
+              <User className="h-5 w-5 text-orange-600" />
               <Label className="text-lg font-semibold">Usuario Contratista</Label>
             </div>
             
@@ -231,7 +231,7 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
             <div className="space-y-3">
               {formData.milestones.map((milestone, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-medium">
+                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-600 text-xs font-medium">
                     {index + 1}
                   </div>
                   <Input
@@ -251,9 +251,9 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
           </div>
 
           {/* Confirmation Section */}
-          <div className="space-y-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="space-y-4 p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-blue-600" />
+              <CheckCircle className="h-5 w-5 text-orange-600" />
               <Label className="text-lg font-semibold">Confirmación del Contrato</Label>
             </div>
             
@@ -304,7 +304,7 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
             )}
             <Button 
               type="submit" 
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
               disabled={!confirmations.clientConfirmed || !confirmations.contractorConfirmed}
             >
               {confirmations.clientConfirmed && confirmations.contractorConfirmed 

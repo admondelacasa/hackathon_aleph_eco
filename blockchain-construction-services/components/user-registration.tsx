@@ -160,7 +160,7 @@ export function UserRegistration({ walletAddress, onSubmit, existingProfile, onC
                   </Button>
                   <Button 
                     type="submit" 
-                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                    className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                   >
                     <Save className="h-4 w-4 mr-2" />
                     Guardar Cambios
@@ -169,7 +169,7 @@ export function UserRegistration({ walletAddress, onSubmit, existingProfile, onC
               ) : (
                 <Button 
                   type="submit" 
-                  className="w-full bg-orange-600 hover:bg-orange-700"
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Completar Registro

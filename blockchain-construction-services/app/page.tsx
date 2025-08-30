@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet } from "lucide-react"
+import { Star, Hammer, Wrench, Zap, TreePine, Shield, Coins, CheckCircle, AlertCircle, Loader2, Search, Wallet, Building2 } from "lucide-react"
 import { useBlockchain } from "@/hooks/use-blockchain"
 import { useConstructionServices, type Service } from "@/hooks/use-construction-services"
 import { useStaking } from "@/hooks/use-staking"
@@ -285,13 +286,19 @@ export default function ConstructionServicesApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <header className="border-b bg-white/80 backdrop-blur-sm dark:bg-gray-900/80">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-900 dark:to-gray-800">
+      <header className="border-b bg-gradient-to-r from-orange-500 to-red-500 shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">BuildTrust</h1>
+              <Image 
+                src="/BuildTrust-logo-v2.png" 
+                alt="BuildTrust Logo" 
+                width={32} 
+                height={32}
+                className="h-8 w-8 object-contain"
+              />
+              <h1 className="text-2xl font-bold text-white">BuildTrust</h1>
             </div>
 
             {!isConnected ? (
@@ -300,7 +307,7 @@ export default function ConstructionServicesApp() {
                 <Button
                   onClick={handleConnectWallet}
                   disabled={walletLoading}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-white text-orange-600 hover:bg-orange-50 font-semibold"
                 >
                   {walletLoading ? (
                     <>
@@ -346,7 +353,13 @@ export default function ConstructionServicesApp() {
       <main className="container mx-auto px-4 py-8">
         {!isConnected ? (
           <div className="text-center py-20">
-            <Shield className="h-20 w-20 text-blue-600 mx-auto mb-6" />
+            <Image 
+              src="/BuildTrust-logo-v2.png" 
+              alt="BuildTrust Logo" 
+              width={80} 
+              height={80}
+              className="h-20 w-20 object-contain mx-auto mb-6"
+            />
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildTrust</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-16 max-w-xl mx-auto">
               Conectamos clientes y profesionales con la máxima seguridad y transparencia.
@@ -359,8 +372,14 @@ export default function ConstructionServicesApp() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Shield className="h-6 w-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Image 
+                      src="/BuildTrust-logo-v2.png" 
+                      alt="BuildTrust Logo" 
+                      width={24} 
+                      height={24}
+                      className="h-6 w-6 object-contain"
+                    />
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pagos Seguros</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -369,8 +388,8 @@ export default function ConstructionServicesApp() {
                 </div>
 
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Star className="h-6 w-6 text-green-600" />
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Star className="h-6 w-6 text-red-600" />
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valoraciones Reales</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -379,8 +398,8 @@ export default function ConstructionServicesApp() {
                 </div>
 
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Search className="h-6 w-6 text-purple-600" />
+                  <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Search className="h-6 w-6 text-orange-700" />
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Búsqueda Avanzada</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -389,8 +408,8 @@ export default function ConstructionServicesApp() {
                 </div>
 
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Wallet className="h-6 w-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Wallet className="h-6 w-6 text-red-600" />
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Billetera Integrada</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -407,7 +426,7 @@ export default function ConstructionServicesApp() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <span className="text-white font-bold">1</span>
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Busca y Contrata</h4>
@@ -417,7 +436,7 @@ export default function ConstructionServicesApp() {
                 </div>
 
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <span className="text-white font-bold">2</span>
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pago Seguro</h4>
@@ -427,7 +446,7 @@ export default function ConstructionServicesApp() {
                 </div>
 
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <span className="text-white font-bold">3</span>
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valora el Trabajo</h4>
@@ -438,7 +457,7 @@ export default function ConstructionServicesApp() {
               </div>
             </div>
 
-            <Button onClick={handleConnectWallet} size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3">
+            <Button onClick={handleConnectWallet} size="lg" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-lg px-8 py-3 text-white font-semibold shadow-lg">
               Conectar Wallet para Comenzar
             </Button>
           </div>
@@ -472,7 +491,7 @@ export default function ConstructionServicesApp() {
                 {/* Contratos Activos */}
                 {activeContracts.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-4 text-blue-600">Contratos en Curso</h3>
+                    <h3 className="text-lg font-semibold mb-4 text-orange-600">Contratos en Curso</h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {activeContracts.map((contract) => (
                         <ContractCard
@@ -610,7 +629,7 @@ export default function ConstructionServicesApp() {
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Total Reseñas</span>
-                      <span className="font-bold text-blue-600">{contractorReputation.totalReviews}</span>
+                      <span className="font-bold text-orange-600">{contractorReputation.totalReviews}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
