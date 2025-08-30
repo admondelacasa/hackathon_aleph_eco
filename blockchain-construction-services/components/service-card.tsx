@@ -18,8 +18,8 @@ interface ServiceCardProps {
     status: number
     description: string
     serviceType: number
-    createdAt?: string
-    deadline?: string
+    createdAt?: number | string
+    deadline?: number | string
     location?: string
     contractorName?: string
     contractorRating?: number
@@ -41,6 +41,18 @@ export function ServiceCard({
 }: ServiceCardProps) {
   const IconComponent = serviceIcons[service.serviceType]
   const progress = service.milestones > 0 ? (service.completedMilestones / service.milestones) * 100 : 0
+
+  const formatDate = (date: number | string | undefined) => {
+    if (!date) return null
+    if (typeof date === 'number') {
+      return new Date(date).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+      })
+    }
+    return date
+  }
 
   const getStatusBadge = (status: number) => {
     const statuses = [
@@ -68,7 +80,7 @@ export function ServiceCard({
             {service.createdAt && (
               <div className="flex items-center text-xs text-gray-400 mt-1">
                 <Clock className="h-3 w-3 mr-1" />
-                {service.createdAt}
+                {formatDate(service.createdAt)}
               </div>
             )}
           </div>

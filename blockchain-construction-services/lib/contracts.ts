@@ -1,4 +1,6 @@
 // Contract addresses and ABIs for blockchain integration
+// NOTA: Estas son direcciones de demostración para desarrollo/testing
+// Los contratos reales se desplegarán en la red principal próximamente
 export const CONTRACT_ADDRESSES = {
   CONSTRUCTION_ESCROW: process.env.NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS || "0x1234567890123456789012345678901234567890",
   STAKING_REWARDS: process.env.NEXT_PUBLIC_STAKING_CONTRACT_ADDRESS || "0x2345678901234567890123456789012345678901",

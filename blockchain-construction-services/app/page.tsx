@@ -40,7 +40,7 @@ export default function ConstructionServicesApp() {
 
   const { account, isConnected, isLoading: walletLoading, balance, connectWallet, disconnectWallet } = useBlockchain()
 
-  const { createService, getUserServices, isLoading: servicesLoading, error: servicesError } = useConstructionServices()
+  const { createService, getUserServices, getAvailableServices, isLoading: servicesLoading, error: servicesError } = useConstructionServices()
 
   const { getPendingRewards, getTotalStaked, claimRewards, isLoading: stakingLoading } = useStaking()
 
@@ -49,13 +49,29 @@ export default function ConstructionServicesApp() {
   useEffect(() => {
     if (isConnected && account) {
       loadUserData()
+    } else {
+      // Load demo services even when not connected
+      loadDemoServices()
     }
   }, [isConnected, account])
+
+  const loadDemoServices = async () => {
+    try {
+      const availableServices = await getAvailableServices()
+      setServices(availableServices)
+    } catch (error) {
+      console.error("Error loading demo services:", error)
+    }
+  }
 
   const loadUserData = async () => {
     try {
       const userServicesData = await getUserServices()
       setUserServices(userServicesData)
+
+      // Load available services for browsing
+      const availableServices = await getAvailableServices()
+      setServices(availableServices)
 
       const rewards = await getPendingRewards()
       setPendingRewards(rewards)
@@ -247,91 +263,99 @@ export default function ConstructionServicesApp() {
           <div className="text-center py-20">
             <Shield className="h-20 w-20 text-blue-600 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Bienvenido a BuildTrust</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
-              La plataforma blockchain descentralizada para servicios de construcción. Conectamos clientes y profesionales 
-              con la máxima seguridad y transparencia.
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-16 max-w-xl mx-auto">
+              Conectamos clientes y profesionales con la máxima seguridad y transparencia.
             </p>
             
-            {/* Características Principales */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
-              <Card className="border-blue-200 hover:border-blue-300 transition-colors">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="h-8 w-8 text-blue-600" />
-                  </div>
-                  <CardTitle className="text-xl text-blue-700">Pagos Seguros</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Tus fondos están protegidos por contratos inteligentes que garantizan que el dinero solo se libera 
-                    cuando el trabajo está completado. No más estafas ni pagos perdidos. Cada transacción queda registrada 
-                    de manera inmutable en la blockchain, brindándote total tranquilidad y control sobre tus pagos.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-green-200 hover:border-green-300 transition-colors">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="h-8 w-8 text-green-600" />
-                  </div>
-                  <CardTitle className="text-xl text-green-700">Valoraciones Reales</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Cada reseña y calificación está registrada en blockchain, lo que hace imposible manipular o falsificar 
-                    las opiniones. Conoce la reputación real de cada profesional basada en experiencias auténticas de otros 
-                    usuarios. Toma decisiones informadas y contrata con confianza sabiendo que las valoraciones son 100% genuinas.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-purple-200 hover:border-purple-300 transition-colors">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Search className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <CardTitle className="text-xl text-purple-700">Búsqueda Avanzada</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Encuentra exactamente lo que necesitas con nuestro sistema de búsqueda inteligente. Filtra por ubicación, 
-                    especialidad, calificaciones, precio y disponibilidad. Nuestro algoritmo te conecta con los profesionales 
-                    más adecuados para tu proyecto, ahorrándote tiempo y garantizando que encuentres la calidad que buscas.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-orange-200 hover:border-orange-300 transition-colors">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Wallet className="h-8 w-8 text-orange-600" />
-                  </div>
-                  <CardTitle className="text-xl text-orange-700">Billetera Integrada</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Gestiona todos tus pagos desde una interfaz simple y segura. Tu billetera MetaMask se integra perfectamente 
-                    con BuildTrust, permitiéndote pagar, recibir fondos y hacer staking de manera intuitiva. No necesitas ser 
-                    un experto en blockchain para usar nuestra plataforma de forma segura y eficiente.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Llamada a la Acción Reforzada */}
-            <div className="text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8 mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Únete a la Revolución de la Construcción Digital
+            {/* ¿Por qué BuildTrust? */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+                ¿Por qué BuildTrust?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-                Miles de profesionales y clientes ya confían en BuildTrust para realizar sus proyectos de construcción 
-                de manera segura y transparente.
-              </p>
-              <Button onClick={handleConnectWallet} size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-3">
-                Conectar Wallet y Comenzar Ahora
-              </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Shield className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pagos Seguros</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Fondos bloqueados hasta completar el trabajo
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Star className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valoraciones Reales</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Sistema de puntuación verificado y rastreable
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Search className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Búsqueda Avanzada</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Filtros por zona, precio y calificación
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Wallet className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Billetera Integrada</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Gestión de pagos con tecnología blockchain
+                  </p>
+                </div>
+              </div>
             </div>
+
+            {/* Cómo Funciona */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+                Cómo Funciona
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white font-bold">1</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Busca y Contrata</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Encuentra el profesional perfecto usando nuestros filtros avanzados
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white font-bold">2</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Pago Seguro</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Los fondos se bloquean hasta que el trabajo esté completado
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white font-bold">3</span>
+                  </div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Valora el Trabajo</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Califica la experiencia para ayudar a otros usuarios
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Button onClick={handleConnectWallet} size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3">
+              Conectar Wallet para Comenzar
+            </Button>
           </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -358,6 +382,19 @@ export default function ConstructionServicesApp() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Demo Notice */}
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="h-5 w-5 text-blue-600" />
+                  <div>
+                    <h4 className="font-medium text-blue-900 dark:text-blue-100">Modo Demostración</h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-200">
+                      Actualmente mostramos servicios de demostración. Los contratos inteligentes se desplegarán en la red principal próximamente.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {servicesLoading ? (
