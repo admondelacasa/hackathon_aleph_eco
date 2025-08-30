@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
-import { Plus, X, MapPin, Calendar, DollarSign } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle } from "lucide-react"
 
 interface ServiceCreationFormProps {
   onSubmit: (serviceData: any) => void
@@ -22,15 +23,18 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
     title: "",
     description: "",
     serviceType: "",
+    contractorUsername: "",
+    walletVerified: false,
     budget: "",
     location: "",
     deadline: "",
     milestones: [""],
-    skills: [] as string[],
-    urgency: "normal",
   })
 
-  const [newSkill, setNewSkill] = useState("")
+  const [confirmations, setConfirmations] = useState({
+    clientConfirmed: false,
+    contractorConfirmed: false,
+  })
 
   const serviceTypes = [
     { value: "0", label: "Jardinería", icon: "🌱" },
@@ -60,37 +64,26 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
     }))
   }
 
-  const addSkill = () => {
-    if (newSkill.trim() && !formData.skills.includes(newSkill.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        skills: [...prev.skills, newSkill.trim()],
-      }))
-      setNewSkill("")
-    }
-  }
-
-  const removeSkill = (skillToRemove: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: prev.skills.filter((skill) => skill !== skillToRemove),
-    }))
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const validMilestones = formData.milestones.filter((m) => m.trim() !== "")
-    onSubmit({
-      ...formData,
-      milestones: validMilestones,
-    })
+    
+    if (confirmations.clientConfirmed && confirmations.contractorConfirmed) {
+      onSubmit({
+        ...formData,
+        milestones: validMilestones,
+        confirmations,
+      })
+    } else {
+      alert("Ambas partes deben confirmar antes de crear el contrato")
+    }
   }
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl">Crear Nuevo Servicio</CardTitle>
-        <p className="text-gray-600">Describe tu proyecto y recibe propuestas de contratistas verificados</p>
+        <CardTitle className="text-2xl">Crear Nuevo Contrato</CardTitle>
+        <p className="text-gray-600">Define los términos del contrato con el contratista seleccionado</p>
       </CardHeader>
 
       <CardContent>
@@ -141,6 +134,42 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
               required
             />
+          </div>
+
+          {/* Contractor Section */}
+          <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <User className="h-5 w-5 text-blue-600" />
+              <Label className="text-lg font-semibold">Usuario Contratista</Label>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="contractorUsername">Nombre de Usuario</Label>
+                <Input
+                  id="contractorUsername"
+                  placeholder="Ingresa el nombre de usuario del contratista"
+                  value={formData.contractorUsername}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, contractorUsername: e.target.value }))}
+                  required
+                />
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="walletVerified"
+                    checked={formData.walletVerified}
+                    onCheckedChange={(checked) => 
+                      setFormData((prev) => ({ ...prev, walletVerified: checked as boolean }))
+                    }
+                  />
+                  <Label htmlFor="walletVerified" className="text-sm">
+                    Wallet verificada
+                  </Label>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Budget and Location */}
@@ -221,52 +250,49 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
             </div>
           </div>
 
-          {/* Skills Required */}
-          <div className="space-y-4">
-            <Label>Habilidades Requeridas</Label>
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Ej: Soldadura, Instalación eléctrica"
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
-              />
-              <Button type="button" variant="outline" onClick={addSkill}>
-                Agregar
-              </Button>
+          {/* Confirmation Section */}
+          <div className="space-y-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-5 w-5 text-blue-600" />
+              <Label className="text-lg font-semibold">Confirmación del Contrato</Label>
             </div>
-
-            {formData.skills.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {formData.skills.map((skill, index) => (
-                  <Badge key={index} variant="secondary" className="flex items-center space-x-1">
-                    <span>{skill}</span>
-                    <button type="button" onClick={() => removeSkill(skill)} className="ml-1 hover:text-red-500">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
+            
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="clientConfirmed"
+                  checked={confirmations.clientConfirmed}
+                  onCheckedChange={(checked) => 
+                    setConfirmations((prev) => ({ ...prev, clientConfirmed: checked as boolean }))
+                  }
+                />
+                <Label htmlFor="clientConfirmed" className="text-sm">
+                  Como cliente, doy mi consentimiento para crear este contrato
+                </Label>
               </div>
-            )}
-          </div>
-
-          {/* Urgency */}
-          <div className="space-y-2">
-            <Label>Urgencia del Proyecto</Label>
-            <Select
-              value={formData.urgency}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, urgency: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="low">Baja - Flexible con tiempos</SelectItem>
-                <SelectItem value="normal">Normal - Dentro de fechas establecidas</SelectItem>
-                <SelectItem value="high">Alta - Necesito comenzar pronto</SelectItem>
-                <SelectItem value="urgent">Urgente - Necesito comenzar inmediatamente</SelectItem>
-              </SelectContent>
-            </Select>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="contractorConfirmed"
+                  checked={confirmations.contractorConfirmed}
+                  onCheckedChange={(checked) => 
+                    setConfirmations((prev) => ({ ...prev, contractorConfirmed: checked as boolean }))
+                  }
+                />
+                <Label htmlFor="contractorConfirmed" className="text-sm">
+                  Como prestador del servicio, acepto los términos del contrato
+                </Label>
+              </div>
+              
+              {confirmations.clientConfirmed && confirmations.contractorConfirmed && (
+                <div className="flex items-center space-x-2 mt-3 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span className="text-sm text-green-700 dark:text-green-300">
+                    ¡Ambas partes han confirmado! El contrato está listo para crearse.
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Actions */}
@@ -276,8 +302,14 @@ export function ServiceCreationForm({ onSubmit, onCancel }: ServiceCreationFormP
                 Cancelar
               </Button>
             )}
-            <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700">
-              Publicar Servicio
+            <Button 
+              type="submit" 
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              disabled={!confirmations.clientConfirmed || !confirmations.contractorConfirmed}
+            >
+              {confirmations.clientConfirmed && confirmations.contractorConfirmed 
+                ? "Crear Contrato" 
+                : "Confirmar Ambas Partes"}
             </Button>
           </div>
         </form>

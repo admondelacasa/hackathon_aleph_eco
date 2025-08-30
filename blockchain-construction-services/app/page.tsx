@@ -16,6 +16,7 @@ import { useFeedback } from "@/hooks/use-feedback"
 import { ServiceCard } from "@/components/service-card"
 import { ServiceCreationForm } from "@/components/service-creation-form"
 import { ServiceBrowser } from "@/components/service-browser"
+import { ContractCard } from "@/components/contract-card"
 import { ReputationBadge } from "@/components/reputation-badge"
 import { toast } from "@/hooks/use-toast"
 import { MetaMaskGuide } from "@/components/metamask-guide"
@@ -31,6 +32,7 @@ export default function ConstructionServicesApp() {
     asClient: [],
     asContractor: [],
   })
+  const [activeContracts, setActiveContracts] = useState<any[]>([])
   const [pendingRewards, setPendingRewards] = useState("0")
   const [totalStaked, setTotalStaked] = useState("0")
   const [contractorReputation, setContractorReputation] = useState({
@@ -138,28 +140,45 @@ export default function ConstructionServicesApp() {
 
   const handleCreateService = async (serviceData: any) => {
     try {
-      const deadline = Math.floor(new Date(serviceData.deadline).getTime() / 1000)
+      if (!serviceData.confirmations?.clientConfirmed || !serviceData.confirmations?.contractorConfirmed) {
+        toast({
+          title: "Error",
+          description: "Ambas partes deben confirmar antes de crear el contrato",
+          variant: "destructive",
+        })
+        return
+      }
 
-      const result = await createService(
-        "0x0000000000000000000000000000000000000000", // Placeholder contractor address
-        serviceData.description,
-        deadline,
-        "CONSTRUCTION", // Default service type
-        serviceData.milestones,
-        serviceData.budget,
-      )
+      // Crear un nuevo contrato
+      const newContract = {
+        id: Date.now().toString(),
+        title: serviceData.title,
+        description: serviceData.description,
+        serviceType: serviceData.serviceType,
+        contractorUsername: serviceData.contractorUsername,
+        walletVerified: serviceData.walletVerified,
+        budget: serviceData.budget,
+        location: serviceData.location,
+        deadline: serviceData.deadline,
+        milestones: serviceData.milestones,
+        status: "En Curso",
+        createdAt: new Date().toISOString(),
+        clientConfirmed: true,
+        contractorConfirmed: true,
+      }
+
+      setActiveContracts(prev => [...prev, newContract])
 
       toast({
-        title: "Servicio Creado",
-        description: `Servicio creado exitosamente. ID: ${result.serviceId}`,
+        title: "Contrato Creado",
+        description: `Contrato creado exitosamente con ${serviceData.contractorUsername}`,
       })
 
-      await loadUserData()
       setActiveTab("my-services")
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo crear el servicio",
+        description: error.message || "No se pudo crear el contrato",
         variant: "destructive",
       })
     }
@@ -361,99 +380,14 @@ export default function ConstructionServicesApp() {
           </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="browse">Explorar Servicios</TabsTrigger>
-              <TabsTrigger value="create">Crear Servicio</TabsTrigger>
-              <TabsTrigger value="my-services">Mis Servicios</TabsTrigger>
-              <TabsTrigger value="profile">Perfil</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="browse">Explorar profesionales</TabsTrigger>
+              <TabsTrigger value="create">Crear contrato</TabsTrigger>
+              <TabsTrigger value="my-services">Mis servicios</TabsTrigger>
             </TabsList>
 
             <TabsContent value="browse" className="space-y-6">
-              {!showProfessionals ? (
-                <>
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Servicios Disponibles</h2>
-                    <div className="flex space-x-3">
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowProfessionals(true)}
-                        className="flex items-center space-x-2"
-                      >
-                        <Search className="h-4 w-4" />
-                        <span>Ver Profesionales</span>
-                      </Button>
-                      <Select>
-                        <SelectTrigger className="w-48">
-                          <SelectValue placeholder="Filtrar por tipo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Todos los servicios</SelectItem>
-                          {serviceTypes.map((type, index) => (
-                            <SelectItem key={index} value={type.toLowerCase()}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Demo Notice */}
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                    <div className="flex items-center space-x-2">
-                      <AlertCircle className="h-5 w-5 text-blue-600" />
-                      <div>
-                        <h4 className="font-medium text-blue-900 dark:text-blue-100">Modo Demostración</h4>
-                        <p className="text-sm text-blue-700 dark:text-blue-200">
-                          Explora servicios disponibles o busca profesionales por especialidad. Los contratos inteligentes se desplegarán próximamente.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {servicesLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                      <span className="ml-2 text-gray-600">Cargando servicios...</span>
-                    </div>
-                  ) : servicesError ? (
-                    <Card>
-                      <CardContent className="text-center py-8">
-                        <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                        <p className="text-red-600">{servicesError}</p>
-                      </CardContent>
-                    </Card>
-                  ) : services.length === 0 ? (
-                    <Card>
-                      <CardContent className="text-center py-12">
-                        <p className="text-gray-500">No hay servicios disponibles en este momento</p>
-                        <Button 
-                          onClick={() => setShowProfessionals(true)} 
-                          className="mt-4"
-                        >
-                          Explorar Profesionales
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {services.map((service) => (
-                        <ServiceCard
-                          key={service.id}
-                          service={service}
-                          serviceTypes={serviceTypes}
-                          serviceIcons={serviceIcons}
-                          onViewDetails={(id) => console.log("View details:", id)}
-                          showApplyButton={true}
-                          onApply={(id) => console.log("Apply to:", id)}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <ServiceBrowser onBack={() => setShowProfessionals(false)} />
-              )}
+              <ServiceBrowser />
             </TabsContent>
 
             <TabsContent value="create" className="space-y-6">
@@ -464,12 +398,30 @@ export default function ConstructionServicesApp() {
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mis Servicios</h2>
                 <div className="flex space-x-2">
+                  <Badge variant="outline">Contratos Activos: {activeContracts.length}</Badge>
                   <Badge variant="outline">Como Cliente: {userServices.asClient.length}</Badge>
                   <Badge variant="outline">Como Contratista: {userServices.asContractor.length}</Badge>
                 </div>
               </div>
 
               <div className="space-y-6">
+                {/* Contratos Activos */}
+                {activeContracts.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-blue-600">Contratos en Curso</h3>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {activeContracts.map((contract) => (
+                        <ContractCard
+                          key={contract.id}
+                          contract={contract}
+                          role="client"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Servicios Anteriores */}
                 {userServices.asClient.length > 0 && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Como Cliente</h3>
@@ -504,11 +456,11 @@ export default function ConstructionServicesApp() {
                   </div>
                 )}
 
-                {userServices.asClient.length === 0 && userServices.asContractor.length === 0 && (
+                {activeContracts.length === 0 && userServices.asClient.length === 0 && userServices.asContractor.length === 0 && (
                   <Card>
                     <CardContent className="text-center py-12">
-                      <p className="text-gray-500 mb-4">No tienes servicios activos</p>
-                      <Button onClick={() => setActiveTab("create")}>Crear tu primer servicio</Button>
+                      <p className="text-gray-500 mb-4">No tienes servicios o contratos activos</p>
+                      <Button onClick={() => setActiveTab("create")}>Crear tu primer contrato</Button>
                     </CardContent>
                   </Card>
                 )}

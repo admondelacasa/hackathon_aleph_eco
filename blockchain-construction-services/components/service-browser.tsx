@@ -11,7 +11,6 @@ import {
   Wrench, 
   Zap, 
   TreePine, 
-  ArrowLeft, 
   Search,
   Filter,
   Star,
@@ -143,25 +142,12 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          {onBack && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onBack}
-              className="flex items-center space-x-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Volver</span>
-            </Button>
-          )}
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {selectedService !== null 
-              ? `Profesionales de ${serviceTypes[selectedService]}`
-              : "Explorar Profesionales"
-            }
-          </h2>
-        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {selectedService !== null 
+            ? `Profesionales de ${serviceTypes[selectedService]}`
+            : "Explorar Profesionales"
+          }
+        </h2>
       </div>
 
       {/* Selección de Servicios */}
