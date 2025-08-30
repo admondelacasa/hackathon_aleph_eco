@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react"
 import { ethers } from "ethers"
 import { useBlockchain } from "./use-blockchain"
+import { useUSDT } from "./use-usdt"
 import { SERVICE_TYPES } from "@/lib/contracts"
 
 export interface Service {
@@ -32,6 +33,7 @@ export interface Milestone {
 
 export function useConstructionServices() {
   const { getEscrowContract, account, isConnected } = useBlockchain()
+  const { getUSDTContract } = useUSDT()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -42,7 +44,7 @@ export function useConstructionServices() {
       deadline: number,
       serviceType: keyof typeof SERVICE_TYPES,
       milestoneDescriptions: string[],
-      value: string,
+      amount: string,
     ) => {
       if (!isConnected) throw new Error("Wallet not connected")
 
@@ -51,7 +53,9 @@ export function useConstructionServices() {
 
       try {
         const contract = getEscrowContract()
-        const valueInWei = ethers.parseEther(value)
+        const usdtContract = getUSDTContract()
+        const decimals = await usdtContract.decimals()
+        const valueInDecimals = ethers.parseUnits(amount, decimals)
 
         const tx = await contract.createService(
           contractor,
@@ -60,7 +64,7 @@ export function useConstructionServices() {
           deadline,
           SERVICE_TYPES[serviceType],
           milestoneDescriptions,
-          { value: valueInWei },
+          valueInDecimals,
         )
 
         const receipt = await tx.wait()
@@ -100,12 +104,13 @@ export function useConstructionServices() {
         const contract = getEscrowContract()
         const service = await contract.getService(serviceId)
 
+        const decimals = await getUSDTContract().decimals()
         return {
           id: Number(service.id),
           client: service.client,
           contractor: service.contractor,
-          totalAmount: ethers.formatEther(service.totalAmount),
-          releasedAmount: ethers.formatEther(service.releasedAmount),
+          totalAmount: ethers.formatUnits(service.totalAmount, decimals),
+          releasedAmount: ethers.formatUnits(service.releasedAmount, decimals),
           milestones: Number(service.milestones),
           completedMilestones: Number(service.completedMilestones),
           status: Number(service.status),
@@ -130,11 +135,12 @@ export function useConstructionServices() {
         const contract = getEscrowContract()
         const milestones = await contract.getServiceMilestones(serviceId)
 
+        const decimals = await getUSDTContract().decimals()
         return milestones.map((milestone: any) => ({
           serviceId: Number(milestone.serviceId),
           milestoneIndex: Number(milestone.milestoneIndex),
           description: milestone.description,
-          amount: ethers.formatEther(milestone.amount),
+          amount: ethers.formatUnits(milestone.amount, decimals),
           completed: milestone.completed,
           approved: milestone.approved,
           completedAt: Number(milestone.completedAt),
