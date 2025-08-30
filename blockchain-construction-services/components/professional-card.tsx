@@ -1,9 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Star, MapPin, Clock, CheckCircle, TrendingUp } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Star, MapPin, Clock, CheckCircle, Phone } from "lucide-react"
 import { Professional } from "@/hooks/use-professionals"
 
 interface ProfessionalCardProps {
@@ -13,6 +15,8 @@ interface ProfessionalCardProps {
 }
 
 export function ProfessionalCard({ professional, onViewDetails, onContact }: ProfessionalCardProps) {
+  const [showPhoneDialog, setShowPhoneDialog] = useState(false)
+
   const renderStars = (rating: number) => {
     const stars = []
     const fullStars = Math.floor(rating)
@@ -41,11 +45,11 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
   }
 
   return (
-    <Card className="hover:shadow-lg transition-shadow border-gray-200 hover:border-blue-300">
+    <Card className="hover:shadow-lg transition-shadow border-gray-200 hover:border-orange-300">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">
                 {professional.name.charAt(0)}
               </span>
@@ -56,7 +60,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
                   {professional.name}
                 </h3>
                 {professional.verified && (
-                  <CheckCircle className="h-4 w-4 text-blue-500" />
+                  <CheckCircle className="h-4 w-4 text-orange-500" />
                 )}
               </div>
               <div className="flex items-center space-x-1 mt-1">
@@ -67,9 +71,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
               </div>
             </div>
           </div>
-          <Badge variant="secondary" className="bg-green-100 text-green-800">
-            {professional.hourlyRate} ETH/h
-          </Badge>
+          {/* Removed ETH/h rate badge */}
         </div>
       </CardHeader>
 
@@ -91,24 +93,12 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-4 text-center py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <div>
-            <div className="text-lg font-bold text-gray-900 dark:text-white">
+        <div className="flex justify-center">
+          <div className="text-center py-2 px-4 bg-orange-50 border border-orange-200 rounded-lg">
+            <div className="text-lg font-bold text-orange-600">
               {professional.completedJobs}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Trabajos</div>
-          </div>
-          <div>
-            <div className="text-lg font-bold text-green-600">
-              {professional.successRate}%
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Éxito</div>
-          </div>
-          <div>
-            <div className="text-lg font-bold text-blue-600">
-              {professional.responseTime}
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Respuesta</div>
+            <div className="text-xs text-gray-600 dark:text-gray-300">Trabajos Completados</div>
           </div>
         </div>
 
@@ -134,13 +124,38 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
           </Button>
           <Button
             size="sm"
-            onClick={() => onContact(professional.id)}
-            className="flex-1 bg-blue-600 hover:bg-blue-700"
+            onClick={() => setShowPhoneDialog(true)}
+            className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
           >
+            <Phone className="h-4 w-4 mr-1" />
             Contactar
           </Button>
         </div>
       </CardContent>
+
+      {/* Phone Dialog */}
+      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Contactar a {professional.name}</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+            <Phone className="h-6 w-6 text-orange-600" />
+            <div>
+              <p className="font-medium text-gray-900">Número de teléfono</p>
+              <p className="text-lg font-mono text-orange-600">
+                {professional.contact?.phone || "No disponible"}
+              </p>
+            </div>
+          </div>
+          <Button 
+            onClick={() => setShowPhoneDialog(false)}
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+          >
+            Cerrar
+          </Button>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }

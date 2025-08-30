@@ -268,17 +268,9 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                 <Button
                   size="lg"
                   onClick={() => onHire(professional.id)}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                 >
-                  Contratar Profesional
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => onContact(professional.id)}
-                  className="w-full"
-                >
-                  Contactar Primero
+                  Contactar
                 </Button>
               </div>
             </CardContent>
