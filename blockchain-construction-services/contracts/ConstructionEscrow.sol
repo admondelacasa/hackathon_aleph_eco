@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract ConstructionEscrow is ReentrancyGuard, Ownable {
-    struct Service {
+    struct Contract {
         uint256 id;
         address client;
         address contractor;
@@ -14,14 +14,14 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         uint256 releasedAmount;
         uint256 milestones;
         uint256 completedMilestones;
-        ServiceStatus status;
+        ContractStatus status;
         string description;
         uint256 createdAt;
         uint256 deadline;
     }
 
     struct Milestone {
-        uint256 serviceId;
+        uint256 contractId;
         uint256 milestoneIndex;
         string description;
         uint256 amount;
@@ -30,7 +30,7 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         uint256 completedAt;
     }
 
-    enum ServiceStatus {
+    enum ContractStatus {
         Created,
         InProgress,
         Completed,
@@ -38,34 +38,36 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         Cancelled
     }
 
-    enum ServiceType {
+    enum ContractType {
         Gardening,
         Plumbing,
         Electrical,
         Construction
     }
 
-    mapping(uint256 => Service) public services;
+    mapping(uint256 => Contract) public contracts;
     mapping(uint256 => mapping(uint256 => Milestone)) public milestones;
-    mapping(address => uint256[]) public clientServices;
-    mapping(address => uint256[]) public contractorServices;
-    mapping(uint256 => ServiceType) public serviceTypes;
+    mapping(address => uint256[]) public clientContracts;
+    mapping(address => uint256[]) public contractorContracts;
+    mapping(uint256 => ContractType) public contractTypes;
 
-    uint256 public nextServiceId = 1;
+    uint256 public nextContractId = 1;
     uint256 public platformFeePercent = 250; // 2.5%
     address public stakingContract;
     
-    event ServiceCreated(uint256 indexed serviceId, address indexed client, address indexed contractor, uint256 amount);
-    event MilestoneCompleted(uint256 indexed serviceId, uint256 milestoneIndex, uint256 amount);
-    event PaymentReleased(uint256 indexed serviceId, uint256 amount, address to);
-    event ServiceCompleted(uint256 indexed serviceId);
-    event DisputeRaised(uint256 indexed serviceId, address raisedBy);
+    event ContractCreated(uint256 indexed contractId, address indexed client, address indexed contractor, uint256 amount);
+    event MilestoneCompleted(uint256 indexed contractId, uint256 milestoneIndex, uint256 amount);
+    event PaymentReleased(uint256 indexed contractId, uint256 amount, address to);
+    event ContractCompleted(uint256 indexed contractId);
+    event DisputeRaised(uint256 indexed contractId, address raisedBy);
+    event MilestonesInitialized(uint256 indexed contractId, uint256 totalMilestones, string[] descriptions, uint256 amountPerMilestone);
+    event MilestoneCreated(uint256 indexed contractId, uint256 indexed milestoneIndex, string description, uint256 amount);
 
-    modifier onlyServiceParty(uint256 serviceId) {
+    modifier onlyContractParty(uint256 contractId) {
         require(
-            msg.sender == services[serviceId].client || 
-            msg.sender == services[serviceId].contractor,
-            "Not authorized for this service"
+            msg.sender == contracts[contractId].client || 
+            msg.sender == contracts[contractId].contractor,
+            "Not authorized for this contract"
         );
         _;
     }
@@ -74,12 +76,12 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         stakingContract = _stakingContract;
     }
 
-    function createService(
+    function createContract(
         address _contractor,
         uint256 _milestones,
         string memory _description,
         uint256 _deadline,
-        ServiceType _serviceType,
+        ContractType _contractType,
         string[] memory _milestoneDescriptions
     ) external payable nonReentrant {
         require(_contractor != address(0), "Invalid contractor address");
@@ -88,39 +90,41 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         require(_milestones > 0 && _milestones <= 10, "Invalid milestone count");
         require(_milestoneDescriptions.length == _milestones, "Milestone descriptions mismatch");
 
-        uint256 serviceId = nextServiceId++;
+        uint256 contractId = nextContractId++;
         
-        services[serviceId] = Service({
-            id: serviceId,
+        contracts[contractId] = Contract({
+            id: contractId,
             client: msg.sender,
             contractor: _contractor,
             totalAmount: msg.value,
             releasedAmount: 0,
             milestones: _milestones,
             completedMilestones: 0,
-            status: ServiceStatus.Created,
+            status: ContractStatus.Created,
             description: _description,
             createdAt: block.timestamp,
             deadline: _deadline
         });
 
-        serviceTypes[serviceId] = _serviceType;
-        clientServices[msg.sender].push(serviceId);
-        contractorServices[_contractor].push(serviceId);
+        contractTypes[contractId] = _contractType;
+        clientContracts[msg.sender].push(contractId);
+        contractorContracts[_contractor].push(contractId);
 
-        // Create milestones with equal payment distribution
+        // Calculate milestone amount
         uint256 amountPerMilestone = msg.value / _milestones;
-        for (uint256 i = 0; i < _milestones; i++) {
-            milestones[serviceId][i] = Milestone({
-                serviceId: serviceId,
-                milestoneIndex: i,
-                description: _milestoneDescriptions[i],
-                amount: amountPerMilestone,
-                completed: false,
-                approved: false,
-                completedAt: 0
-            });
-        }
+        
+        // Create first milestone and emit event for off-chain milestone creation
+        milestones[contractId][0] = Milestone({
+            contractId: contractId,
+            milestoneIndex: 0,
+            description: _milestoneDescriptions[0],
+            amount: amountPerMilestone,
+            completed: false,
+            approved: false,
+            completedAt: 0
+        });
+        
+        emit MilestonesInitialized(contractId, _milestones, _milestoneDescriptions, amountPerMilestone);
 
         // Send funds to staking contract for yield generation
         if (stakingContract != address(0)) {
@@ -128,103 +132,121 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
             require(success, "Failed to stake funds");
         }
 
-        emit ServiceCreated(serviceId, msg.sender, _contractor, msg.value);
+        emit ContractCreated(contractId, msg.sender, _contractor, msg.value);
     }
 
-    function completeMilestone(uint256 serviceId, uint256 milestoneIndex) 
+    function completeMilestone(uint256 contractId, uint256 milestoneIndex) 
         external 
-        onlyServiceParty(serviceId) 
+        onlyContractParty(contractId) 
     {
-        require(services[serviceId].status == ServiceStatus.InProgress || services[serviceId].status == ServiceStatus.Created, "Service not active");
-        require(milestoneIndex < services[serviceId].milestones, "Invalid milestone");
-        require(!milestones[serviceId][milestoneIndex].completed, "Milestone already completed");
-        require(msg.sender == services[serviceId].contractor, "Only contractor can complete milestones");
+        require(contracts[contractId].status == ContractStatus.InProgress || contracts[contractId].status == ContractStatus.Created, "Contract not active");
+        require(milestoneIndex < contracts[contractId].milestones, "Invalid milestone");
+        require(!milestones[contractId][milestoneIndex].completed, "Milestone already completed");
+        require(msg.sender == contracts[contractId].contractor, "Only contractor can complete milestones");
 
-        milestones[serviceId][milestoneIndex].completed = true;
-        milestones[serviceId][milestoneIndex].completedAt = block.timestamp;
+        milestones[contractId][milestoneIndex].completed = true;
+        milestones[contractId][milestoneIndex].completedAt = block.timestamp;
 
-        if (services[serviceId].status == ServiceStatus.Created) {
-            services[serviceId].status = ServiceStatus.InProgress;
+        if (contracts[contractId].status == ContractStatus.Created) {
+            contracts[contractId].status = ContractStatus.InProgress;
         }
 
-        emit MilestoneCompleted(serviceId, milestoneIndex, milestones[serviceId][milestoneIndex].amount);
+        emit MilestoneCompleted(contractId, milestoneIndex, milestones[contractId][milestoneIndex].amount);
     }
 
-    function approveMilestone(uint256 serviceId, uint256 milestoneIndex) 
+    function approveMilestone(uint256 contractId, uint256 milestoneIndex) 
         external 
-        onlyServiceParty(serviceId) 
+        onlyContractParty(contractId) 
         nonReentrant 
     {
-        require(msg.sender == services[serviceId].client, "Only client can approve milestones");
-        require(milestones[serviceId][milestoneIndex].completed, "Milestone not completed");
-        require(!milestones[serviceId][milestoneIndex].approved, "Milestone already approved");
+        require(msg.sender == contracts[contractId].client, "Only client can approve milestones");
+        require(milestones[contractId][milestoneIndex].completed, "Milestone not completed");
+        require(!milestones[contractId][milestoneIndex].approved, "Milestone already approved");
 
-        milestones[serviceId][milestoneIndex].approved = true;
-        services[serviceId].completedMilestones++;
+        milestones[contractId][milestoneIndex].approved = true;
+        contracts[contractId].completedMilestones++;
         
-        uint256 releaseAmount = milestones[serviceId][milestoneIndex].amount;
-        services[serviceId].releasedAmount += releaseAmount;
+        uint256 releaseAmount = milestones[contractId][milestoneIndex].amount;
+        contracts[contractId].releasedAmount += releaseAmount;
 
         // Release payment to contractor
-        (bool success, ) = services[serviceId].contractor.call{value: releaseAmount}("");
+        (bool success, ) = contracts[contractId].contractor.call{value: releaseAmount}("");
         require(success, "Payment release failed");
 
-        emit PaymentReleased(serviceId, releaseAmount, services[serviceId].contractor);
+        emit PaymentReleased(contractId, releaseAmount, contracts[contractId].contractor);
 
         // Check if all milestones are completed
-        if (services[serviceId].completedMilestones == services[serviceId].milestones) {
-            services[serviceId].status = ServiceStatus.Completed;
-            emit ServiceCompleted(serviceId);
+        if (contracts[contractId].completedMilestones == contracts[contractId].milestones) {
+            contracts[contractId].status = ContractStatus.Completed;
+            emit ContractCompleted(contractId);
         }
     }
 
-    function raiseDispute(uint256 serviceId) external onlyServiceParty(serviceId) {
-        require(services[serviceId].status == ServiceStatus.InProgress, "Service not in progress");
-        services[serviceId].status = ServiceStatus.Disputed;
-        emit DisputeRaised(serviceId, msg.sender);
+    function raiseDispute(uint256 contractId) external onlyContractParty(contractId) {
+        require(contracts[contractId].status == ContractStatus.InProgress, "Contract not in progress");
+        contracts[contractId].status = ContractStatus.Disputed;
+        emit DisputeRaised(contractId, msg.sender);
     }
 
-    function resolveDispute(uint256 serviceId, bool favorClient) external onlyOwner {
-        require(services[serviceId].status == ServiceStatus.Disputed, "Service not disputed");
+    function resolveDispute(uint256 contractId, bool favorClient) external onlyOwner {
+        require(contracts[contractId].status == ContractStatus.Disputed, "Contract not disputed");
         
         if (favorClient) {
             // Refund remaining amount to client
-            uint256 refundAmount = services[serviceId].totalAmount - services[serviceId].releasedAmount;
+            uint256 refundAmount = contracts[contractId].totalAmount - contracts[contractId].releasedAmount;
             if (refundAmount > 0) {
-                (bool success, ) = services[serviceId].client.call{value: refundAmount}("");
+                (bool success, ) = contracts[contractId].client.call{value: refundAmount}("");
                 require(success, "Refund failed");
             }
         } else {
             // Release remaining amount to contractor
-            uint256 releaseAmount = services[serviceId].totalAmount - services[serviceId].releasedAmount;
+            uint256 releaseAmount = contracts[contractId].totalAmount - contracts[contractId].releasedAmount;
             if (releaseAmount > 0) {
-                services[serviceId].releasedAmount = services[serviceId].totalAmount;
-                (bool success, ) = services[serviceId].contractor.call{value: releaseAmount}("");
+                contracts[contractId].releasedAmount = contracts[contractId].totalAmount;
+                (bool success, ) = contracts[contractId].contractor.call{value: releaseAmount}("");
                 require(success, "Payment release failed");
             }
         }
         
-        services[serviceId].status = ServiceStatus.Completed;
+        contracts[contractId].status = ContractStatus.Completed;
     }
 
-    function getService(uint256 serviceId) external view returns (Service memory) {
-        return services[serviceId];
+    function getContract(uint256 contractId) external view returns (Contract memory) {
+        return contracts[contractId];
     }
 
-    function getServiceMilestones(uint256 serviceId) external view returns (Milestone[] memory) {
-        Milestone[] memory serviceMilestones = new Milestone[](services[serviceId].milestones);
-        for (uint256 i = 0; i < services[serviceId].milestones; i++) {
-            serviceMilestones[i] = milestones[serviceId][i];
-        }
-        return serviceMilestones;
+    function getMilestone(uint256 contractId, uint256 milestoneIndex) external view returns (Milestone memory) {
+        require(milestoneIndex < contracts[contractId].milestones, "Invalid milestone index");
+        return milestones[contractId][milestoneIndex];
     }
 
-    function getClientServices(address client) external view returns (uint256[] memory) {
-        return clientServices[client];
+    function createMilestone(uint256 contractId, uint256 milestoneIndex, string calldata description) external {
+        require(msg.sender == owner(), "Only owner can create milestones");
+        require(milestoneIndex < contracts[contractId].milestones, "Invalid milestone index");
+        require(milestoneIndex > 0, "First milestone already created"); // First milestone created in createContract
+        require(milestones[contractId][milestoneIndex].contractId == 0, "Milestone already exists");
+
+        uint256 amountPerMilestone = contracts[contractId].totalAmount / contracts[contractId].milestones;
+        
+        milestones[contractId][milestoneIndex] = Milestone({
+            contractId: contractId,
+            milestoneIndex: milestoneIndex,
+            description: description,
+            amount: amountPerMilestone,
+            completed: false,
+            approved: false,
+            completedAt: 0
+        });
+
+        emit MilestoneCreated(contractId, milestoneIndex, description, amountPerMilestone);
     }
 
-    function getContractorServices(address contractor) external view returns (uint256[] memory) {
-        return contractorServices[contractor];
+    function getClientContracts(address client) external view returns (uint256[] memory) {
+        return clientContracts[client];
+    }
+
+    function getContractorContracts(address contractor) external view returns (uint256[] memory) {
+        return contractorContracts[contractor];
     }
 
     function setStakingContract(address _stakingContract) external onlyOwner {
