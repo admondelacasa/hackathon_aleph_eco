@@ -10,6 +10,8 @@ import { User, Phone, CreditCard, Save } from "lucide-react"
 interface UserRegistrationProps {
   walletAddress: string
   onSubmit: (userData: UserProfile) => void
+  existingProfile?: UserProfile | null
+  onCancel?: () => void
 }
 
 export interface UserProfile {
@@ -20,11 +22,13 @@ export interface UserProfile {
   isRegistered: boolean
 }
 
-export function UserRegistration({ walletAddress, onSubmit }: UserRegistrationProps) {
+export function UserRegistration({ walletAddress, onSubmit, existingProfile, onCancel }: UserRegistrationProps) {
+  const isEditMode = !!existingProfile
+  
   const [formData, setFormData] = useState({
-    username: "",
-    phoneNumber: "",
-    documentNumber: "",
+    username: existingProfile?.username || "",
+    phoneNumber: existingProfile?.phoneNumber || "",
+    documentNumber: existingProfile?.documentNumber || "",
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -74,9 +78,14 @@ export function UserRegistration({ walletAddress, onSubmit }: UserRegistrationPr
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Completar Perfil</CardTitle>
+          <CardTitle className="text-2xl text-center">
+            {isEditMode ? "Editar Perfil" : "Completar Perfil"}
+          </CardTitle>
           <p className="text-center text-gray-600 dark:text-gray-300">
-            Para usar BuildTrust, necesitas completar tu perfil
+            {isEditMode 
+              ? "Actualiza la información de tu perfil" 
+              : "Para usar BuildTrust, necesitas completar tu perfil"
+            }
           </p>
           <div className="text-center">
             <p className="text-xs text-gray-500 break-all">
@@ -139,13 +148,33 @@ export function UserRegistration({ walletAddress, onSubmit }: UserRegistrationPr
             </div>
 
             <div className="pt-4">
-              <Button 
-                type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700"
-              >
-                <Save className="h-4 w-4 mr-2" />
-                Completar Registro
-              </Button>
+              {isEditMode && onCancel ? (
+                <div className="flex space-x-2">
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    onClick={onCancel}
+                    className="flex-1"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    Guardar Cambios
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  type="submit" 
+                  className="w-full bg-orange-600 hover:bg-orange-700"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Completar Registro
+                </Button>
+              )}
             </div>
 
             <p className="text-xs text-center text-gray-500 mt-4">

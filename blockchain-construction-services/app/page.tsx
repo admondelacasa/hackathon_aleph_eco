@@ -83,14 +83,21 @@ export default function ConstructionServicesApp() {
     setUserProfile(userData)
     setShowRegistration(false)
     
+    const isNewUser = !userProfile
     toast({
-      title: "Perfil Completado",
-      description: `¡Bienvenido a BuildTrust, ${userData.username}!`,
+      title: isNewUser ? "Perfil Completado" : "Perfil Actualizado", 
+      description: isNewUser 
+        ? `¡Bienvenido a BuildTrust, ${userData.username}!`
+        : `Tu perfil ha sido actualizado exitosamente.`,
     })
   }
 
   const handleEditProfile = () => {
     setShowRegistration(true)
+  }
+
+  const handleCancelEditProfile = () => {
+    setShowRegistration(false)
   }
 
   const handleDisconnectWallet = async () => {
@@ -657,6 +664,8 @@ export default function ConstructionServicesApp() {
         <UserRegistration
           walletAddress={account}
           onSubmit={handleUserRegistration}
+          existingProfile={userProfile}
+          onCancel={userProfile ? handleCancelEditProfile : undefined}
         />
       )}
     </div>

@@ -51,7 +51,7 @@ export function UserProfileDisplay({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
                 <User className="h-4 w-4 text-white" />
               </div>
               <div className="hidden sm:block text-left">
@@ -68,7 +68,7 @@ export function UserProfileDisplay({
         <DropdownMenuContent className="w-80" align="end">
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
                 <User className="h-6 w-6 text-white" />
               </div>
               <div className="flex-1">
@@ -88,7 +88,7 @@ export function UserProfileDisplay({
                 <span className="text-gray-600 dark:text-gray-300">Wallet:</span>
                 <button
                   onClick={() => setShowFullWallet(!showFullWallet)}
-                  className="text-blue-600 hover:underline flex-1 text-left"
+                  className="text-orange-600 hover:underline flex-1 text-left"
                 >
                   {formatWalletAddress(walletAddress)}
                 </button>
