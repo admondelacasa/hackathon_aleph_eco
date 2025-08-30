@@ -583,21 +583,26 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
 
               {/* Manual location selects - shown when manual selection is active */}
               {locationState.useManualLocation && (
-                <div className="space-y-4 p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <MapPin className="h-5 w-5 text-orange-600" />
+                <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-blue-200 dark:border-gray-700 shadow-lg">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                      <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Selección Manual de Ubicación</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">Selección Manual de Ubicación</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         Disponible en {Object.keys(countries).length} países de Latinoamérica y España
                       </p>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-4">
                     {/* Country select with search */}
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">País</Label>
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span>País</span>
+                      </Label>
                       <Popover 
                         open={locationState.countryPopoverOpen} 
                         onOpenChange={(open) => setLocationState(prev => ({ ...prev, countryPopoverOpen: open }))}
@@ -607,10 +612,10 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                             variant="outline"
                             role="combobox"
                             aria-expanded={locationState.countryPopoverOpen}
-                            className="w-full justify-between bg-white dark:bg-gray-800"
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-blue-300 transition-colors"
                           >
-                            {locationState.country || "Seleccionar país..."}
-                            <Navigation className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            <span className="font-medium">{locationState.country || "Seleccionar país..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-full p-0" align="start">
@@ -644,8 +649,11 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                     </div>
 
                     {/* Province select with search */}
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Provincia/Estado</Label>
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span>Provincia/Estado</span>
+                      </Label>
                       <Popover 
                         open={locationState.provincePopoverOpen} 
                         onOpenChange={(open) => setLocationState(prev => ({ ...prev, provincePopoverOpen: open }))}
@@ -655,11 +663,11 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                             variant="outline"
                             role="combobox"
                             aria-expanded={locationState.provincePopoverOpen}
-                            className="w-full justify-between bg-white dark:bg-gray-800"
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-green-300 transition-colors"
                             disabled={!locationState.country}
                           >
-                            {locationState.province || "Seleccionar provincia..."}
-                            <Navigation className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            <span className="font-medium">{locationState.province || "Seleccionar provincia..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-full p-0" align="start">
@@ -693,8 +701,11 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                     </div>
 
                     {/* City select with search */}
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Ciudad</Label>
+                    <div className="w-full">
+                      <Label className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center space-x-2 mb-3">
+                        <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                        <span>Ciudad</span>
+                      </Label>
                       <Popover 
                         open={locationState.cityPopoverOpen} 
                         onOpenChange={(open) => setLocationState(prev => ({ ...prev, cityPopoverOpen: open }))}
@@ -704,11 +715,11 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                             variant="outline"
                             role="combobox"
                             aria-expanded={locationState.cityPopoverOpen}
-                            className="w-full justify-between bg-white dark:bg-gray-800"
+                            className="w-full justify-between h-12 bg-white dark:bg-gray-800 border-2 hover:border-orange-300 transition-colors"
                             disabled={!locationState.province}
                           >
-                            {locationState.city || "Seleccionar ciudad..."}
-                            <Navigation className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            <span className="font-medium">{locationState.city || "Seleccionar ciudad..."}</span>
+                            <Navigation className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-full p-0" align="start">
@@ -744,23 +755,25 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                   
                   {/* Selected location display */}
                   {locationState.country && locationState.province && locationState.city && (
-                    <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                      <div className="flex items-center space-x-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span className="text-sm font-medium text-green-700 dark:text-green-300">Ubicación seleccionada:</span>
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <div className="p-1 bg-green-100 dark:bg-green-900/30 rounded-full">
+                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        </div>
+                        <span className="text-base font-bold text-green-800 dark:text-green-300">Ubicación seleccionada</span>
                       </div>
-                      <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                        {locationState.city}, {locationState.province}, {locationState.country}
+                      <p className="text-lg font-semibold text-green-700 dark:text-green-400 ml-8">
+                        📍 {locationState.city}, {locationState.province}, {locationState.country}
                       </p>
                     </div>
                   )}
                   
                   {/* Reset manual selection button */}
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end mt-6">
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
+                      size="lg"
                       onClick={() => {
                         setLocationState(prev => ({ 
                           ...prev, 
@@ -774,9 +787,9 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                         }))
                         setFormData(prev => ({ ...prev, location: "" }))
                       }}
-                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors px-6 py-3"
                     >
-                      <X className="h-4 w-4 mr-2" />
+                      <X className="h-5 w-5 mr-2" />
                       Cancelar selección manual
                     </Button>
                   </div>
