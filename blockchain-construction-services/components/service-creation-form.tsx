@@ -13,7 +13,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle, AlertCircle, Loader2, Navigation } from "lucide-react"
+import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle, AlertCircle, Loader2, Navigation, Wifi, WifiOff, Wallet } from "lucide-react"
+import { useWeb3Users, Web3User } from "@/hooks/use-web3-users"
 
 interface ServiceCreationFormProps {
   onSubmit: (serviceData: any) => void
@@ -22,6 +23,14 @@ interface ServiceCreationFormProps {
 }
 
 export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }: ServiceCreationFormProps) {
+  // Web3 Users hook
+  const { 
+    findUserByUsername, 
+    getConnectedUsers, 
+    isLoading: web3Loading,
+    error: web3Error 
+  } = useWeb3Users()
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -42,8 +51,9 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
   const [userValidation, setUserValidation] = useState({
     isValidating: false,
     isValid: false,
-    userFound: null as { username: string; walletAddress: string } | null,
-    message: ""
+    userFound: null as Web3User | null,
+    message: "",
+    showConnectionStatus: false
   })
 
   const [locationState, setLocationState] = useState({
@@ -279,51 +289,71 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
     handleManualLocationChange()
   }, [locationState.country, locationState.province, locationState.city])
 
-  // Simulated user database (in real app, this would be an API call)
-  const mockUsers = [
-    { username: "CarlosMendoza", walletAddress: "0x742d35Cc6635Bb327234567890123456789ab987" },
-    { username: "AnaRodriguez", walletAddress: "0x856f123456789012345678901234567890abcdef" },
-    { username: "MiguelTorres", walletAddress: "0x123abc456def789012345678901234567890cdef" },
-    { username: "LauraFernandez", walletAddress: "0xabcdef123456789012345678901234567890abcd" },
-    { username: "RobertoSilva", walletAddress: "0x567890123456789012345678901234567890bcde" },
-    { username: "ManuelHerrera", walletAddress: "0x678901234567890123456789012345678901cdef" }
-  ]
-
-  // Function to validate user
+  // Function to validate user using Web3 system
   const validateUser = async (username: string) => {
     if (!username.trim()) {
       setUserValidation({
         isValidating: false,
         isValid: false,
         userFound: null,
-        message: ""
+        message: "",
+        showConnectionStatus: false
       })
       return
     }
 
-    setUserValidation(prev => ({ ...prev, isValidating: true }))
+    setUserValidation(prev => ({ 
+      ...prev, 
+      isValidating: true, 
+      message: "Buscando usuario...",
+      showConnectionStatus: false
+    }))
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    try {
+      const foundUser = await findUserByUsername(username)
 
-    const foundUser = mockUsers.find(user => 
-      user.username.toLowerCase() === username.toLowerCase()
-    )
-
-    if (foundUser) {
-      setUserValidation({
-        isValidating: false,
-        isValid: true,
-        userFound: foundUser,
-        message: "Usuario válido encontrado"
-      })
-    } else {
+      if (foundUser) {
+        setUserValidation({
+          isValidating: false,
+          isValid: true,
+          userFound: foundUser,
+          message: foundUser.isConnected 
+            ? "✅ Usuario encontrado y conectado" 
+            : "⚡ Usuario encontrado (desconectado)",
+          showConnectionStatus: true
+        })
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          walletVerified: true 
+        }))
+      } else {
+        setUserValidation({
+          isValidating: false,
+          isValid: false,
+          userFound: null,
+          message: "❌ Usuario no encontrado en el sistema Web3",
+          showConnectionStatus: false
+        })
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          walletVerified: false 
+        }))
+      }
+    } catch (error) {
       setUserValidation({
         isValidating: false,
         isValid: false,
         userFound: null,
-        message: "Usuario no encontrado"
+        message: "⚠️ Error conectando con Web3",
+        showConnectionStatus: false
       })
+      
+      setFormData(prev => ({ 
+        ...prev, 
+        walletVerified: false 
+      }))
     }
   }
 
@@ -334,7 +364,7 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
     }, 800) // Debounce for 800ms
 
     return () => clearTimeout(timeoutId)
-  }, [formData.contractorUsername])
+  }, [formData.contractorUsername, findUserByUsername])
 
   const serviceTypes = [
     { value: "0", label: "Jardinería", icon: "🌱" },
@@ -477,24 +507,64 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                 />
               </div>
               
-              {/* User Validation Display */}
+              {/* User Validation Display with Web3 Info */}
               {formData.contractorUsername && (
-                <div className="flex items-center space-x-3 p-3 bg-white dark:bg-gray-700 rounded-lg border">
+                <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-700 rounded-lg border">
                   {userValidation.isValidating && (
                     <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
-                      <span className="text-sm text-gray-500">Verificando usuario...</span>
+                      <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                      <span className="text-sm text-blue-600 font-medium">{userValidation.message}</span>
                     </div>
                   )}
                   
                   {!userValidation.isValidating && userValidation.isValid && userValidation.userFound && (
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <div>
-                        <p className="text-sm font-medium text-green-600">{userValidation.message}</p>
-                        <p className="text-xs text-gray-500">
-                          Wallet: {userValidation.userFound.walletAddress.slice(0, 6)}...{userValidation.userFound.walletAddress.slice(-4)}
-                        </p>
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                          <span className="text-sm font-medium text-green-600">{userValidation.message}</span>
+                        </div>
+                        {userValidation.showConnectionStatus && (
+                          <div className="flex items-center space-x-1">
+                            {userValidation.userFound.isConnected ? (
+                              <div className="flex items-center space-x-1">
+                                <Wifi className="h-4 w-4 text-green-500" />
+                                <Badge variant="default" className="bg-green-100 text-green-700 border-green-300">
+                                  Online
+                                </Badge>
+                              </div>
+                            ) : (
+                              <div className="flex items-center space-x-1">
+                                <WifiOff className="h-4 w-4 text-gray-400" />
+                                <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                                  Offline
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-2 text-xs">
+                        <div className="flex items-center space-x-2">
+                          <Wallet className="h-3 w-3 text-gray-400" />
+                          <span className="text-gray-600">
+                            {userValidation.userFound.walletAddress.slice(0, 8)}...{userValidation.userFound.walletAddress.slice(-6)}
+                          </span>
+                        </div>
+                        
+                        {userValidation.userFound.profile?.name && (
+                          <div className="flex items-center space-x-2">
+                            <User className="h-3 w-3 text-gray-400" />
+                            <span className="text-gray-600">{userValidation.userFound.profile.name}</span>
+                          </div>
+                        )}
+                        
+                        {userValidation.userFound.isConnected && (
+                          <div className="text-green-600">
+                            ✅ Última actividad: hace {Math.round((Date.now() - userValidation.userFound.lastSeen) / 60000)} min
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -502,7 +572,12 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
                   {!userValidation.isValidating && !userValidation.isValid && userValidation.message && (
                     <div className="flex items-center space-x-2">
                       <AlertCircle className="h-5 w-5 text-red-500" />
-                      <p className="text-sm text-red-600">{userValidation.message}</p>
+                      <div>
+                        <p className="text-sm text-red-600 font-medium">{userValidation.message}</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Verifica que el usuario esté registrado en Web3 y tenga su wallet conectada
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>

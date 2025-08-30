@@ -319,6 +319,14 @@ export default function ConstructionServicesApp() {
                   <Wallet className="h-4 w-4 mr-2" />
                   Web3 Real
                 </Button>
+                <Button
+                  onClick={() => window.open('/web3-integration-demo', '_blank')}
+                  variant="outline"
+                  className="bg-blue-600 text-white border-blue-400 hover:bg-blue-700 font-semibold"
+                >
+                  <Users className="h-4 w-4 mr-2" />
+                  Demo Web3 Users
+                </Button>
                 <MetaMaskGuide />
                 <Button
                   onClick={handleConnectWallet}
