@@ -39,7 +39,7 @@ export function MetaMaskGuide() {
       completed: isMetaMaskInstalled,
     },
     {
-      title: "Conectar a BuildChain",
+      title: "Conectar a BuildTrust",
       description: "Haz clic en 'Conectar Wallet' para autorizar la conexión",
       completed: false,
     },
@@ -58,7 +58,7 @@ export function MetaMaskGuide() {
             <img src="/metamask-logo.png" alt="MetaMask" className="h-6 w-6" />
             <span>Guía de Conexión MetaMask</span>
           </DialogTitle>
-          <DialogDescription>Sigue estos pasos para conectar tu wallet MetaMask a BuildChain</DialogDescription>
+          <DialogDescription>Sigue estos pasos para conectar tu wallet MetaMask a BuildTrust</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -69,7 +69,7 @@ export function MetaMaskGuide() {
                   <AlertTriangle className="h-5 w-5" />
                   <span className="font-medium">MetaMask no detectado</span>
                 </div>
-                <p className="text-sm text-orange-700 mt-1">Necesitas instalar MetaMask para usar BuildChain</p>
+                <p className="text-sm text-orange-700 mt-1">Necesitas instalar MetaMask para usar BuildTrust</p>
               </CardContent>
             </Card>
           )}
@@ -120,7 +120,7 @@ export function MetaMaskGuide() {
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Nunca compartas tu frase de recuperación (seed phrase)</li>
                 <li>• Verifica siempre la URL antes de conectar tu wallet</li>
-                <li>• BuildChain nunca te pedirá tu clave privada</li>
+                <li>• BuildTrust nunca te pedirá tu clave privada</li>
                 <li>• Revisa las transacciones antes de confirmarlas</li>
               </ul>
             </CardContent>

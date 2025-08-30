@@ -5,9 +5,9 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'BuildTrust - Plataforma Blockchain para Servicios de Construcción',
+  description: 'Plataforma descentralizada para servicios de construcción con pagos seguros y liberación gradual de fondos',
+  generator: 'BuildTrust',
 }
 
 export default function RootLayout({
