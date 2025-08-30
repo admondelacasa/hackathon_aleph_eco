@@ -86,7 +86,8 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         string memory _description,
         uint256 _deadline,
         ContractType _contractType,
-        string[] memory _milestoneDescriptions
+        string[] memory _milestoneDescriptions,
+        uint256 _amount
     ) external nonReentrant {
         require(_contractor != address(0), "Invalid contractor address");
         require(_contractor != msg.sender, "Cannot hire yourself");
@@ -94,7 +95,7 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         require(_milestoneDescriptions.length == _milestones, "Milestone descriptions mismatch");
         
         // Calculate total amount needed in USDT (using USDT decimals)
-        uint256 totalAmount = _amount * (10 ** USDT_DECIMALS);
+        uint256 totalAmount = _amount;
         require(USDT.allowance(msg.sender, address(this)) >= totalAmount, "Insufficient USDT allowance");
         require(USDT.balanceOf(msg.sender) >= totalAmount, "Insufficient USDT balance");
 
@@ -122,7 +123,7 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
         contractorContracts[_contractor].push(contractId);
 
         // Calculate milestone amount
-        uint256 amountPerMilestone = msg.value / _milestones;
+        uint256 amountPerMilestone = totalAmount / _milestones;
         
         // Create first milestone and emit event for off-chain milestone creation
         milestones[contractId][0] = Milestone({
@@ -142,7 +143,7 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
             require(USDT.transfer(stakingContract, totalAmount), "Failed to transfer USDT to staking");
         }
 
-        emit ContractCreated(contractId, msg.sender, _contractor, msg.value);
+        emit ContractCreated(contractId, msg.sender, _contractor, totalAmount);
     }
 
     function completeMilestone(uint256 contractId, uint256 milestoneIndex) 
@@ -204,16 +205,14 @@ contract ConstructionEscrow is ReentrancyGuard, Ownable {
             // Refund remaining amount to client
             uint256 refundAmount = contracts[contractId].totalAmount - contracts[contractId].releasedAmount;
             if (refundAmount > 0) {
-                (bool success, ) = contracts[contractId].client.call{value: refundAmount}("");
-                require(success, "Refund failed");
+                require(USDT.transfer(contracts[contractId].client, refundAmount), "USDT refund failed");
             }
         } else {
             // Release remaining amount to contractor
             uint256 releaseAmount = contracts[contractId].totalAmount - contracts[contractId].releasedAmount;
             if (releaseAmount > 0) {
                 contracts[contractId].releasedAmount = contracts[contractId].totalAmount;
-                (bool success, ) = contracts[contractId].contractor.call{value: releaseAmount}("");
-                require(success, "Payment release failed");
+                require(USDT.transfer(contracts[contractId].contractor, releaseAmount), "USDT transfer failed");
             }
         }
         

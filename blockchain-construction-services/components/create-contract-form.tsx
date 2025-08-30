@@ -13,7 +13,7 @@ import { CONTRACT_ADDRESSES } from "@/lib/contracts"
 
 export function CreateContractForm() {
   const { createService } = useConstructionServices()
-  const { checkBalance, checkAllowance } = useUSDT()
+  const { checkBalance, checkAllowance, approveUSDT } = useUSDT()
   const { toast } = useToast()
   
   const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +22,8 @@ export function CreateContractForm() {
     amount: "",
     contractor: "",
     description: "",
-    milestones: "1"
+    milestones: "1",
+    milestoneDescriptions: [""],
   })
   const [currentStep, setCurrentStep] = useState<'initial' | 'checking' | 'approving' | 'creating'>('initial')
 
@@ -87,7 +88,13 @@ export function CreateContractForm() {
       
       if (needsApproval) {
         setCurrentStep('approving')
-        // La aprobación se maneja en el hook useConstructionServices
+        const approved = await approveUSDT(
+          CONTRACT_ADDRESSES.CONSTRUCTION_ESCROW,
+          formData.amount
+        )
+        if (!approved) {
+          throw new Error("No se pudo aprobar el uso de USDT")
+        }
       }
 
       setCurrentStep('creating')
@@ -96,7 +103,7 @@ export function CreateContractForm() {
         formData.description,
         Date.now() + 7 * 24 * 60 * 60 * 1000, // Example deadline: 1 week from now
         "CONSTRUCTION", // Example serviceType, adjust as needed
-        Array(parseInt(formData.milestones)).fill("Milestone"),
+        formData.milestoneDescriptions,
         formData.amount
       )
 
@@ -111,7 +118,8 @@ export function CreateContractForm() {
         amount: "",
         contractor: "",
         description: "",
-        milestones: "1"
+        milestones: "1",
+        milestoneDescriptions: [""],
       })
       setCurrentStep('initial')
 
@@ -154,7 +162,67 @@ export function CreateContractForm() {
             )}
           </div>
 
-          {/* Otros campos del formulario */}
+          <div className="space-y-2">
+            <label>Contratista (dirección)</label>
+            <Input
+              type="text"
+              value={formData.contractor}
+              onChange={(e) => setFormData(prev => ({ ...prev, contractor: e.target.value }))}
+              placeholder="0x..."
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label>Descripción del contrato</label>
+            <Input
+              type="text"
+              value={formData.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              placeholder="Describe el trabajo a realizar..."
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label>Número de milestones</label>
+            <Input
+              type="number"
+              value={formData.milestones}
+              onChange={(e) => {
+                const value = e.target.value
+                const numMilestones = parseInt(value) || 1
+                setFormData(prev => ({ 
+                  ...prev, 
+                  milestones: value,
+                  milestoneDescriptions: Array(numMilestones).fill("").map((_, i) => 
+                    prev.milestoneDescriptions[i] || `Milestone ${i + 1}`
+                  )
+                }))
+              }}
+              min="1"
+              max="10"
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <label>Descripción de los milestones</label>
+            {formData.milestoneDescriptions.map((desc, index) => (
+              <Input
+                key={index}
+                type="text"
+                value={desc}
+                onChange={(e) => {
+                  const newDescriptions = [...formData.milestoneDescriptions]
+                  newDescriptions[index] = e.target.value
+                  setFormData(prev => ({ ...prev, milestoneDescriptions: newDescriptions }))
+                }}
+                placeholder={`Milestone ${index + 1}`}
+                disabled={isLoading}
+              />
+            ))}
+          </div>
 
           <div className="space-y-4">
             {needsApproval && (
