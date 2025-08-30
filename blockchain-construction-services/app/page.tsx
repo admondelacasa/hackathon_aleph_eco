@@ -15,6 +15,7 @@ import { useStaking } from "@/hooks/use-staking"
 import { useFeedback } from "@/hooks/use-feedback"
 import { ServiceCard } from "@/components/service-card"
 import { ServiceCreationForm } from "@/components/service-creation-form"
+import { ServiceBrowser } from "@/components/service-browser"
 import { ReputationBadge } from "@/components/reputation-badge"
 import { toast } from "@/hooks/use-toast"
 import { MetaMaskGuide } from "@/components/metamask-guide"
@@ -24,6 +25,7 @@ const serviceIcons = [TreePine, Wrench, Zap, Hammer]
 
 export default function ConstructionServicesApp() {
   const [activeTab, setActiveTab] = useState("browse")
+  const [showProfessionals, setShowProfessionals] = useState(false)
   const [services, setServices] = useState<Service[]>([])
   const [userServices, setUserServices] = useState<{ asClient: Service[]; asContractor: Service[] }>({
     asClient: [],
@@ -367,68 +369,90 @@ export default function ConstructionServicesApp() {
             </TabsList>
 
             <TabsContent value="browse" className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Servicios Disponibles</h2>
-                <Select>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filtrar por tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos los servicios</SelectItem>
-                    {serviceTypes.map((type, index) => (
-                      <SelectItem key={index} value={type.toLowerCase()}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Demo Notice */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <div className="flex items-center space-x-2">
-                  <AlertCircle className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <h4 className="font-medium text-blue-900 dark:text-blue-100">Modo Demostración</h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-200">
-                      Actualmente mostramos servicios de demostración. Los contratos inteligentes se desplegarán en la red principal próximamente.
-                    </p>
+              {!showProfessionals ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Servicios Disponibles</h2>
+                    <div className="flex space-x-3">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowProfessionals(true)}
+                        className="flex items-center space-x-2"
+                      >
+                        <Search className="h-4 w-4" />
+                        <span>Ver Profesionales</span>
+                      </Button>
+                      <Select>
+                        <SelectTrigger className="w-48">
+                          <SelectValue placeholder="Filtrar por tipo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Todos los servicios</SelectItem>
+                          {serviceTypes.map((type, index) => (
+                            <SelectItem key={index} value={type.toLowerCase()}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              {servicesLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                  <span className="ml-2 text-gray-600">Cargando servicios...</span>
-                </div>
-              ) : servicesError ? (
-                <Card>
-                  <CardContent className="text-center py-8">
-                    <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                    <p className="text-red-600">{servicesError}</p>
-                  </CardContent>
-                </Card>
-              ) : services.length === 0 ? (
-                <Card>
-                  <CardContent className="text-center py-12">
-                    <p className="text-gray-500">No hay servicios disponibles en este momento</p>
-                  </CardContent>
-                </Card>
+                  {/* Demo Notice */}
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                    <div className="flex items-center space-x-2">
+                      <AlertCircle className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-100">Modo Demostración</h4>
+                        <p className="text-sm text-blue-700 dark:text-blue-200">
+                          Explora servicios disponibles o busca profesionales por especialidad. Los contratos inteligentes se desplegarán próximamente.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {servicesLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                      <span className="ml-2 text-gray-600">Cargando servicios...</span>
+                    </div>
+                  ) : servicesError ? (
+                    <Card>
+                      <CardContent className="text-center py-8">
+                        <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                        <p className="text-red-600">{servicesError}</p>
+                      </CardContent>
+                    </Card>
+                  ) : services.length === 0 ? (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <p className="text-gray-500">No hay servicios disponibles en este momento</p>
+                        <Button 
+                          onClick={() => setShowProfessionals(true)} 
+                          className="mt-4"
+                        >
+                          Explorar Profesionales
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {services.map((service) => (
+                        <ServiceCard
+                          key={service.id}
+                          service={service}
+                          serviceTypes={serviceTypes}
+                          serviceIcons={serviceIcons}
+                          onViewDetails={(id) => console.log("View details:", id)}
+                          showApplyButton={true}
+                          onApply={(id) => console.log("Apply to:", id)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services.map((service) => (
-                    <ServiceCard
-                      key={service.id}
-                      service={service}
-                      serviceTypes={serviceTypes}
-                      serviceIcons={serviceIcons}
-                      onViewDetails={(id) => console.log("View details:", id)}
-                      showApplyButton={true}
-                      onApply={(id) => console.log("Apply to:", id)}
-                    />
-                  ))}
-                </div>
+                <ServiceBrowser onBack={() => setShowProfessionals(false)} />
               )}
             </TabsContent>
 
