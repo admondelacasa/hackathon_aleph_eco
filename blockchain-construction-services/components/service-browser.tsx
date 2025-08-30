@@ -60,6 +60,7 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
 
   const loadAllProfessionals = async () => {
     try {
+      setSelectedService(null)
       const allProfessionals = await getAllProfessionals()
       setProfessionals(allProfessionals)
     } catch (error) {
