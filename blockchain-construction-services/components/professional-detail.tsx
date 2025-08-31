@@ -99,7 +99,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
 
   return (
     <div className="space-y-6">
-      {/* Header con botón de regreso */}
+      {/* Header with back button */}
       <div className="flex items-center space-x-4">
         <Button
           variant="ghost"
@@ -116,7 +116,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Información principal */}
+        {/* Main information */}
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
@@ -147,7 +147,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                     <div className="flex items-center space-x-1 mt-1">
                       {renderStars(professional.rating)}
                       <span className="text-gray-600 ml-2">
-                        {professional.rating}/5 ({professional.totalReviews} reseñas)
+                        {professional.rating}/5 ({professional.totalReviews} reviews)
                       </span>
                     </div>
                     <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
@@ -172,10 +172,10 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
             </CardContent>
           </Card>
 
-          {/* Estadísticas */}
+          {/* Statistics */}
           <Card>
             <CardHeader>
-              <CardTitle>Estadísticas de Rendimiento</CardTitle>
+              <CardTitle>Performance Statistics</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -184,7 +184,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                     {professional.completedJobs}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Trabajos Completados
+                    Completed Jobs
                   </div>
                 </div>
                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
@@ -192,7 +192,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                     {professional.totalReviews}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Reseñas Totales
+                    Total Reviews
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
           {professional.portfolio.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Trabajos Destacados</CardTitle>
+                <CardTitle>Featured Work</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {professional.portfolio.map((project, index) => (
@@ -242,10 +242,10 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
             </Card>
           )}
 
-          {/* Reseñas */}
+          {/* Reviews */}
           <Card>
             <CardHeader>
-              <CardTitle>Reseñas de Clientes</CardTitle>
+              <CardTitle>Client Reviews</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {professional.reviews.map(renderReview)}
@@ -265,16 +265,16 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
                   className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                 >
                   <Phone className="h-4 w-4 mr-2" />
-                  Contactar
+                  Contact
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          {/* Información de contacto */}
+          {/* Contact information */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Información de Contacto</CardTitle>
+              <CardTitle className="text-lg">Contact Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {professional.contact.phone && (
@@ -305,10 +305,10 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
             </CardContent>
           </Card>
 
-          {/* Verificación */}
+          {/* Verification */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Verificación</CardTitle>
+              <CardTitle className="text-lg">Verification</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -334,12 +334,12 @@ export function ProfessionalDetail({ professional, onBack, onContact, onHire }: 
       <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Contactar a {professional.name}</DialogTitle>
+            <DialogTitle>Contact {professional.name}</DialogTitle>
           </DialogHeader>
           <div className="flex items-center space-x-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
             <Phone className="h-6 w-6 text-orange-600" />
             <div>
-              <p className="font-medium text-gray-900">Número de teléfono</p>
+              <p className="font-medium text-gray-900">Phone number</p>
               <p className="text-lg font-mono text-orange-600">
                 {professional.contact?.phone || "No disponible"}
               </p>

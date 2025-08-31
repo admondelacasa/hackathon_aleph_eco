@@ -36,10 +36,10 @@ interface ServiceBrowserProps {
 }
 
 const serviceTypes = [
-  "Jardinería", "Plomería", "Electricidad", "Construcción", 
-  "Pintura", "Carpintería", "Techos", "Limpieza", 
-  "Climatización", "Cerrajería", "Albañilería", "Suelos",
-  "Reparación electrodomésticos", "Control de plagas", "Soldadura", "Cristalería"
+  "Gardening", "Plumbing", "Electrical", "Construction", 
+  "Painting", "Carpentry", "Roofing", "Cleaning", 
+  "HVAC", "Locksmith", "Masonry", "Flooring",
+  "Appliance Repair", "Pest Control", "Welding", "Glazing"
 ]
 const serviceIcons = [TreePine, Wrench, Zap, Hammer, Paintbrush, Construction, Home, Brush, Wind, Key, Construction, Square, Settings, Bug, Zap, Glasses]
 
@@ -53,7 +53,7 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
 
   const { getProfessionalsByService, getProfessionalById, getAllProfessionals, isLoading } = useProfessionals()
 
-  // Cargar todos los profesionales al inicio
+  // Load all professionals at start
   useEffect(() => {
     loadAllProfessionals()
   }, [])
@@ -67,7 +67,7 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
       console.error("Error loading professionals:", error)
       toast({
         title: "Error",
-        description: "No se pudieron cargar los profesionales",
+        description: "Could not load professionals",
         variant: "destructive",
       })
     }
@@ -82,7 +82,7 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
       console.error("Error loading service professionals:", error)
       toast({
         title: "Error",
-        description: "No se pudieron cargar los profesionales del servicio",
+        description: "Could not load service professionals",
         variant: "destructive",
       })
     }
@@ -111,12 +111,12 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
 
   const handleHire = (professionalId: number) => {
     toast({
-      title: "Proceso de Contratación",
-      description: "Se ha iniciado el proceso de contratación. Te contactaremos pronto.",
+      title: "Hiring Process",
+      description: "The hiring process has started. We will contact you soon.",
     })
   }
 
-  // Filtrar y ordenar profesionales
+  // Filter and sort professionals
   const filteredAndSortedProfessionals = professionals
     .filter(prof => {
       const matchesSearch = prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -158,19 +158,19 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           {selectedService !== null 
-            ? `Profesionales de ${serviceTypes[selectedService]}`
-            : "Explorar Profesionales"
+            ? `${serviceTypes[selectedService]} Professionals`
+            : "Browse Professionals"
           }
         </h2>
       </div>
 
-      {/* Selección de Servicios */}
+      {/* Service Selection */}
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="text-xl font-bold">Seleccionar Servicio</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Botón Todos los servicios destacado */}
+          {/* All services button highlighted */}
           <div className="w-full">
             <Button
               variant={selectedService === null ? "default" : "outline"}
@@ -178,11 +178,11 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
               className="flex items-center justify-center space-x-3 p-6 h-16 w-full text-lg font-semibold shadow-md hover:shadow-lg transition-all"
             >
               <Search className="h-6 w-6" />
-              <span>Todos los servicios</span>
+              <span>All Services</span>
             </Button>
           </div>
           
-          {/* Grid de servicios específicos */}
+          {/* Specific services grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {serviceTypes.map((service, index) => {
               const IconComponent = serviceIcons[index]
@@ -202,14 +202,14 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
         </CardContent>
       </Card>
 
-      {/* Filtros y Búsqueda */}
+      {/* Filters and Search */}
       <Card>
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Buscar profesionales..."
+                placeholder="Search professionals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -221,28 +221,32 @@ export function ServiceBrowser({ onBack }: ServiceBrowserProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="rating">Mejor calificados</SelectItem>
-                <SelectItem value="experience">Más experiencia</SelectItem>
-                <SelectItem value="reviews">Más reseñas</SelectItem>
+                <SelectItem value="rating">Best rated</SelectItem>
+                <SelectItem value="experience">Most experience</SelectItem>
+                <SelectItem value="reviews">Most reviews</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={filterLocation} onValueChange={setFilterLocation}>
               <SelectTrigger>
-                <SelectValue placeholder="Ubicación" />
+                <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todas las ubicaciones</SelectItem>
-                <SelectItem value="Madrid">Madrid</SelectItem>
-                <SelectItem value="Barcelona">Barcelona</SelectItem>
-                <SelectItem value="Valencia">Valencia</SelectItem>
-                <SelectItem value="Sevilla">Sevilla</SelectItem>
+                <SelectItem value="all">All locations</SelectItem>
+                <SelectItem value="Mexico">Mexico City</SelectItem>
+                <SelectItem value="Buenos Aires">Buenos Aires</SelectItem>
+                <SelectItem value="São Paulo">São Paulo</SelectItem>
+                <SelectItem value="Lima">Lima</SelectItem>
+                <SelectItem value="Bogotá">Bogotá</SelectItem>
+                <SelectItem value="Santiago">Santiago</SelectItem>
+                <SelectItem value="Caracas">Caracas</SelectItem>
+                <SelectItem value="Quito">Quito</SelectItem>
               </SelectContent>
             </Select>
 
             <div className="flex items-center space-x-2">
               <Badge variant="secondary">
-                {filteredAndSortedProfessionals.length} encontrados
+                                {filteredAndSortedProfessionals.length} found
               </Badge>
             </div>
           </div>

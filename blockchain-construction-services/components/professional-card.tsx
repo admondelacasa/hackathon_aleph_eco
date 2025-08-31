@@ -74,7 +74,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
               <div className="flex items-center space-x-1 mt-1">
                 {renderStars(professional.rating)}
                 <span className="text-sm text-gray-600 ml-1">
-                  {professional.rating} ({professional.totalReviews} reseñas)
+                  {professional.rating} ({professional.totalReviews} reviews)
                 </span>
               </div>
             </div>
@@ -96,7 +96,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
           ))}
           {professional.skills.length > 3 && (
             <Badge variant="outline" className="text-xs">
-              +{professional.skills.length - 3} más
+              +{professional.skills.length - 3} more
             </Badge>
           )}
         </div>
@@ -106,7 +106,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
             <div className="text-lg font-bold text-orange-600">
               {professional.completedJobs}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-300">Trabajos Completados</div>
+            <div className="text-xs text-gray-600 dark:text-gray-300">Completed Jobs</div>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
           </div>
           <div className="flex items-center space-x-1">
             <Clock className="h-4 w-4" />
-            <span>Miembro desde {new Date(professional.joinDate).getFullYear()}</span>
+            <span>Member since {new Date(professional.joinDate).getFullYear()}</span>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
           <div className="flex items-center space-x-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
             <Phone className="h-6 w-6 text-orange-600" />
             <div>
-              <p className="font-medium text-gray-900">Número de teléfono</p>
+              <p className="font-medium text-gray-900">Phone number</p>
               <p className="text-lg font-mono text-orange-600">
                 {professional.contact?.phone || "No disponible"}
               </p>
