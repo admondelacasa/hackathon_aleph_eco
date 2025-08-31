@@ -312,6 +312,14 @@ export default function ConstructionServicesApp() {
             {!isConnected ? (
               <div className="flex items-center space-x-3">
                 <Button
+                  onClick={() => window.open('/symbiotic', '_blank')}
+                  variant="outline"
+                  className="bg-purple-600/20 text-white border-purple-300/50 hover:bg-purple-600/30 font-semibold"
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  Symbiotic Network
+                </Button>
+                <Button
                   onClick={() => window.open('/web3-test', '_blank')}
                   variant="outline"
                   className="bg-white/10 text-white border-white/30 hover:bg-white/20 font-semibold"
@@ -353,6 +361,15 @@ export default function ConstructionServicesApp() {
               />
             ) : (
               <div className="flex items-center space-x-4">
+                <Button
+                  onClick={() => window.open('/symbiotic', '_blank')}
+                  variant="outline"
+                  size="sm"
+                  className="bg-purple-600/20 text-white border-purple-300/50 hover:bg-purple-600/30"
+                >
+                  <Shield className="h-4 w-4 mr-1" />
+                  Symbiotic
+                </Button>
                 <Button
                   onClick={() => window.open('/web3-test', '_blank')}
                   variant="outline"
