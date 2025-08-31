@@ -1,6 +1,6 @@
 "use client"
 
-import { UserRegistrationManager } from '@/components/user-registration-manager'
+import SimpleUserRegistration from '@/components/simple-user-registration'
 
 export default function UserRegistrationPage() {
   return (
@@ -18,7 +18,7 @@ export default function UserRegistrationPage() {
           </p>
         </div>
 
-        <UserRegistrationManager />
+        <SimpleUserRegistration />
       </div>
     </div>
   )
