@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract MockSymbioticVault {
     IERC20 public asset;
     uint256 public totalDeposited;
-    uint256 public totalShares;
+    uint256 private _totalShares;
 
     mapping(address => uint256) public sharesOf;
 
@@ -28,7 +28,7 @@ contract MockSymbioticVault {
         require(asset.transferFrom(msg.sender, address(this), amount), "transferFrom failed");
         shares = amount;
         sharesOf[msg.sender] += shares;
-        totalShares += shares;
+        _totalShares += shares;
         totalDeposited += amount;
         return shares;
     }
@@ -37,7 +37,7 @@ contract MockSymbioticVault {
     function withdraw(address, uint256 shares) external returns (uint256 amountOut) {
         require(sharesOf[msg.sender] >= shares, "insufficient shares");
         sharesOf[msg.sender] -= shares;
-        totalShares -= shares;
+        _totalShares -= shares;
         amountOut = shares; // 1:1 in mock
         totalDeposited -= amountOut;
         require(asset.transfer(msg.sender, amountOut), "transfer failed");
@@ -49,6 +49,6 @@ contract MockSymbioticVault {
     }
 
     function totalShares() external view returns (uint256) {
-        return totalShares;
+        return _totalShares;
     }
 }

@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useCallback, useEffect } from 'react'
+import { useUserRegistrySimple as useUserRegistry } from './use-user-registry-simple'
+import { useBlockchain } from './use-blockchain'
 
 export interface Web3User {
   username: string

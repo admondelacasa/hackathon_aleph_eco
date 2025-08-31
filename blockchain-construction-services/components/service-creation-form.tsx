@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, X, MapPin, Calendar, DollarSign, User, CheckCircle, AlertCircle, Loader2, Navigation, Wifi, WifiOff, Wallet } from "lucide-react"
-import { useWeb3Users, Web3User } from "@/hooks/use-web3-users"
+import { useWeb3Users, Web3User } from "@/hooks/use-web3-users-blockchain"
 
 interface ServiceCreationFormProps {
   onSubmit: (serviceData: any) => void
