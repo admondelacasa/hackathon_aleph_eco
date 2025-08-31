@@ -55,28 +55,28 @@ export function useProfessionals() {
       id: 1,
       address: "0x742d35Cc6635Bb327234567890123456789ab987",
       name: "Carlos Mendoza",
-      description: "Electricista certificado con 15 años de experiencia en instalaciones residenciales e industriales.",
-      skills: ["Instalaciones eléctricas", "Automatización", "Paneles solares", "Sistemas de seguridad"],
-      serviceTypes: [2], // ELECTRICAL
+      description: "Certified gardener with 15 years of experience in landscaping and garden design.",
+      skills: ["Landscaping", "Garden design", "Tree pruning", "Irrigation systems"],
+      serviceTypes: [0], // GARDENING
       rating: 4.9,
       totalReviews: 127,
       completedJobs: 156,
-      joinDate: Date.now() - 31536000000, // 1 año atrás
+      joinDate: Date.now() - 31536000000, // 1 year ago
       hourlyRate: "0.025",
-      location: "Madrid Centro",
+      location: "Mexico City Centro",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 2 horas",
+      responseTime: "< 2 hours",
       successRate: 98.7,
       portfolio: [
         {
           title: "Instalación completa casa moderna",
-          description: "Sistema eléctrico completo para vivienda de 200m²",
+          description: "Complete electrical system for 200m² house",
           completedDate: Date.now() - 2592000000, // 1 mes atrás
         },
         {
           title: "Automatización oficina",
-          description: "Sistema domótico para oficina corporativa",
+          description: "Smart home system for corporate office",
           completedDate: Date.now() - 5184000000, // 2 meses atrás
         }
       ],
@@ -86,7 +86,7 @@ export function useProfessionals() {
           clientName: "María González",
           clientAddress: "0x1234567890123456789012345678901234567890",
           rating: 5,
-          comment: "Excelente trabajo, muy profesional y puntual. La instalación quedó perfecta.",
+          comment: "Excellent work, very professional and punctual. The installation was perfect.",
           date: Date.now() - 1209600000, // 2 semanas atrás
           serviceType: 2,
           verified: true
@@ -96,7 +96,7 @@ export function useProfessionals() {
           clientName: "José Martín",
           clientAddress: "0x2345678901234567890123456789012345678901",
           rating: 5,
-          comment: "Trabajo impecable. Cumplió todos los plazos y el precio fue justo.",
+          comment: "Impeccable work. Met all deadlines and the price was fair.",
           date: Date.now() - 2419200000, // 4 semanas atrás
           serviceType: 2,
           verified: true
@@ -112,7 +112,7 @@ export function useProfessionals() {
       id: 2,
       address: "0x856f123456789012345678901234567890abcdef",
       name: "Ana Rodríguez",
-      description: "Fontanera especialista en reparaciones urgentes y instalaciones de alta calidad.",
+      description: "Plumber specialist in emergency repairs and high-quality installations.",
       skills: ["Reparaciones urgentes", "Instalación de calderas", "Fontanería industrial", "Detección de fugas"],
       serviceTypes: [1], // PLUMBING
       rating: 4.8,
@@ -120,7 +120,7 @@ export function useProfessionals() {
       completedJobs: 112,
       joinDate: Date.now() - 20736000000, // 8 meses atrás
       hourlyRate: "0.022",
-      location: "Barcelona Norte",
+      location: "Buenos Aires Norte",
       avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b287?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 1 hora",
@@ -128,7 +128,7 @@ export function useProfessionals() {
       portfolio: [
         {
           title: "Renovación baño completo",
-          description: "Instalación completa de fontanería en baño principal",
+          description: "Complete plumbing installation in main bathroom",
           completedDate: Date.now() - 1814400000, // 3 semanas atrás
         }
       ],
@@ -138,7 +138,7 @@ export function useProfessionals() {
           clientName: "Pedro Sánchez",
           clientAddress: "0x3456789012345678901234567890123456789012",
           rating: 5,
-          comment: "Reparó una fuga muy difícil de localizar. Muy recomendable.",
+          comment: "Fixed a very difficult leak to locate. Highly recommended.",
           date: Date.now() - 604800000, // 1 semana atrás
           serviceType: 1,
           verified: true
@@ -153,15 +153,15 @@ export function useProfessionals() {
       id: 3,
       address: "0x123abc456def789012345678901234567890cdef",
       name: "Miguel Torres",
-      description: "Constructor con amplia experiencia en obras residenciales y reformas integrales.",
-      skills: ["Obra nueva", "Reformas", "Albañilería", "Gestión de proyectos"],
-      serviceTypes: [3], // CONSTRUCTION
+      description: "Certified electrician with extensive experience in residential and commercial electrical installations.",
+      skills: ["Electrical installations", "Home automation", "Solar panels", "Security systems"],
+      serviceTypes: [2], // ELECTRICAL
       rating: 4.7,
       totalReviews: 203,
       completedJobs: 245,
-      joinDate: Date.now() - 63072000000, // 2 años atrás
+      joinDate: Date.now() - 63072000000, // 2 years ago
       hourlyRate: "0.035",
-      location: "Valencia Centro",
+      location: "São Paulo Centro",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 4 horas",
@@ -169,7 +169,7 @@ export function useProfessionals() {
       portfolio: [
         {
           title: "Piscina residencial",
-          description: "Construcción completa de piscina con sistema de filtrado",
+          description: "Complete pool construction with filtration system",
           completedDate: Date.now() - 7776000000, // 3 meses atrás
         },
         {
@@ -210,15 +210,15 @@ export function useProfessionals() {
       id: 4,
       address: "0xabcdef123456789012345678901234567890abcd",
       name: "Laura Fernández",
-      description: "Paisajista y jardinera especializada en jardines sostenibles y diseño exterior.",
-      skills: ["Diseño de jardines", "Paisajismo", "Riego automático", "Plantas autóctonas"],
-      serviceTypes: [0], // GARDENING
+      description: "Construction engineer specialized in residential construction and comprehensive renovations.",
+      skills: ["New construction", "Renovations", "Masonry", "Project management"],
+      serviceTypes: [3], // CONSTRUCTION
       rating: 4.9,
       totalReviews: 64,
       completedJobs: 78,
       joinDate: Date.now() - 15552000000, // 6 meses atrás
       hourlyRate: "0.020",
-      location: "Sevilla Este",
+      location: "Lima Norte",
       avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 3 horas",
@@ -226,7 +226,7 @@ export function useProfessionals() {
       portfolio: [
         {
           title: "Jardín mediterráneo",
-          description: "Diseño y creación de jardín con plantas autóctonas",
+          description: "Garden design and creation with native plants",
           completedDate: Date.now() - 3888000000, // 1.5 meses atrás
         }
       ],
@@ -252,7 +252,7 @@ export function useProfessionals() {
       id: 5,
       address: "0x567890123456789012345678901234567890bcde",
       name: "Roberto Silva",
-      description: "Pintor profesional especializado en pintura interior, exterior y decorativa. 12 años de experiencia.",
+      description: "Professional painter specialized in interior, exterior and decorative painting. 12 years of experience.",
       skills: ["Pintura interior", "Pintura exterior", "Pintura decorativa", "Empapelado", "Lacado"],
       serviceTypes: [4], // PAINTING
       rating: 4.7,
@@ -260,7 +260,7 @@ export function useProfessionals() {
       completedJobs: 143,
       joinDate: Date.now() - 15552000000, // 6 meses atrás
       hourlyRate: "0.018",
-      location: "Valencia Centro",
+      location: "Bogotá Centro",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 3 horas",
@@ -273,7 +273,7 @@ export function useProfessionals() {
         },
         {
           title: "Fachada edificio comercial",
-          description: "Pintura exterior de edificio de 4 plantas con impermeabilización",
+          description: "Exterior painting of 4-story building with waterproofing",
           completedDate: Date.now() - 4320000000, // 1.5 meses atrás
         }
       ],
@@ -298,7 +298,7 @@ export function useProfessionals() {
       id: 6,
       address: "0x678901234567890123456789012345678901cdef",
       name: "Manuel Herrera",
-      description: "Carpintero artesano con 20 años de experiencia en muebles a medida y restauración.",
+      description: "Artisan carpenter with 20 years of experience in custom furniture and restoration.",
       skills: ["Muebles a medida", "Restauración", "Carpintería de obra", "Ebanistería", "Instalación cocinas"],
       serviceTypes: [5], // CARPENTRY
       rating: 4.9,
@@ -306,7 +306,7 @@ export function useProfessionals() {
       completedJobs: 89,
       joinDate: Date.now() - 41472000000, // 16 meses atrás
       hourlyRate: "0.028",
-      location: "Sevilla Este",
+      location: "Santiago Centro",
       avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
       verified: true,
       responseTime: "< 4 horas",
@@ -345,9 +345,9 @@ export function useProfessionals() {
       id: 7,
       address: "0x789012345678901234567890123456789012def0",
       name: "Patricia Morales",
-      description: "Técnica en climatización y calefacción. Especialista en instalación y mantenimiento de sistemas HVAC.",
-      skills: ["Aire acondicionado", "Calefacción", "Ventilación", "Bombas de calor", "Mantenimiento HVAC"],
-      serviceTypes: [8], // HVAC
+      description: "Roofing specialist with expertise in waterproofing and roof maintenance systems.",
+      skills: ["Waterproofing", "Roof repairs", "Shingles", "Gutters", "Roof maintenance"],
+      serviceTypes: [6], // ROOFING
       rating: 4.8,
       totalReviews: 67,
       completedJobs: 92,
@@ -513,9 +513,9 @@ export function useProfessionals() {
       id: 8,
       address: "0x8901234567890123456789012345678901234567",
       name: "Ana Sofía Ramírez",
-      description: "Arquitecta especializada en diseño sustentable y construcción ecológica. 10 años transformando espacios.",
-      skills: ["Diseño arquitectónico", "Construcción sustentable", "Remodelación", "Gestión de proyectos"],
-      serviceTypes: [3], // CONSTRUCTION
+      description: "Professional cleaning specialist in residential and commercial spaces. 10 years providing comprehensive cleaning services.",
+      skills: ["Deep cleaning", "Commercial cleaning", "Post-construction cleanup", "Sanitization"],
+      serviceTypes: [7], // CLEANING
       rating: 4.8,
       totalReviews: 94,
       completedJobs: 87,
@@ -554,9 +554,9 @@ export function useProfessionals() {
       id: 9,
       address: "0x9012345678901234567890123456789012345678",
       name: "Diego Fernández",
-      description: "Plomero especialista en instalaciones de agua y gas con certificación internacional. Servicio 24/7.",
-      skills: ["Plomería residencial", "Instalaciones de gas", "Sistemas de calefacción", "Reparaciones de emergencia"],
-      serviceTypes: [1], // PLUMBING
+      description: "HVAC specialist in heating, ventilation and air conditioning systems with international certification. Available 24/7.",
+      skills: ["Air conditioning", "Heating systems", "Ventilation", "Emergency repairs"],
+      serviceTypes: [8], // HVAC
       rating: 4.7,
       totalReviews: 156,
       completedJobs: 203,
@@ -595,9 +595,9 @@ export function useProfessionals() {
       id: 10,
       address: "0xa123456789012345678901234567890123456789",
       name: "Isabella Santos",
-      description: "Diseñadora de interiores con especialización en espacios comerciales y residenciales modernos.",
-      skills: ["Diseño de interiores", "Decoración", "Mobiliario personalizado", "Iluminación"],
-      serviceTypes: [4], // PAINTING
+      description: "Professional locksmith specialized in security systems and emergency lockout services.",
+      skills: ["Lock installation", "Security systems", "Emergency lockouts", "Key duplication"],
+      serviceTypes: [9], // LOCKSMITH
       rating: 4.9,
       totalReviews: 73,
       completedJobs: 68,
@@ -636,9 +636,9 @@ export function useProfessionals() {
       id: 11,
       address: "0xb234567890123456789012345678901234567890",
       name: "Miguel Ángel Vargas",
-      description: "Carpintero artesanal con 20 años de experiencia en muebles a medida y restauración de antigüedades.",
-      skills: ["Carpintería fina", "Muebles a medida", "Restauración", "Ebanistería"],
-      serviceTypes: [5], // CARPENTRY
+      description: "Master mason with 20 years of experience in stone and brick construction and restoration.",
+      skills: ["Stone masonry", "Brick work", "Restoration", "Structural masonry"],
+      serviceTypes: [10], // MASONRY
       rating: 4.8,
       totalReviews: 102,
       completedJobs: 134,
@@ -677,9 +677,9 @@ export function useProfessionals() {
       id: 12,
       address: "0xc345678901234567890123456789012345678901",
       name: "Valentina Rojas",
-      description: "Especialista en sistemas de aire acondicionado y climatización para hogares y oficinas.",
-      skills: ["Instalación AC", "Mantenimiento HVAC", "Refrigeración", "Ventilación"],
-      serviceTypes: [8], // HVAC
+      description: "Flooring installation specialist in hardwood, ceramic, and luxury vinyl installations.",
+      skills: ["Hardwood installation", "Ceramic tiles", "Luxury vinyl", "Floor refinishing"],
+      serviceTypes: [11], // FLOORING
       rating: 4.6,
       totalReviews: 87,
       completedJobs: 95,
@@ -759,9 +759,9 @@ export function useProfessionals() {
       id: 14,
       address: "0xe567890123456789012345678901234567890123",
       name: "Camila Guerrero",
-      description: "Paisajista y jardinera especializada en jardines urbanos y azoteas verdes con plantas nativas.",
-      skills: ["Diseño de jardines", "Plantas nativas", "Riego automático", "Mantenimiento"],
-      serviceTypes: [0], // LANDSCAPING
+      description: "Pest control specialist with expertise in eco-friendly solutions and urban pest management.",
+      skills: ["Pest control", "Eco-friendly treatments", "Urban pest management", "Prevention"],
+      serviceTypes: [13], // PEST_CONTROL
       rating: 4.9,
       totalReviews: 65,
       completedJobs: 58,
@@ -841,9 +841,9 @@ export function useProfessionals() {
       id: 16,
       address: "0x0789012345678901234567890123456789012345",
       name: "Daniela Herrera",
-      description: "Especialista en control de plagas urbanas con métodos ecológicos y seguros para mascotas.",
-      skills: ["Control de plagas", "Fumigación ecológica", "Prevención", "Desinfección"],
-      serviceTypes: [13], // PEST_CONTROL
+      description: "Glass installation specialist with expertise in windows, mirrors and custom glazing solutions.",
+      skills: ["Glass installation", "Window repair", "Mirror installation", "Custom glazing"],
+      serviceTypes: [15], // GLAZING
       rating: 4.6,
       totalReviews: 134,
       completedJobs: 167,
@@ -923,9 +923,9 @@ export function useProfessionals() {
       id: 18,
       address: "0x2901234567890123456789012345678901234567",
       name: "Sofía Paredes",
-      description: "Pintora profesional especializada en técnicas decorativas y pintura artística para interiores.",
-      skills: ["Pintura decorativa", "Técnicas artísticas", "Murales", "Restauración"],
-      serviceTypes: [4], // PAINTING
+      description: "Professional interior decorator specialized in decorative techniques and artistic interiors design.",
+      skills: ["Decorative painting", "Artistic techniques", "Murals", "Interior design"],
+      serviceTypes: [4], // PAINTING - but I'll find another duplicate to change
       rating: 4.9,
       totalReviews: 54,
       completedJobs: 47,

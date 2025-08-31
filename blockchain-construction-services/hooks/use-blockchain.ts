@@ -36,12 +36,14 @@ export function useBlockchain() {
             setIsConnected(true)
 
             // Get USDT balance and chain ID
-            const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
-            const [usdtBalance, decimals] = await Promise.all([
-              usdtContract.balanceOf(accounts[0].address),
-              usdtContract.decimals()
-            ])
-            setBalance(ethers.formatUnits(usdtBalance, decimals))
+            // Temporarily disabled USDT calls for local development
+            // const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+            // const [usdtBalance, decimals] = await Promise.all([
+            //   usdtContract.balanceOf(accounts[0].address),
+            //   usdtContract.decimals()
+            // ])
+            // setBalance(ethers.formatUnits(usdtBalance, decimals))
+            setBalance("1000") // Mock balance for local development
 
             const network = await provider.getNetwork()
             setChainId(Number(network.chainId))
@@ -69,13 +71,15 @@ export function useBlockchain() {
           // Reinitialize signer
           if (provider) {
             provider.getSigner().then(setSigner)
-            const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
-            Promise.all([
-              usdtContract.balanceOf(accounts[0]),
-              usdtContract.decimals()
-            ]).then(([balance, decimals]) => {
-              setBalance(ethers.formatUnits(balance, decimals))
-            })
+            // Temporarily disabled USDT calls for local development
+            // const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+            // Promise.all([
+            //   usdtContract.balanceOf(accounts[0]),
+            //   usdtContract.decimals()
+            // ]).then(([balance, decimals]) => {
+            //   setBalance(ethers.formatUnits(balance, decimals))
+            // })
+            setBalance("1000") // Mock balance for local development
           }
         }
       }
@@ -123,12 +127,14 @@ export function useBlockchain() {
         setIsConnected(true)
 
         // Get USDT balance and chain ID
-        const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
-        const [usdtBalance, decimals] = await Promise.all([
-          usdtContract.balanceOf(accounts[0]),
-          usdtContract.decimals()
-        ])
-        setBalance(ethers.formatUnits(usdtBalance, decimals))
+        // Temporarily disabled USDT calls for local development
+        // const usdtContract = new ethers.Contract(CONTRACT_ADDRESSES.USDT, ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"], provider)
+        // const [usdtBalance, decimals] = await Promise.all([
+        //   usdtContract.balanceOf(accounts[0]),
+        //   usdtContract.decimals()
+        // ])
+        // setBalance(ethers.formatUnits(usdtBalance, decimals))
+        setBalance("1000") // Mock balance for local development
 
         const network = await provider.getNetwork()
         setChainId(Number(network.chainId))

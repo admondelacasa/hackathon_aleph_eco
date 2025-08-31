@@ -119,7 +119,7 @@ export function WalletConnector() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Dirección de la cuenta */}
+        {/* Account Address */}
         <div className="space-y-2">
           <label className="text-sm font-medium">Cuenta</label>
           <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ export function WalletConnector() {
           </div>
         </div>
 
-        {/* Información adicional */}
+        {/* Additional Information */}
         <div className="pt-4 border-t">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
@@ -179,7 +179,7 @@ export function WalletConnector() {
               <span className="font-mono">{chainId}</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Estado:</span>
+              <span className="text-muted-foreground">Status:</span>
               <br />
               <Badge variant="outline" className="text-green-600">
                 Conectado

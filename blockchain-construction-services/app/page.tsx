@@ -25,10 +25,10 @@ import { toast } from "@/hooks/use-toast"
 import { MetaMaskGuide } from "@/components/metamask-guide"
 
 const serviceTypes = [
-  "Jardinería", "Plomería", "Electricidad", "Construcción", 
-  "Pintura", "Carpintería", "Techos", "Limpieza", 
-  "Climatización", "Cerrajería", "Albañilería", "Suelos",
-  "Reparación electrodomésticos", "Control de plagas", "Soldadura", "Cristalería"
+  "Gardening", "Plumbing", "Electrical", "Construction", 
+  "Painting", "Carpentry", "Roofing", "Cleaning", 
+  "HVAC", "Locksmith", "Masonry", "Flooring",
+  "Appliance Repair", "Pest Control", "Welding", "Glazing"
 ]
 const serviceIcons = [TreePine, Wrench, Zap, Hammer, Paintbrush, Construction, Home, Brush, Wind, Key, Construction, Square, Settings, Bug, Zap, Glasses]
 
@@ -72,7 +72,7 @@ export default function ConstructionServicesApp() {
 
   const checkUserRegistration = () => {
     if (account) {
-      // Verificar si el usuario ya está registrado en localStorage
+      // Check if user is already registered in localStorage
       const savedProfile = localStorage.getItem(`userProfile_${account}`)
       if (savedProfile) {
         setUserProfile(JSON.parse(savedProfile))
@@ -91,10 +91,10 @@ export default function ConstructionServicesApp() {
     
     const isNewUser = !userProfile
     toast({
-      title: isNewUser ? "Perfil Completado" : "Perfil Actualizado", 
+      title: isNewUser ? "Profile Completed" : "Profile Updated", 
       description: isNewUser 
-        ? `¡Bienvenido a BuildTrust, ${userData.username}!`
-        : `Tu perfil ha sido actualizado exitosamente.`,
+        ? `Welcome to BuildTrust, ${userData.username}!`
+        : `Your profile has been updated successfully.`,
     })
   }
 
@@ -156,7 +156,7 @@ export default function ConstructionServicesApp() {
       console.log("[v0] Window is undefined - running on server")
       toast({
         title: "Error",
-        description: "La aplicación debe ejecutarse en el navegador",
+        description: "The application must run in the browser",
         variant: "destructive",
       })
       return
@@ -165,8 +165,8 @@ export default function ConstructionServicesApp() {
     if (!window.ethereum) {
       console.log("[v0] window.ethereum not found")
       toast({
-        title: "MetaMask No Detectado",
-        description: "Por favor instala MetaMask desde metamask.io para continuar",
+        title: "MetaMask Not Detected",
+        description: "Please install MetaMask from metamask.io to continue",
         variant: "destructive",
       })
       return
@@ -178,14 +178,14 @@ export default function ConstructionServicesApp() {
       await connectWallet()
       console.log("[v0] Connection successful")
       toast({
-        title: "Wallet Conectada",
-        description: "Tu wallet se ha conectado exitosamente",
+        title: "Wallet Connected",
+        description: "Your wallet has been connected successfully",
       })
     } catch (error: any) {
       console.log("[v0] Connection failed:", error)
       toast({
-        title: "Error de Conexión",
-        description: error.message || "No se pudo conectar la wallet",
+        title: "Connection Error",
+        description: error.message || "Could not connect wallet",
         variant: "destructive",
       })
     }
@@ -197,13 +197,13 @@ export default function ConstructionServicesApp() {
       if (!serviceData.confirmations?.clientConfirmed) {
         toast({
           title: "Error",
-          description: "Debes confirmar como cliente para crear el contrato",
+          description: "You must confirm as client to create the contract",
           variant: "destructive",
         })
         return
       }
 
-      // Crear un nuevo contrato pendiente de confirmación del prestador
+      // Create a new contract pending provider confirmation
       const newContract = {
         id: Date.now().toString(),
         title: serviceData.title,
@@ -216,7 +216,7 @@ export default function ConstructionServicesApp() {
         location: serviceData.location,
         deadline: serviceData.deadline,
         milestones: serviceData.milestones,
-        status: "Pendiente de Confirmación",
+        status: "Pending Confirmation",
         createdAt: new Date().toISOString(),
         clientConfirmed: true,
         contractorConfirmed: false,
@@ -226,15 +226,15 @@ export default function ConstructionServicesApp() {
       setActiveContracts(prev => [...prev, newContract])
 
       toast({
-        title: "Contrato Creado",
-        description: `Contrato enviado a ${serviceData.contractorUsername} para su revisión y confirmación`,
+        title: "Contract Created",
+        description: `Contract sent to ${serviceData.contractorUsername} for review and confirmation`,
       })
 
       setActiveTab("my-services")
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo crear el contrato",
+        description: error.message || "Could not create contract",
         variant: "destructive",
       })
     }
@@ -244,14 +244,14 @@ export default function ConstructionServicesApp() {
     try {
       await claimRewards()
       toast({
-        title: "Recompensas Reclamadas",
-        description: "Tus recompensas han sido transferidas a tu wallet",
+        title: "Rewards Claimed",
+        description: "Your rewards have been transferred to your wallet",
       })
       await loadUserData()
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "No se pudieron reclamar las recompensas",
+        description: error.message || "Could not claim rewards",
         variant: "destructive",
       })
     }
@@ -277,18 +277,18 @@ export default function ConstructionServicesApp() {
     )
     
     toast({
-      title: "Contrato Finalizado",
-      description: "El contrato se ha completado exitosamente",
+      title: "Contract Finalized",
+      description: "The contract has been completed successfully",
     })
   }
 
   const getStatusBadge = (status: number) => {
     const statuses = [
-      { label: "Creado", variant: "secondary" as const },
-      { label: "En Progreso", variant: "default" as const },
-      { label: "Completado", variant: "default" as const },
-      { label: "En Disputa", variant: "destructive" as const },
-      { label: "Cancelado", variant: "outline" as const },
+      { label: "Created", variant: "secondary" as const },
+      { label: "In Progress", variant: "default" as const },
+      { label: "Completed", variant: "default" as const },
+      { label: "In Dispute", variant: "destructive" as const },
+      { label: "Cancelled", variant: "outline" as const },
     ]
     return statuses[status] || statuses[0]
   }
@@ -317,7 +317,7 @@ export default function ConstructionServicesApp() {
                   className="bg-green-600/20 text-white border-green-300/50 hover:bg-green-600/30 font-semibold"
                 >
                   <Key className="h-4 w-4 mr-2" />
-                  Registro Web3
+                  Web3 Registry
                 </Button>
                 <Button
                   onClick={() => window.open('/symbiotic', '_blank')}
@@ -333,7 +333,7 @@ export default function ConstructionServicesApp() {
                   className="bg-white/10 text-white border-white/30 hover:bg-white/20 font-semibold"
                 >
                   <Wallet className="h-4 w-4 mr-2" />
-                  Web3 Real
+                  Real Web3
                 </Button>
                 <Button
                   onClick={() => window.open('/web3-integration-demo', '_blank')}
@@ -352,10 +352,10 @@ export default function ConstructionServicesApp() {
                   {walletLoading ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Conectando...
+                      Connecting...
                     </>
                   ) : (
-                    "Conectar Wallet"
+                    "Connect Wallet"
                   )}
                 </Button>
               </div>
@@ -376,7 +376,7 @@ export default function ConstructionServicesApp() {
                   className="bg-green-600/20 text-white border-green-300/50 hover:bg-green-600/30"
                 >
                   <Key className="h-4 w-4 mr-1" />
-                  Registro
+                  Registry
                 </Button>
                 <Button
                   onClick={() => window.open('/web3-user-system', '_blank')}
@@ -418,7 +418,7 @@ export default function ConstructionServicesApp() {
                   onClick={disconnectWallet}
                   className="text-gray-500 hover:text-gray-700"
                 >
-                  Desconectar
+                  Disconnect
                 </Button>
               </div>
             )}
@@ -445,7 +445,7 @@ export default function ConstructionServicesApp() {
                   </span>
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                  La plataforma más segura de Latinoamérica para contratar servicios de construcción
+                  Latin America's most secure platform for hiring construction services
                 </p>
               </div>
 
@@ -453,19 +453,19 @@ export default function ConstructionServicesApp() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-16">
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
                   <div className="text-3xl font-bold text-orange-600 mb-2">500+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Profesionales</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Professionals</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
                   <div className="text-3xl font-bold text-red-600 mb-2">1.2M+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Proyectos</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Projects</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
                   <div className="text-3xl font-bold text-orange-600 mb-2">98%</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Satisfacción</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Satisfaction</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
                   <div className="text-3xl font-bold text-red-600 mb-2">24/7</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Soporte</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Support</div>
                 </div>
               </div>
 
@@ -476,28 +476,28 @@ export default function ConstructionServicesApp() {
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <Shield className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Seguridad Blockchain</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Blockchain Security</h3>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                    Contratos inteligentes que protegen tu dinero hasta que el trabajo esté 100% completado.
+                    Smart contracts that protect your money until the work is 100% completed.
                   </p>
                   <div className="flex items-center text-orange-600 font-semibold">
                     <CheckCircle2 className="h-5 w-5 mr-2" />
-                    Fondos protegidos
+                    Protected funds
                   </div>
                 </div>
 
-                {/* Profesionales Verificados */}
+                {/* Verified Professionals */}
                 <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-3xl p-8 shadow-xl border border-red-200 dark:border-red-700/50 hover:transform hover:scale-105 transition-all duration-300">
                   <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <Users className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Profesionales Elite</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Elite Professionals</h3>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                    Contratistas verificados con certificaciones reales y años de experiencia comprobada.
+                    Verified contractors with real certifications and years of proven experience.
                   </p>
                   <div className="flex items-center text-red-600 font-semibold">
                     <Star className="h-5 w-5 mr-2" />
-                    Calificación promedio 4.8/5
+                    Average rating 4.8/5
                   </div>
                 </div>
 
@@ -506,13 +506,13 @@ export default function ConstructionServicesApp() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <Eye className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Transparencia Total</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Total Transparency</h3>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                    Seguimiento en tiempo real de tu proyecto con hitos verificables y comunicación directa.
+                    Real-time project tracking with verifiable milestones and direct communication.
                   </p>
                   <div className="flex items-center text-blue-600 font-semibold">
                     <Clock className="h-5 w-5 mr-2" />
-                    Actualizaciones en vivo
+                    Live updates
                   </div>
                 </div>
               </div>
@@ -520,23 +520,23 @@ export default function ConstructionServicesApp() {
               {/* Services Grid */}
               <div className="mb-16">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">
-                  Servicios Más Demandados
+                  Most Requested Services
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
                   {[
-                    { icon: "🏠", name: "Construcción", count: "200+" },
-                    { icon: "🔧", name: "Plomería", count: "150+" },
-                    { icon: "⚡", name: "Electricidad", count: "180+" },
-                    { icon: "🎨", name: "Pintura", count: "120+" },
-                    { icon: "🪟", name: "Ventanas", count: "90+" },
-                    { icon: "🚿", name: "Baños", count: "110+" },
+                    { icon: "🏠", name: "Construction", count: "200+" },
+                    { icon: "🔧", name: "Plumbing", count: "150+" },
+                    { icon: "⚡", name: "Electrical", count: "180+" },
+                    { icon: "🎨", name: "Painting", count: "120+" },
+                    { icon: "🪟", name: "Windows", count: "90+" },
+                    { icon: "🚿", name: "Bathrooms", count: "110+" },
                   ].map((service, index) => (
                     <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 text-center group">
                       <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
                         {service.icon}
                       </div>
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{service.name}</h4>
-                      <p className="text-sm text-orange-600 font-medium">{service.count} profesionales</p>
+                      <p className="text-sm text-orange-600 font-medium">{service.count} professionals</p>
                     </div>
                   ))}
                 </div>
@@ -550,18 +550,18 @@ export default function ConstructionServicesApp() {
                   ))}
                 </div>
                 <blockquote className="text-xl md:text-2xl font-medium italic mb-6">
-                  "BuildTrust revolucionó la forma en que contrato servicios. La seguridad del blockchain me da total tranquilidad."
+                  "BuildTrust revolutionized the way I hire services. The blockchain security gives me total peace of mind."
                 </blockquote>
-                <cite className="font-semibold">— María González, Cliente satisfecha</cite>
+                <cite className="font-semibold">— Maria Gonzalez, Satisfied Client</cite>
               </div>
 
               {/* CTA Section */}
               <div className="text-center">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                  ¿Listo para empezar?
+                  Ready to get started?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                  Únete a miles de clientes que ya confían en BuildTrust para sus proyectos de construcción.
+                  Join thousands of clients who already trust BuildTrust for their construction projects.
                 </p>
                 <Button 
                   onClick={handleConnectWallet} 
@@ -569,10 +569,10 @@ export default function ConstructionServicesApp() {
                   className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-xl px-12 py-4 text-white font-bold shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 rounded-2xl"
                 >
                   <Wallet className="h-6 w-6 mr-3" />
-                  Conectar Wallet y Empezar
+                  Connect Wallet and Start
                 </Button>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                  Conecta tu wallet en segundos y accede a la mejor plataforma de construcción
+                  Connect your wallet in seconds and access the best construction platform
                 </p>
               </div>
             </div>
@@ -580,9 +580,9 @@ export default function ConstructionServicesApp() {
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="browse">Explorar profesionales</TabsTrigger>
-              <TabsTrigger value="create">Crear contrato</TabsTrigger>
-              <TabsTrigger value="my-services">Mis servicios</TabsTrigger>
+              <TabsTrigger value="browse">Browse Professionals</TabsTrigger>
+              <TabsTrigger value="create">Create Contract</TabsTrigger>
+              <TabsTrigger value="my-services">My Services</TabsTrigger>
             </TabsList>
 
             <TabsContent value="browse" className="space-y-6">
@@ -595,11 +595,11 @@ export default function ConstructionServicesApp() {
 
             <TabsContent value="my-services" className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mis Servicios</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">My Services</h2>
                 <div className="flex space-x-2">
-                  <Badge variant="outline">Contratos Activos: {activeContracts.length}</Badge>
-                  <Badge variant="outline">Como Cliente: {userServices.asClient.length}</Badge>
-                  <Badge variant="outline">Como Contratista: {userServices.asContractor.length}</Badge>
+                  <Badge variant="outline">Active Contracts: {activeContracts.length}</Badge>
+                  <Badge variant="outline">As Client: {userServices.asClient.length}</Badge>
+                  <Badge variant="outline">As Contractor: {userServices.asContractor.length}</Badge>
                 </div>
               </div>
 
@@ -607,7 +607,7 @@ export default function ConstructionServicesApp() {
                 {/* Contratos Activos */}
                 {activeContracts.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-4 text-orange-600">Contratos en Curso</h3>
+                    <h3 className="text-lg font-semibold mb-4 text-orange-600">Contracts in Progress</h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {activeContracts.map((contract) => (
                         <ContractCard
@@ -622,10 +622,10 @@ export default function ConstructionServicesApp() {
                   </div>
                 )}
 
-                {/* Servicios Anteriores */}
+                {/* Previous Services */}
                 {userServices.asClient.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Como Cliente</h3>
+                    <h3 className="text-lg font-semibold mb-4">As Client</h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {userServices.asClient.map((service) => (
                         <ServiceCard
@@ -642,7 +642,7 @@ export default function ConstructionServicesApp() {
 
                 {userServices.asContractor.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Como Contratista</h3>
+                    <h3 className="text-lg font-semibold mb-4">As Contractor</h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {userServices.asContractor.map((service) => (
                         <ServiceCard
@@ -660,8 +660,8 @@ export default function ConstructionServicesApp() {
                 {activeContracts.length === 0 && userServices.asClient.length === 0 && userServices.asContractor.length === 0 && (
                   <Card>
                     <CardContent className="text-center py-12">
-                      <p className="text-gray-500 mb-4">No tienes servicios o contratos activos</p>
-                      <Button onClick={() => setActiveTab("create")}>Crear tu primer contrato</Button>
+                      <p className="text-gray-500 mb-4">You don't have any active services or contracts</p>
+                      <Button onClick={() => setActiveTab("create")}>Create your first contract</Button>
                     </CardContent>
                   </Card>
                 )}
@@ -673,7 +673,7 @@ export default function ConstructionServicesApp() {
                 <Card className="lg:col-span-2">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      Perfil de Contratista
+                      Contractor Profile
                       <ReputationBadge
                         averageRating={contractorReputation.averageRating}
                         totalReviews={contractorReputation.totalReviews}
@@ -681,21 +681,21 @@ export default function ConstructionServicesApp() {
                         size="sm"
                       />
                     </CardTitle>
-                    <CardDescription>Completa tu perfil para recibir más trabajos</CardDescription>
+                    <CardDescription>Complete your profile to receive more jobs</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Nombre</label>
-                      <Input placeholder="Tu nombre completo" />
+                      <label className="text-sm font-medium">Name</label>
+                      <Input placeholder="Your full name" />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Descripción</label>
-                      <Textarea placeholder="Describe tu experiencia y especialidades..." rows={3} />
+                      <label className="text-sm font-medium">Description</label>
+                      <Textarea placeholder="Describe your experience and specialties..." rows={3} />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Especialidades</label>
+                      <label className="text-sm font-medium">Specialties</label>
                       <div className="flex flex-wrap gap-2">
                         {serviceTypes.map((type, index) => (
                           <Badge key={index} variant="outline" className="cursor-pointer">
@@ -705,24 +705,24 @@ export default function ConstructionServicesApp() {
                       </div>
                     </div>
 
-                    <Button className="w-full">Actualizar Perfil</Button>
+                    <Button className="w-full">Update Profile</Button>
                     <Button
                       variant="outline"
                       className="w-full bg-transparent"
                       onClick={() => window.open(`/contractor/${account}/reviews`, "_blank")}
                     >
-                      Ver Mis Reseñas ({contractorReputation.totalReviews})
+                      View My Reviews ({contractorReputation.totalReviews})
                     </Button>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Estadísticas</CardTitle>
+                    <CardTitle>Statistics</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Calificación</span>
+                      <span className="text-sm text-gray-600">Rating</span>
                       <div className="flex items-center space-x-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -739,20 +739,20 @@ export default function ConstructionServicesApp() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Trabajos Completados</span>
+                      <span className="text-sm text-gray-600">Completed Jobs</span>
                       <span className="font-bold">{contractorReputation.completedJobs}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Total Reseñas</span>
+                      <span className="text-sm text-gray-600">Total Reviews</span>
                       <span className="font-bold text-orange-600">{contractorReputation.totalReviews}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Verificado</span>
+                      <span className="text-sm text-gray-600">Verified</span>
                       <Badge variant="default" className="bg-green-100 text-green-800">
                         <CheckCircle className="h-3 w-3 mr-1" />
-                        Verificado
+                        Verified
                       </Badge>
                     </div>
 
@@ -762,13 +762,13 @@ export default function ConstructionServicesApp() {
                         <span className="font-bold">{Number.parseFloat(totalStaked).toFixed(2)} USDT</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Recompensas Pendientes</span>
+                        <span className="text-sm text-gray-600">Pending Rewards</span>
                         <span className="font-bold text-green-600">
                           {Number.parseFloat(pendingRewards).toFixed(2)} USDT
                         </span>
                       </div>
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-sm text-gray-600">Ganancias Totales</span>
+                        <span className="text-sm text-gray-600">Total Earnings</span>
                         <span className="font-bold text-purple-600">
                           {Number.parseFloat(contractorReputation.totalEarnings).toFixed(2)} USDT
                         </span>
@@ -782,7 +782,7 @@ export default function ConstructionServicesApp() {
         )}
       </main>
 
-      {/* Modal de Registro de Usuario */}
+      {/* User Registration Modal */}
       {showRegistration && isConnected && account && (
         <UserRegistration
           walletAddress={account}

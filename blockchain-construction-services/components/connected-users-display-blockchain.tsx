@@ -40,8 +40,8 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
     } catch (err) {
       console.error('Error loading users:', err)
       toast({
-        title: "Error cargando usuarios",
-        description: "No se pudieron cargar los usuarios registrados",
+        title: "Error loading users",
+        description: "Could not load registered users",
         variant: "destructive"
       })
     }
@@ -54,13 +54,13 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
       setTimeout(() => setCopiedAddress(null), 2000)
       
       toast({
-        title: "Dirección copiada",
-        description: "La dirección de wallet ha sido copiada al portapapeles",
+        title: "Address copied",
+        description: "Wallet address has been copied to clipboard",
       })
     } catch (err) {
       toast({
         title: "Error al copiar",
-        description: "No se pudo copiar la dirección",
+        description: "Could not copy address",
         variant: "destructive"
       })
     }
@@ -135,7 +135,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
             <div className="flex items-center space-x-2">
               <Key className="h-3 w-3 text-gray-400" />
               <span className="text-xs text-gray-500">
-                Clave pública registrada
+                Registered public key
               </span>
             </div>
           </div>
@@ -147,7 +147,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
               className="mt-3 w-full"
               onClick={() => onUserSelect(user)}
             >
-              Seleccionar Usuario
+              Select User
             </Button>
           )}
         </div>
@@ -160,7 +160,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
       <Card>
         <CardContent className="p-6">
           <div className="text-center text-red-600">
-            <p>Error cargando usuarios: {error}</p>
+            <p>Error loading users: {error}</p>
             <Button variant="outline" onClick={loadUsers} className="mt-2">
               <RefreshCw className="h-4 w-4 mr-2" />
               Reintentar
@@ -176,7 +176,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center space-x-2">
           <Users className="h-4 w-4" />
-          <span>Ver Usuarios Web3 Registrados</span>
+          <span>View Registered Web3 Users</span>
           {users.length > 0 && (
             <Badge variant="default" className="ml-2">
               {users.length} registrados
@@ -189,7 +189,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Shield className="h-5 w-5" />
-            <span>Usuarios Web3 Registrados en Blockchain</span>
+            <span>Web3 Users Registered on Blockchain</span>
           </DialogTitle>
         </DialogHeader>
         
@@ -197,7 +197,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
           {isLoading ? (
             <div className="flex items-center justify-center p-8">
               <RefreshCw className="h-6 w-6 animate-spin" />
-              <span className="ml-2">Cargando usuarios de la blockchain...</span>
+              <span className="ml-2">Loading users from blockchain...</span>
             </div>
           ) : (
             <div className="space-y-6">
@@ -206,7 +206,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-green-600 flex items-center space-x-2">
                     <Shield className="h-5 w-5" />
-                    <span>Usuarios Registrados ({users.length})</span>
+                    <span>Registered Users ({users.length})</span>
                   </h3>
                   <Button variant="ghost" size="sm" onClick={loadUsers}>
                     <RefreshCw className="h-4 w-4" />
@@ -222,8 +222,8 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
                 ) : (
                   <div className="text-center py-8 text-gray-500">
                     <User className="h-12 w-12 mx-auto mb-2 text-gray-400" />
-                    <p>No hay usuarios registrados en la blockchain aún</p>
-                    <p className="text-xs mt-2">Los usuarios necesitan registrarse con MetaMask</p>
+                    <p>No users registered on the blockchain yet</p>
+                    <p className="text-xs mt-2">Users need to register with MetaMask</p>
                   </div>
                 )}
               </div>
@@ -233,11 +233,11 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
               {/* Info section */}
               <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                 <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
-                  ¿Qué es el registro Web3?
+                  What is Web3 registration?
                 </h4>
                 <p className="text-sm text-blue-600 dark:text-blue-300">
-                  Los usuarios registrados han almacenado su clave pública en la blockchain, 
-                  lo que permite comunicación encriptada de extremo a extremo y verificación de identidad.
+                  Registered users have stored their public key on the blockchain, 
+                  which enables end-to-end encrypted communication and identity verification.
                 </p>
               </div>
             </div>

@@ -73,7 +73,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
     if (!searchUsername.trim()) {
       toast({
         title: "Error",
-        description: "Por favor ingresa un nombre de usuario para validar",
+        description: "Please enter a username to validate",
         variant: "destructive"
       })
       return
@@ -90,7 +90,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
         setValidationResult({
           user,
           isValid: true,
-          message: `Usuario "${searchUsername}" está registrado y verificado en la blockchain`
+          message: `User "${searchUsername}" is registered and verified on the blockchain`
         })
         
         if (onUserValidated) {
@@ -98,19 +98,19 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
         }
         
         toast({
-          title: "Usuario válido",
-          description: `${user.profileData.name || user.username} está registrado`,
+          title: "Valid user",
+          description: `${user.profileData.name || user.username} is registered`,
         })
       } else {
         setValidationResult({
           user: null,
           isValid: false,
-          message: `Usuario "${searchUsername}" no está registrado en la blockchain`
+          message: `User "${searchUsername}" is not registered on the blockchain`
         })
         
         toast({
-          title: "Usuario no encontrado",
-          description: `El usuario "${searchUsername}" no está registrado`,
+          title: "User not found",
+          description: `User "${searchUsername}" is not registered`,
           variant: "destructive"
         })
       }
@@ -118,12 +118,12 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
       setValidationResult({
         user: null,
         isValid: false,
-        message: `Error al validar usuario: ${error.message}`
+        message: `Error validating user: ${error.message}`
       })
       
       toast({
-        title: "Error de validación",
-        description: "No se pudo validar el usuario",
+        title: "Validation error",
+        description: "Could not validate user",
         variant: "destructive"
       })
     } finally {
@@ -146,7 +146,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
       })
     } catch (error: any) {
       toast({
-        title: "Error de encriptación", 
+        title: "Encryption error", 
         description: error.message,
         variant: "destructive"
       })
@@ -164,7 +164,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
         </CardHeader>
         <CardContent className="text-center">
           <p className="text-gray-600 mb-6">
-            Conecta MetaMask para validar usuarios registrados en la blockchain.
+            Connect MetaMask to validate users registered on the blockchain.
           </p>
           <Button onClick={connectWallet} className="w-full">
             <Wallet className="h-4 w-4 mr-2" />
@@ -182,7 +182,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <User className="h-5 w-5" />
-            <span>Tu Estado Web3</span>
+            <span>Your Web3 Status</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -215,7 +215,7 @@ export function Web3UserValidator({ onUserValidated, showEncryption = false }: W
             <Alert className="mt-4">
               <UserPlus className="h-4 w-4" />
               <AlertDescription>
-                Necesitas registrarte para validar otros usuarios y usar encriptación. 
+                You need to register to validate other users and use encryption. 
                 <a href="/user-registry" target="_blank" className="text-blue-600 hover:underline ml-1">
                   Ir al registro
                 </a>

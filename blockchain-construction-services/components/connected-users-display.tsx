@@ -68,13 +68,13 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
       setTimeout(() => setCopiedAddress(null), 2000)
       
       toast({
-        title: "Dirección copiada",
-        description: "La dirección de wallet ha sido copiada al portapapeles",
+        title: "Address copied",
+        description: "Wallet address has been copied to clipboard",
       })
     } catch (err) {
       toast({
         title: "Error al copiar",
-        description: "No se pudo copiar la dirección",
+        description: "Could not copy address",
         variant: "destructive"
       })
     }
@@ -86,7 +86,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
     const hours = Math.floor(diff / 3600000)
     const days = Math.floor(diff / 86400000)
 
-    if (days > 0) return `hace ${days} día${days > 1 ? 's' : ''}`
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`
     if (hours > 0) return `hace ${hours} hora${hours > 1 ? 's' : ''}`
     if (minutes > 0) return `hace ${minutes} minuto${minutes > 1 ? 's' : ''}`
     return 'Ahora'
@@ -161,7 +161,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
             <div className="flex justify-center mb-4">
               <WifiOff className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Error de conexión</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Connection Error</h3>
             <p className="text-gray-500 mb-4">
               {error || usersError || registryError}
             </p>
@@ -182,11 +182,11 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5" />
-              <CardTitle>Usuarios Registrados en Blockchain</CardTitle>
+              <CardTitle>Registered Blockchain Users</CardTitle>
             </div>
             <div className="flex items-center space-x-2">
               <Badge variant="outline">
-                {users.length} usuarios
+                {users.length} users
               </Badge>
               <Button 
                 variant="outline" 
@@ -206,16 +206,16 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
               <div className="flex justify-center mb-4">
                 <Shield className="h-12 w-12 text-blue-500 animate-pulse" />
               </div>
-              <p className="text-gray-500">Cargando usuarios desde blockchain...</p>
+              <p className="text-gray-500">Loading users from blockchain...</p>
             </div>
           ) : users.length === 0 ? (
             <div className="text-center py-8">
               <div className="flex justify-center mb-4">
                 <User className="h-12 w-12 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No hay usuarios registrados</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No registered users</h3>
               <p className="text-gray-500">
-                Sé el primero en registrarte en la blockchain
+                Be the first to register on the blockchain
               </p>
             </div>
           ) : (
@@ -233,7 +233,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
           <CardHeader>
             <div className="flex items-center space-x-2">
               <Wifi className="h-5 w-5 text-green-500" />
-              <CardTitle>Estado de Conexión</CardTitle>
+              <CardTitle>Connection Status</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -244,7 +244,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
                   Conectados Ahora ({connectedUsers.length})
                 </h4>
                 {connectedUsers.length === 0 ? (
-                  <p className="text-sm text-gray-500">No hay usuarios conectados</p>
+                  <p className="text-sm text-gray-500">No connected users</p>
                 ) : (
                   <div className="space-y-1">
                     {connectedUsers.map((user) => (
@@ -263,7 +263,7 @@ export function ConnectedUsersDisplay({ onUserSelect, showSelectButton = false }
                   Desconectados ({users.length - connectedUsers.length})
                 </h4>
                 {users.length - connectedUsers.length === 0 ? (
-                  <p className="text-sm text-gray-500">Todos los usuarios están conectados</p>
+                  <p className="text-sm text-gray-500">All users are connected</p>
                 ) : (
                   <div className="space-y-1">
                     {users.filter(user => !connectedUsers.some(cu => cu.walletAddress.toLowerCase() === user.address.toLowerCase())).map((user) => (
