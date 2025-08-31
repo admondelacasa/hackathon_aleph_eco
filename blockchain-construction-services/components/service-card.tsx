@@ -56,11 +56,11 @@ export function ServiceCard({
 
   const getStatusBadge = (status: number) => {
     const statuses = [
-      { label: "Creado", variant: "secondary" as const, color: "bg-gray-100 text-gray-800" },
-      { label: "En Progreso", variant: "default" as const, color: "bg-blue-100 text-blue-800" },
-      { label: "Completado", variant: "default" as const, color: "bg-green-100 text-green-800" },
-      { label: "En Disputa", variant: "destructive" as const, color: "bg-red-100 text-red-800" },
-      { label: "Cancelado", variant: "outline" as const, color: "bg-gray-100 text-gray-600" },
+      { label: "Created", variant: "secondary" as const, color: "bg-gray-100 text-gray-800" },
+      { label: "In Progress", variant: "default" as const, color: "bg-blue-100 text-blue-800" },
+      { label: "Completed", variant: "default" as const, color: "bg-green-100 text-green-800" },
+      { label: "In Dispute", variant: "destructive" as const, color: "bg-red-100 text-red-800" },
+      { label: "Cancelled", variant: "outline" as const, color: "bg-gray-100 text-gray-600" },
     ]
     return statuses[status] || statuses[0]
   }
@@ -117,9 +117,9 @@ export function ServiceCard({
 
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Progreso</span>
+            <span className="text-gray-600">Progress</span>
             <span className="font-medium">
-              {service.completedMilestones}/{service.milestones} hitos
+              {service.completedMilestones}/{service.milestones} milestones
             </span>
           </div>
           <Progress value={progress} className="h-2" />
@@ -127,11 +127,11 @@ export function ServiceCard({
 
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-2 bg-blue-50 rounded-lg">
-            <div className="text-xs text-gray-600 mb-1">Valor Total</div>
+            <div className="text-xs text-gray-600 mb-1">Total Value</div>
             <div className="font-bold text-lg text-blue-600">{service.totalAmount} USDT</div>
           </div>
           <div className="text-center p-2 bg-green-50 rounded-lg">
-            <div className="text-xs text-gray-600 mb-1">Liberado</div>
+            <div className="text-xs text-gray-600 mb-1">Released</div>
             <div className="font-bold text-lg text-green-600">{service.releasedAmount} USDT</div>
           </div>
         </div>
@@ -154,7 +154,7 @@ export function ServiceCard({
           </Button>
           {showApplyButton && onApply && (
             <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700" onClick={() => onApply(service.id)}>
-              Aplicar
+              Apply
             </Button>
           )}
         </div>
