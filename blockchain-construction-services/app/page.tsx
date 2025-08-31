@@ -633,7 +633,7 @@ export default function ConstructionServicesApp() {
                           service={service}
                           serviceTypes={serviceTypes}
                           serviceIcons={serviceIcons}
-                          onViewDetails={(id) => console.log("View details:", id)}
+                          onViewDetails={(id) => window.open(`/service/${id}`, "_blank")}
                         />
                       ))}
                     </div>
@@ -650,7 +650,7 @@ export default function ConstructionServicesApp() {
                           service={service}
                           serviceTypes={serviceTypes}
                           serviceIcons={serviceIcons}
-                          onViewDetails={(id) => console.log("View details:", id)}
+                          onViewDetails={(id) => window.open(`/service/${id}`, "_blank")}
                         />
                       ))}
                     </div>

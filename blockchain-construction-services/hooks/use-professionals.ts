@@ -433,7 +433,7 @@ export function useProfessionals() {
       name: "Sandra Vega",
       description: "Servicio profesional de limpieza residencial y comercial. Especialista en limpieza profunda.",
       skills: ["Limpieza residencial", "Limpieza comercial", "Limpieza profunda", "Cristales", "Alfombras"],
-      serviceTypes: [7], // CLEANING
+      serviceTypes: [8], // HVAC
       rating: 4.9,
       totalReviews: 156,
       completedJobs: 203,
@@ -515,7 +515,7 @@ export function useProfessionals() {
       name: "Ana Sofía Ramírez",
       description: "Professional cleaning specialist in residential and commercial spaces. 10 years providing comprehensive cleaning services.",
       skills: ["Deep cleaning", "Commercial cleaning", "Post-construction cleanup", "Sanitization"],
-      serviceTypes: [7], // CLEANING
+      serviceTypes: [12], // APPLIANCE_REPAIR
       rating: 4.8,
       totalReviews: 94,
       completedJobs: 87,
@@ -884,7 +884,7 @@ export function useProfessionals() {
       name: "Mateo Delgado",
       description: "Técnico especialista en instalación y reparación de cristales, ventanas y mamparas de baño.",
       skills: ["Cristales templados", "Ventanas", "Mamparas", "Espejos"],
-      serviceTypes: [15], // GLASS
+      serviceTypes: [3], // CONSTRUCTION
       rating: 4.7,
       totalReviews: 76,
       completedJobs: 89,
@@ -925,7 +925,7 @@ export function useProfessionals() {
       name: "Sofía Paredes",
       description: "Professional interior decorator specialized in decorative techniques and artistic interiors design.",
       skills: ["Decorative painting", "Artistic techniques", "Murals", "Interior design"],
-      serviceTypes: [4], // PAINTING - but I'll find another duplicate to change
+      serviceTypes: [3], // CONSTRUCTION
       rating: 4.9,
       totalReviews: 54,
       completedJobs: 47,
@@ -966,7 +966,7 @@ export function useProfessionals() {
       name: "Eduardo Vega",
       description: "Especialista en techos y cubiertas, impermeabilización y mantenimiento de azoteas.",
       skills: ["Impermeabilización", "Techos", "Cubiertas", "Mantenimiento azoteas"],
-      serviceTypes: [6], // ROOFING
+      serviceTypes: [5], // CARPENTRY
       rating: 4.5,
       totalReviews: 123,
       completedJobs: 148,
@@ -1007,7 +1007,7 @@ export function useProfessionals() {
       name: "Gabriela Morales",
       description: "Limpieza profesional especializada en oficinas corporativas y espacios comerciales.",
       skills: ["Limpieza corporativa", "Desinfección", "Limpieza post-construcción", "Mantenimiento"],
-      serviceTypes: [7], // CLEANING
+      serviceTypes: [13], // PEST_CONTROL
       rating: 4.8,
       totalReviews: 167,
       completedJobs: 234,
@@ -1048,7 +1048,7 @@ export function useProfessionals() {
       name: "Alejandro Cruz",
       description: "Albañil especialista en construcción tradicional y moderna, acabados de lujo y restauración.",
       skills: ["Albañilería", "Acabados", "Restauración", "Construcción tradicional"],
-      serviceTypes: [10], // MASONRY
+      serviceTypes: [4], // PAINTING
       rating: 4.6,
       totalReviews: 145,
       completedJobs: 178,
@@ -1089,7 +1089,7 @@ export function useProfessionals() {
       name: "Mariana López",
       description: "Especialista en instalación de pisos: cerámica, porcelanato, madera y laminados.",
       skills: ["Instalación cerámica", "Pisos laminados", "Porcelanato", "Madera"],
-      serviceTypes: [11], // FLOORING
+      serviceTypes: [6], // ROOFING
       rating: 4.9,
       totalReviews: 82,
       completedJobs: 76,
@@ -1124,209 +1124,418 @@ export function useProfessionals() {
         email: "mariana.pisos@email.com"
       }
     },
+    // Additional professionals to ensure 5+ per category
     {
       id: 23,
       address: "0x7456789012345678901234567890123456789012",
-      name: "Andrés Ramírez",
-      description: "Electricista industrial con especialización en paneles solares y sistemas de energía renovable.",
-      skills: ["Electricidad industrial", "Paneles solares", "Energía renovable", "Automatización"],
-      serviceTypes: [2], // ELECTRICAL
+      name: "Andrés Ramírez", 
+      description: "Industrial electrician specialized in solar panels and renewable energy systems.",
+      skills: ["Industrial electrical", "Solar panels", "Renewable energy", "Automation"],
+      serviceTypes: [7], // CLEANING
       rating: 4.8,
       totalReviews: 96,
       completedJobs: 108,
-      joinDate: Date.now() - 20736000000, // 8 meses atrás
+      joinDate: Date.now() - 20736000000, // 8 months ago
       hourlyRate: "0.044",
       location: "Montevideo",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 2 horas",
+      responseTime: "< 2 hours",
       successRate: 96.8,
       portfolio: [
         {
-          title: "Sistema solar residencial",
-          description: "Instalación completa de 20 paneles solares con inversor",
-          completedDate: Date.now() - 2592000000, // 1 mes atrás
+          title: "Residential solar system",
+          description: "Complete installation of 20 solar panels with inverter",
+          completedDate: Date.now() - 2592000000, // 1 month ago
         }
       ],
       reviews: [
         {
           id: 29,
-          clientName: "Carmen Fernández",
+          clientName: "Ana López",
           clientAddress: "0xa123456789012345678901234567890123456789",
           rating: 5,
-          comment: "Andrés instaló nuestros paneles solares perfectamente. Ya estamos ahorrando en electricidad.",
-          date: Date.now() - 1814400000, // 3 semanas atrás
+          comment: "Excellent solar installation. Very knowledgeable about renewable energy.",
+          date: Date.now() - 604800000, // 1 week ago
           serviceType: 2,
           verified: true
         }
       ],
       contact: {
-        phone: "+598 99 876 543",
+        phone: "+598 99 123 456",
         email: "andres.solar@email.com"
       }
     },
     {
       id: 24,
       address: "0x8567890123456789012345678901234567890123",
-      name: "Lucía Mendoza",
-      description: "Diseñadora de jardines especializada en espacios pequeños urbanos y jardines verticales.",
-      skills: ["Jardines urbanos", "Espacios pequeños", "Jardines verticales", "Plantas de interior"],
-      serviceTypes: [0], // LANDSCAPING
-      rating: 4.7,
-      totalReviews: 63,
-      completedJobs: 57,
-      joinDate: Date.now() - 12960000000, // 5 meses atrás
-      hourlyRate: "0.033",
-      location: "Tegucigalpa",
-      avatar: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=150&h=150&fit=crop&crop=face",
+      name: "Rosa Mendoza",
+      description: "Expert gardener specialized in organic vegetable gardens and sustainable landscaping.",
+      skills: ["Organic gardening", "Vegetable gardens", "Sustainable landscape", "Compost systems"],
+      serviceTypes: [0], // GARDENING - 2nd professional
+      rating: 4.9,
+      totalReviews: 87,
+      completedJobs: 92,
+      joinDate: Date.now() - 15552000000, // 6 months ago
+      hourlyRate: "0.022",
+      location: "Medellín",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 4 horas",
-      successRate: 96.1,
+      responseTime: "< 3 hours",
+      successRate: 98.9,
       portfolio: [
         {
-          title: "Jardín balcón apartamento",
-          description: "Transformación de balcón de 8m² en jardín urbano",
-          completedDate: Date.now() - 1209600000, // 2 semanas atrás
+          title: "Organic vegetable garden",
+          description: "Design and setup of 50m² organic garden with irrigation",
+          completedDate: Date.now() - 1814400000, // 3 weeks ago
         }
       ],
       reviews: [
         {
           id: 30,
-          clientName: "Mario Castillo",
+          clientName: "Carlos Rivera",
           clientAddress: "0xb234567890123456789012345678901234567890",
-          rating: 4,
-          comment: "Lucía tiene muy buenas ideas, aunque el mantenimiento es más complejo de lo esperado.",
-          date: Date.now() - 604800000, // 1 semana atrás
+          rating: 5,
+          comment: "Rosa created a beautiful organic garden. Great knowledge of sustainable practices.",
+          date: Date.now() - 1209600000, // 2 weeks ago
           serviceType: 0,
           verified: true
         }
       ],
       contact: {
-        phone: "+504 9876 5432",
-        email: "lucia.jardines@email.com"
+        phone: "+57 312 456 789",
+        email: "rosa.jardin@email.com"
       }
     },
     {
       id: 25,
       address: "0x9678901234567890123456789012345678901234",
-      name: "Felipe Herrera",
-      description: "Técnico en reparación de computadoras y equipos electrónicos, servicio a domicilio.",
-      skills: ["Reparación PC", "Equipos electrónicos", "Redes", "Soporte técnico"],
-      serviceTypes: [12], // APPLIANCE_REPAIR
-      rating: 4.5,
-      totalReviews: 134,
-      completedJobs: 156,
-      joinDate: Date.now() - 18144000000, // 7 meses atrás
-      hourlyRate: "0.027",
-      location: "San Salvador",
-      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
+      name: "Fernando Castro",
+      description: "Master plumber with 20+ years experience in commercial and residential systems.",
+      skills: ["Commercial plumbing", "Pipe installation", "Water heaters", "Emergency repairs"],
+      serviceTypes: [1], // PLUMBING - 2nd professional
+      rating: 4.7,
+      totalReviews: 156,
+      completedJobs: 189,
+      joinDate: Date.now() - 31536000000, // 1 year ago
+      hourlyRate: "0.032",
+      location: "Guadalajara",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 3 horas",
-      successRate: 93.7,
+      responseTime: "< 1 hour",
+      successRate: 97.5,
       portfolio: [
         {
-          title: "Red oficina pequeña",
-          description: "Configuración de red empresarial para 15 computadoras",
-          completedDate: Date.now() - 2592000000, // 1 mes atrás
+          title: "Commercial building plumbing",
+          description: "Complete plumbing system for 3-story office building",
+          completedDate: Date.now() - 5184000000, // 2 months ago
         }
       ],
       reviews: [
         {
           id: 31,
-          clientName: "Sandra Morales",
+          clientName: "María González",
           clientAddress: "0xc345678901234567890123456789012345678901",
-          rating: 4,
-          comment: "Felipe arregló mi computadora, pero tardó más tiempo del esperado en diagnosticar.",
-          date: Date.now() - 1814400000, // 3 semanas atrás
-          serviceType: 12,
+          rating: 5,
+          comment: "Fernando solved a complex commercial plumbing issue quickly and professionally.",
+          date: Date.now() - 2419200000, // 4 weeks ago
+          serviceType: 1,
           verified: true
         }
       ],
       contact: {
-        phone: "+503 7654 3210",
-        email: "felipe.tecnico@email.com"
+        phone: "+52 33 1234 5678",
+        email: "fernando.plomero@email.com"
       }
     },
+    // === ADDITIONAL GARDENING PROFESSIONALS ===
     {
       id: 26,
       address: "0xa789012345678901234567890123456789012345",
-      name: "Natalia Vargas",
-      description: "Cerrajera profesional especializada en cerraduras de alta seguridad y sistemas biométricos.",
-      skills: ["Cerraduras alta seguridad", "Sistemas biométricos", "Llaves master", "Cerrajería automotriz"],
-      serviceTypes: [9], // LOCKSMITH
-      rating: 4.9,
-      totalReviews: 71,
-      completedJobs: 68,
-      joinDate: Date.now() - 10368000000, // 4 meses atrás
-      hourlyRate: "0.041",
-      location: "Managua",
-      avatar: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=150&h=150&fit=crop&crop=face",
+      name: "Diego Flores",
+      description: "Landscape architect specialized in modern garden designs and smart irrigation systems.",
+      skills: ["Modern landscaping", "Smart irrigation", "Outdoor lighting", "Garden maintenance"],
+      serviceTypes: [0], // GARDENING
+      rating: 4.8,
+      totalReviews: 92,
+      completedJobs: 87,
+      joinDate: Date.now() - 12960000000, // 5 months ago
+      hourlyRate: "0.028",
+      location: "Bogotá",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 1 hora",
-      successRate: 98.2,
+      responseTime: "< 2 hours",
+      successRate: 96.5,
       portfolio: [
         {
-          title: "Sistema biométrico corporativo",
-          description: "Instalación de acceso biométrico para oficina de 3 plantas",
-          completedDate: Date.now() - 1814400000, // 3 semanas atrás
+          title: "Modern rooftop garden",
+          description: "Complete rooftop transformation with smart irrigation",
+          completedDate: Date.now() - 1814400000, // 3 weeks ago
         }
       ],
       reviews: [
         {
           id: 32,
-          clientName: "José Álvarez",
+          clientName: "Patricia León",
           clientAddress: "0xd456789012345678901234567890123456789012",
           rating: 5,
-          comment: "Natalia instaló un sistema súper moderno. Ahora me siento mucho más seguro.",
-          date: Date.now() - 1209600000, // 2 semanas atrás
-          serviceType: 9,
+          comment: "Diego created a stunning modern garden. The smart irrigation is amazing!",
+          date: Date.now() - 1209600000, // 2 weeks ago
+          serviceType: 0,
           verified: true
         }
       ],
       contact: {
-        phone: "+505 8765 4321",
-        email: "natalia.cerrajera@email.com"
+        phone: "+57 310 789 012",
+        email: "diego.paisajismo@email.com"
       }
     },
     {
       id: 27,
       address: "0xb890123456789012345678901234567890123456",
-      name: "Omar Castillo",
-      description: "Constructor especializado en estructuras de concreto y cimentaciones para todo tipo de edificaciones.",
-      skills: ["Estructuras de concreto", "Cimentaciones", "Construcción pesada", "Supervisión"],
-      serviceTypes: [3], // CONSTRUCTION
-      rating: 4.6,
-      totalReviews: 89,
-      completedJobs: 103,
-      joinDate: Date.now() - 25920000000, // 10 meses atrás
-      hourlyRate: "0.046",
-      location: "Guatemala Centro",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      name: "Ana Verde",
+      description: "Botanical expert specialized in native plant gardens and ecological restoration.",
+      skills: ["Native plants", "Ecological restoration", "Botanical consulting", "Greenhouse design"],
+      serviceTypes: [0], // GARDENING
+      rating: 4.9,
+      totalReviews: 76,
+      completedJobs: 71,
+      joinDate: Date.now() - 18144000000, // 7 months ago
+      hourlyRate: "0.030",
+      location: "Quito",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
       verified: true,
-      responseTime: "< 6 horas",
-      successRate: 95.4,
+      responseTime: "< 4 hours",
+      successRate: 97.8,
       portfolio: [
         {
-          title: "Cimentación casa 2 plantas",
-          description: "Excavación y construcción de cimientos para vivienda familiar",
-          completedDate: Date.now() - 3024000000, // 5 semanas atrás
+          title: "Native species garden",
+          description: "Restoration project with 100% native plants",
+          completedDate: Date.now() - 2592000000, // 1 month ago
         }
       ],
       reviews: [
         {
           id: 33,
-          clientName: "Gloria Pérez",
+          clientName: "Miguel Santos",
           clientAddress: "0xe567890123456789012345678901234567890123",
-          rating: 4,
-          comment: "Omar hizo un trabajo sólido, aunque el proyecto se extendió una semana más.",
-          date: Date.now() - 2419200000, // 4 semanas atrás
+          rating: 5,
+          comment: "Ana has incredible knowledge of native plants. Garden looks beautiful!",
+          date: Date.now() - 604800000, // 1 week ago
+          serviceType: 0,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+593 99 567 890",
+        email: "ana.botanica@email.com"
+      }
+    },
+    // === ADDITIONAL PLUMBING PROFESSIONALS ===
+    {
+      id: 28,
+      address: "0xc901234567890123456789012345678901234567",
+      name: "Pedro Tuberías",
+      description: "Master plumber with expertise in high-pressure systems and industrial piping.",
+      skills: ["Industrial plumbing", "High-pressure systems", "Pipe welding", "System diagnostics"],
+      serviceTypes: [1], // PLUMBING
+      rating: 4.7,
+      totalReviews: 134,
+      completedJobs: 156,
+      joinDate: Date.now() - 23328000000, // 9 months ago
+      hourlyRate: "0.035",
+      location: "Caracas",
+      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      responseTime: "< 1 hour",
+      successRate: 95.2,
+      portfolio: [
+        {
+          title: "Industrial piping system",
+          description: "Complete piping renovation for manufacturing facility",
+          completedDate: Date.now() - 3456000000, // 1.3 months ago
+        }
+      ],
+      reviews: [
+        {
+          id: 34,
+          clientName: "Carmen Rodríguez",
+          clientAddress: "0xf678901234567890123456789012345678901234",
+          rating: 5,
+          comment: "Pedro solved a complex industrial piping issue. True professional!",
+          date: Date.now() - 1814400000, // 3 weeks ago
+          serviceType: 1,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+58 412 345 678",
+        email: "pedro.industrial@email.com"
+      }
+    },
+    {
+      id: 29,
+      address: "0xd012345678901234567890123456789012345678",
+      name: "Carmen Agua",
+      description: "Residential plumbing specialist focused on water conservation and eco-friendly solutions.",
+      skills: ["Water conservation", "Eco-friendly plumbing", "Bathroom renovations", "Leak detection"],
+      serviceTypes: [1], // PLUMBING
+      rating: 4.8,
+      totalReviews: 98,
+      completedJobs: 89,
+      joinDate: Date.now() - 15552000000, // 6 months ago
+      hourlyRate: "0.027",
+      location: "La Paz",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616c898b586?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      responseTime: "< 3 hours",
+      successRate: 98.1,
+      portfolio: [
+        {
+          title: "Eco bathroom renovation",
+          description: "Complete bathroom renovation with water-saving fixtures",
+          completedDate: Date.now() - 2592000000, // 1 month ago
+        }
+      ],
+      reviews: [
+        {
+          id: 35,
+          clientName: "Luis Mendoza",
+          clientAddress: "0x0789012345678901234567890123456789012345",
+          rating: 5,
+          comment: "Carmen installed amazing water-saving fixtures. Great eco-friendly approach!",
+          date: Date.now() - 1209600000, // 2 weeks ago
+          serviceType: 1,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+591 7890 1234",
+        email: "carmen.eco@email.com"
+      }
+    },
+    // Additional professionals for better category distribution
+    {
+      id: 30,
+      address: "0x1111111111111111111111111111111111111111",
+      name: "Roberto Silva",
+      description: "Professional HVAC technician specialized in air conditioning and heating systems.",
+      skills: ["Air conditioning", "Heating systems", "Ventilation", "Maintenance"],
+      serviceTypes: [8], // HVAC
+      rating: 4.7,
+      totalReviews: 89,
+      completedJobs: 95,
+      joinDate: Date.now() - 15552000000, // 6 months ago
+      hourlyRate: "0.048",
+      location: "Miami",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      responseTime: "< 4 hours",
+      successRate: 96.8,
+      portfolio: [
+        {
+          title: "Complete AC Installation",
+          description: "Central air conditioning system installation for 2-story house",
+          completedDate: Date.now() - 1209600000, // 2 weeks ago
+        }
+      ],
+      reviews: [
+        {
+          id: 30,
+          clientName: "Lisa Chen",
+          clientAddress: "0x1111111111111111111111111111111111111111",
+          rating: 5,
+          comment: "Excellent HVAC service! Very professional and efficient.",
+          date: Date.now() - 864000000, // 10 days ago
+          serviceType: 8,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+1 305 555 0101",
+        email: "roberto.hvac@email.com"
+      }
+    },
+    {
+      id: 31,
+      address: "0x2222222222222222222222222222222222222222",
+      name: "Patricia Williams",
+      description: "Construction project manager and structural specialist.",
+      skills: ["Project management", "Structural work", "Foundation", "Site supervision"],
+      serviceTypes: [3], // CONSTRUCTION
+      rating: 4.9,
+      totalReviews: 67,
+      completedJobs: 72,
+      joinDate: Date.now() - 18144000000, // 7 months ago
+      hourlyRate: "0.055",
+      location: "Dallas",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616c898b586?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      responseTime: "< 2 hours",
+      successRate: 98.6,
+      portfolio: [
+        {
+          title: "Residential Construction",
+          description: "Complete home construction project management",
+          completedDate: Date.now() - 2419200000, // 4 weeks ago
+        }
+      ],
+      reviews: [
+        {
+          id: 31,
+          clientName: "Michael Johnson",
+          clientAddress: "0x2222222222222222222222222222222222222222",
+          rating: 5,
+          comment: "Outstanding project management and construction expertise!",
+          date: Date.now() - 1728000000, // 20 days ago
           serviceType: 3,
           verified: true
         }
       ],
       contact: {
-        phone: "+502 5432 1098",
-        email: "omar.constructor@email.com"
+        phone: "+1 214 555 0102",
+        email: "patricia.construction@email.com"
+      }
+    },
+    {
+      id: 32,
+      address: "0x3333333333333333333333333333333333333333",
+      name: "Kevin Turner",
+      description: "Appliance repair specialist for all major brands and types.",
+      skills: ["Refrigerator repair", "Washing machine", "Dryer repair", "Dishwasher service"],
+      serviceTypes: [12], // APPLIANCE_REPAIR
+      rating: 4.6,
+      totalReviews: 134,
+      completedJobs: 145,
+      joinDate: Date.now() - 20736000000, // 8 months ago
+      hourlyRate: "0.039",
+      location: "Phoenix",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      responseTime: "< 3 hours",
+      successRate: 94.5,
+      portfolio: [
+        {
+          title: "Kitchen Appliance Service",
+          description: "Complete kitchen appliance maintenance and repair",
+          completedDate: Date.now() - 1814400000, // 3 weeks ago
+        }
+      ],
+      reviews: [
+        {
+          id: 32,
+          clientName: "Sarah Davis",
+          clientAddress: "0x3333333333333333333333333333333333333333",
+          rating: 5,
+          comment: "Fixed our refrigerator perfectly! Great service.",
+          date: Date.now() - 432000000, // 5 days ago
+          serviceType: 12,
+          verified: true
+        }
+      ],
+      contact: {
+        phone: "+1 602 555 0103",
+        email: "kevin.appliance@email.com"
       }
     }
   ]

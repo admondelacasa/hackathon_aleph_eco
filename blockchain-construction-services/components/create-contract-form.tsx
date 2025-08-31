@@ -137,12 +137,12 @@ export function CreateContractForm() {
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
-        <CardTitle>Crear Nuevo Contrato</CardTitle>
+        <CardTitle>Create New Contract</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label>Monto (USDT)</label>
+            <label>Amount (USDT)</label>
             <Input
               type="number"
               value={formData.amount}
@@ -154,16 +154,16 @@ export function CreateContractForm() {
             />
             {validations.isValidAmount && !validations.hasEnoughBalance && (
               <Alert variant="destructive">
-                <AlertTitle>Balance insuficiente</AlertTitle>
+                <AlertTitle>Insufficient balance</AlertTitle>
                 <AlertDescription>
-                  No tienes suficientes USDT para crear este contrato.
+                  You don't have enough USDT to create this contract.
                 </AlertDescription>
               </Alert>
             )}
           </div>
 
           <div className="space-y-2">
-            <label>Contratista (dirección)</label>
+            <label>Contractor (address)</label>
             <Input
               type="text"
               value={formData.contractor}
@@ -174,18 +174,18 @@ export function CreateContractForm() {
           </div>
 
           <div className="space-y-2">
-            <label>Descripción del contrato</label>
+            <label>Contract description</label>
             <Input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Describe el trabajo a realizar..."
+              placeholder="Describe the work to be done..."
               disabled={isLoading}
             />
           </div>
 
           <div className="space-y-2">
-            <label>Número de milestones</label>
+            <label>Number of milestones</label>
             <Input
               type="number"
               value={formData.milestones}

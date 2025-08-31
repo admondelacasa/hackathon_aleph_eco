@@ -367,22 +367,22 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
   }, [formData.contractorUsername, findUserByUsername])
 
   const serviceTypes = [
-    { value: "0", label: "Jardinería", icon: "🌱" },
-    { value: "1", label: "Plomería", icon: "🔧" },
-    { value: "2", label: "Electricidad", icon: "⚡" },
-    { value: "3", label: "Construcción", icon: "🏗️" },
-    { value: "4", label: "Pintura", icon: "🎨" },
-    { value: "5", label: "Carpintería", icon: "🪚" },
-    { value: "6", label: "Techos", icon: "🏠" },
-    { value: "7", label: "Limpieza", icon: "🧽" },
-    { value: "8", label: "Climatización", icon: "❄️" },
-    { value: "9", label: "Cerrajería", icon: "🔐" },
-    { value: "10", label: "Albañilería", icon: "🧱" },
-    { value: "11", label: "Suelos", icon: "⬜" },
-    { value: "12", label: "Reparación electrodomésticos", icon: "🔧" },
-    { value: "13", label: "Control de plagas", icon: "🐛" },
-    { value: "14", label: "Soldadura", icon: "⚡" },
-    { value: "15", label: "Cristalería", icon: "🪟" },
+    { value: "0", label: "Gardening", icon: "🌱" },
+    { value: "1", label: "Plumbing", icon: "🔧" },
+    { value: "2", label: "Electrical", icon: "⚡" },
+    { value: "3", label: "Construction", icon: "🏗️" },
+    { value: "4", label: "Painting", icon: "🎨" },
+    { value: "5", label: "Carpentry", icon: "🪚" },
+    { value: "6", label: "Roofing", icon: "🏠" },
+    { value: "7", label: "Cleaning", icon: "🧽" },
+    { value: "8", label: "HVAC", icon: "❄️" },
+    { value: "9", label: "Locksmith", icon: "🔐" },
+    { value: "10", label: "Masonry", icon: "🧱" },
+    { value: "11", label: "Flooring", icon: "⬜" },
+    { value: "12", label: "Appliance Repair", icon: "🔧" },
+    { value: "13", label: "Pest Control", icon: "🐛" },
+    { value: "14", label: "Welding", icon: "⚡" },
+    { value: "15", label: "Glazing", icon: "🪟" },
   ]
 
   const addMilestone = () => {
@@ -434,8 +434,8 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl">Crear Nuevo Contrato</CardTitle>
-        <p className="text-gray-600">Define los términos del contrato con el contratista seleccionado</p>
+        <CardTitle className="text-2xl">Create New Contract</CardTitle>
+        <p className="text-gray-600">Define the contract terms with the selected contractor</p>
       </CardHeader>
 
       <CardContent>
@@ -443,10 +443,10 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Título del Proyecto</Label>
+              <Label htmlFor="title">Project Title</Label>
               <Input
                 id="title"
-                placeholder="Ej: Instalación de sistema eléctrico completo"
+                placeholder="Ex: Complete electrical system installation"
                 value={formData.title}
                 onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                 required
@@ -454,13 +454,13 @@ export function ServiceCreationForm({ onSubmit, onCancel, userRole = 'client' }:
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="serviceType">Tipo de Servicio</Label>
+              <Label htmlFor="serviceType">Service Type</Label>
               <Select
                 value={formData.serviceType}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, serviceType: value }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona el tipo" />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   {serviceTypes.map((type) => (

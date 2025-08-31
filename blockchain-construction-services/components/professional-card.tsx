@@ -128,7 +128,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
             onClick={() => onViewDetails(professional.id)}
             className="flex-1"
           >
-            Ver Detalles
+            View Details
           </Button>
           <Button
             size="sm"
@@ -136,7 +136,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
             className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
           >
             <Phone className="h-4 w-4 mr-1" />
-            Contactar
+            Contact
           </Button>
         </div>
       </CardContent>
@@ -145,7 +145,7 @@ export function ProfessionalCard({ professional, onViewDetails, onContact }: Pro
       <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Contactar a {professional.name}</DialogTitle>
+            <DialogTitle>Contact {professional.name}</DialogTitle>
           </DialogHeader>
           <div className="flex items-center space-x-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
             <Phone className="h-6 w-6 text-orange-600" />

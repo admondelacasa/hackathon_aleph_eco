@@ -109,7 +109,7 @@ export function MilestoneTracker({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4 text-sm text-gray-600">
                 <span>Valor: {milestone.amount} ETH</span>
-                {milestone.dueDate && <span>Fecha límite: {milestone.dueDate}</span>}
+                {milestone.dueDate && <span>Estimated Completion: {milestone.dueDate}</span>}
                 {milestone.completedAt && <span>Completado: {milestone.completedAt}</span>}
               </div>
 

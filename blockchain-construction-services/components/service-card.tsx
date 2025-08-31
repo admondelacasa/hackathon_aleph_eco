@@ -45,13 +45,13 @@ export function ServiceCard({
   const formatDate = (date: number | string | undefined) => {
     if (!date) return null
     if (typeof date === 'number') {
-      return new Date(date).toLocaleDateString('es-ES', {
+      return new Date(date).toLocaleDateString('en-US', {
         day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
+        month: 'short',
+        year: 'numeric'
       })
     }
-    return date
+    return typeof date === 'string' ? date : null
   }
 
   const getStatusBadge = (status: number) => {
@@ -139,7 +139,7 @@ export function ServiceCard({
         {service.deadline && (
           <div className="flex items-center justify-center p-2 bg-orange-50 rounded-lg">
             <Clock className="h-4 w-4 text-orange-600 mr-2" />
-            <span className="text-sm text-orange-700">Fecha límite: {service.deadline}</span>
+            <span className="text-sm text-orange-700">Estimated Completion: {formatDate(service.deadline)}</span>
           </div>
         )}
 
@@ -150,7 +150,7 @@ export function ServiceCard({
             className="flex-1 bg-transparent"
             onClick={() => onViewDetails(service.id)}
           >
-            Ver Detalles
+            View Details
           </Button>
           {showApplyButton && onApply && (
             <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700" onClick={() => onApply(service.id)}>

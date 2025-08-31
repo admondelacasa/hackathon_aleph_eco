@@ -237,7 +237,11 @@ export default function ServiceDetailPage() {
                   {service.deadline > 0 && (
                     <div className="flex items-center">
                       <Clock className="h-4 w-4 mr-1" />
-                      Fecha límite: {new Date(service.deadline * 1000).toLocaleDateString()}
+                      Estimated Completion: {new Date(service.deadline * 1000).toLocaleDateString('en-US', {
+                        day: '2-digit',
+                        month: 'short', 
+                        year: 'numeric'
+                      })}
                     </div>
                   )}
                 </div>
@@ -336,7 +340,7 @@ export default function ServiceDetailPage() {
                     </div>
                     {service.deadline > 0 && (
                       <div>
-                        <h4 className="font-medium mb-2">Fecha Límite</h4>
+                        <h4 className="font-medium mb-2">Estimated Completion Date</h4>
                         <p className="text-gray-600">{new Date(service.deadline * 1000).toLocaleDateString()}</p>
                       </div>
                     )}
