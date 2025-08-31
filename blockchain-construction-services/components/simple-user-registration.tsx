@@ -94,10 +94,10 @@ export default function SimpleUserRegistration() {
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl">
             <Shield className="h-6 w-6" />
-            Sistema de Registro Web3 Simplificado
+            Simplified Web3 Registration System
           </CardTitle>
           <p className="text-muted-foreground">
-            Conecta tu wallet y regístrate en la blockchain
+            Connect your wallet and register on the blockchain
           </p>
         </CardHeader>
       </Card>
@@ -107,25 +107,25 @@ export default function SimpleUserRegistration() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wallet className="h-5 w-5" />
-            Estado de Conexión
+            Connection Status
           </CardTitle>
         </CardHeader>
         <CardContent>
           {!account ? (
             <div className="text-center py-6">
               <p className="text-muted-foreground mb-4">
-                Conecta tu wallet para comenzar
+                Connect your wallet to get started
               </p>
               <Button onClick={connectWallet} disabled={walletLoading || isLoading}>
                 {walletLoading || isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Conectando...
+                    Connecting...
                   </>
                 ) : (
                   <>
                     <Wallet className="h-4 w-4 mr-2" />
-                    Conectar MetaMask
+                    Connect MetaMask
                   </>
                 )}
               </Button>
@@ -134,7 +134,7 @@ export default function SimpleUserRegistration() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
-                <span>Wallet conectada:</span>
+                <span>Wallet connected:</span>
                 <Badge variant="outline" className="font-mono">
                   {account.slice(0, 6)}...{account.slice(-4)}
                 </Badge>
@@ -150,7 +150,7 @@ export default function SimpleUserRegistration() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UserPlus className="h-5 w-5" />
-              Registro de Usuario
+              User Registration
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -158,18 +158,18 @@ export default function SimpleUserRegistration() {
               <Alert className="mb-4">
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  ¡Usuario registrado exitosamente en la blockchain!
+                  User successfully registered on the blockchain!
                 </AlertDescription>
               </Alert>
             )}
 
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
-                <Label htmlFor="username">Nombre de Usuario</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
                   type="text"
-                  placeholder="Ingresa tu nombre de usuario"
+                  placeholder="Enter your username"
                   value={registrationForm.username}
                   onChange={(e) => setRegistrationForm(prev => ({ ...prev, username: e.target.value }))}
                   required
@@ -177,22 +177,22 @@ export default function SimpleUserRegistration() {
               </div>
 
               <div>
-                <Label htmlFor="publicKey">Clave Pública (Opcional)</Label>
+                <Label htmlFor="publicKey">Public Key (Optional)</Label>
                 <Input
                   id="publicKey"
                   type="text"
-                  placeholder="Se generará automáticamente si se deja vacío"
+                  placeholder="Will be generated automatically if left empty"
                   value={registrationForm.publicKey}
                   onChange={(e) => setRegistrationForm(prev => ({ ...prev, publicKey: e.target.value }))}
                 />
               </div>
 
               <div>
-                <Label htmlFor="profileData">Datos de Perfil (JSON, Opcional)</Label>
+                <Label htmlFor="profileData">Profile Data (JSON, Optional)</Label>
                 <Input
                   id="profileData"
                   type="text"
-                  placeholder='{"nombre": "Tu Nombre", "email": "tu@email.com"}'
+                  placeholder='{"name": "Your Name", "email": "your@email.com"}'
                   value={registrationForm.profileData}
                   onChange={(e) => setRegistrationForm(prev => ({ ...prev, profileData: e.target.value }))}
                 />
@@ -202,12 +202,12 @@ export default function SimpleUserRegistration() {
                 {isRegistering ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Registrando en Blockchain...
+                    Registering on Blockchain...
                   </>
                 ) : (
                   <>
                     <UserPlus className="h-4 w-4 mr-2" />
-                    Registrar Usuario
+                    Register User
                   </>
                 )}
               </Button>
@@ -222,7 +222,7 @@ export default function SimpleUserRegistration() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Usuarios Registrados ({registeredUsers.length})
+              Registered Users ({registeredUsers.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -238,7 +238,7 @@ export default function SimpleUserRegistration() {
                     </div>
                     <Badge variant="secondary">
                       <CheckCircle className="h-3 w-3 mr-1" />
-                      Verificado
+                      Verified
                     </Badge>
                   </div>
                   

@@ -17,7 +17,7 @@ export interface Web3User {
   registered: number
 }
 
-// Simulamos una base de datos de usuarios Web3 registrados
+// Simulate a database of registered Web3 users
 const mockWeb3Users: Web3User[] = [
   {
     username: "CarlosMendoza",
@@ -28,20 +28,20 @@ const mockWeb3Users: Web3User[] = [
       email: "carlos@email.com",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 3600000, // 1 hora atrás
-    registered: Date.now() - 86400000 // 1 día atrás
+    lastSeen: Date.now() - 3600000, // 1 hour ago
+    registered: Date.now() - 86400000 // 1 day ago
   },
   {
     username: "AnaRodriguez", 
     walletAddress: "0x856f123456789012345678901234567890abcdef",
     isConnected: false,
     profile: {
-      name: "Ana Rodríguez",
+      name: "Ana Rodriguez",
       email: "ana@email.com",
       avatar: "https://images.unsplash.com/photo-1494790108755-2616c898b586?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 7200000, // 2 horas atrás
-    registered: Date.now() - 172800000 // 2 días atrás
+    lastSeen: Date.now() - 7200000, // 2 hours ago
+    registered: Date.now() - 172800000 // 2 days ago
   },
   {
     username: "MiguelTorres",
@@ -52,20 +52,20 @@ const mockWeb3Users: Web3User[] = [
       email: "miguel@email.com",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 300000, // 5 minutos atrás
-    registered: Date.now() - 259200000 // 3 días atrás
+    lastSeen: Date.now() - 300000, // 5 minutes ago
+    registered: Date.now() - 259200000 // 3 days ago
   },
   {
     username: "LauraFernandez",
     walletAddress: "0xabcdef123456789012345678901234567890abcd",
     isConnected: false,
     profile: {
-      name: "Laura Fernández", 
+      name: "Laura Fernandez", 
       email: "laura@email.com",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 14400000, // 4 horas atrás
-    registered: Date.now() - 345600000 // 4 días atrás
+    lastSeen: Date.now() - 14400000, // 4 hours ago
+    registered: Date.now() - 345600000 // 4 days ago
   },
   {
     username: "RobertoSilva",
@@ -76,8 +76,8 @@ const mockWeb3Users: Web3User[] = [
       email: "roberto@email.com", 
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 180000, // 3 minutos atrás
-    registered: Date.now() - 432000000 // 5 días atrás
+    lastSeen: Date.now() - 180000, // 3 minutes ago
+    registered: Date.now() - 432000000 // 5 days ago
   },
   {
     username: "ManuelHerrera",
@@ -88,8 +88,8 @@ const mockWeb3Users: Web3User[] = [
       email: "manuel@email.com",
       avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face"
     },
-    lastSeen: Date.now() - 21600000, // 6 horas atrás
-    registered: Date.now() - 518400000 // 6 días atrás
+    lastSeen: Date.now() - 21600000, // 6 hours ago
+    registered: Date.now() - 518400000 // 6 days ago
   },
   // Nuevos usuarios de Latinoamérica
   {

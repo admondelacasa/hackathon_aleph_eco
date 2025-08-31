@@ -90,7 +90,7 @@ export function UserProfileDisplay({
               <div className="flex-1">
                 <h3 className="font-semibold">{userProfile.username}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Usuario Verificado
+                  Verified User
                 </p>
               </div>
               <Badge variant="outline" className="text-xs">
@@ -112,7 +112,7 @@ export function UserProfileDisplay({
 
               <div className="flex items-center space-x-2 p-2">
                 <Phone className="h-4 w-4 text-gray-500" />
-                <span className="text-gray-600 dark:text-gray-300">Teléfono:</span>
+                <span className="text-gray-600 dark:text-gray-300">Phone:</span>
                 <span className="text-gray-800 dark:text-gray-200">
                   {userProfile.phoneNumber}
                 </span>
